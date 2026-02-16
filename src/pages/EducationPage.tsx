@@ -1,0 +1,210 @@
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  Heart,
+  MessageSquare,
+  Shield,
+  Users,
+  BookOpen,
+  Sparkles,
+  Globe,
+  ArrowLeft,
+  ChevronRight,
+} from "lucide-react";
+import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
+
+const categories = [
+  {
+    icon: MessageSquare,
+    title: "Communication & Conversation",
+    description: "Master the art of meaningful conversation, from the first message to deep, lasting dialogue.",
+    articles: [
+      "How to Start a Conversation That Leads Somewhere Real",
+      "Active Listening: The Secret to Being Truly Heard",
+      "Navigating Difficult Conversations with Grace",
+      "Digital Communication Etiquette for Modern Dating",
+    ],
+    color: "from-[hsl(var(--primary))] to-[hsl(var(--secondary))]",
+  },
+  {
+    icon: Heart,
+    title: "Building Lasting Love",
+    description: "Understand the foundations of relationships that go the distance — for professionals ready to settle down.",
+    articles: [
+      "From Dating to Commitment: Signs You're Ready",
+      "Love Languages in African Relationships",
+      "Building Trust in a Long-Distance Relationship",
+      "Financial Compatibility: The Talk No One Has Early Enough",
+    ],
+    color: "from-[hsl(var(--secondary))] to-[hsl(var(--primary))]",
+  },
+  {
+    icon: Shield,
+    title: "Respect & Boundaries",
+    description: "Healthy relationships start with mutual respect. Learn to set and honor boundaries.",
+    articles: [
+      "Setting Healthy Boundaries Without Guilt",
+      "Recognizing Red Flags vs. Cultural Differences",
+      "Consent and Communication in Modern Love",
+      "How to Respectfully End a Connection That Isn't Working",
+    ],
+    color: "from-[hsl(45,100%,55%)] to-[hsl(var(--primary))]",
+  },
+  {
+    icon: Globe,
+    title: "Cultural Dating Guides",
+    description: "Navigate the beautiful complexities of dating across African cultures and the diaspora.",
+    articles: [
+      "Understanding Bride Price & Lobola in Modern Context",
+      "Interfaith Relationships: Finding Common Ground",
+      "Dating Across African Cultures: What to Know",
+      "Diaspora Dating: Balancing Two Worlds",
+    ],
+    color: "from-[hsl(var(--primary))] to-[hsl(160,60%,45%)]",
+  },
+  {
+    icon: Sparkles,
+    title: "Self-Improvement & Readiness",
+    description: "Become the partner you want to attract. Growth starts from within.",
+    articles: [
+      "Are You Emotionally Ready for a Serious Relationship?",
+      "Healing Before You Love Again",
+      "Building Confidence in Your Dating Life",
+      "Work-Life-Love Balance for Busy Professionals",
+    ],
+    color: "from-[hsl(280,70%,55%)] to-[hsl(var(--primary))]",
+  },
+  {
+    icon: Users,
+    title: "Marriage & Partnership",
+    description: "Practical wisdom for professionals who are done dating casually and ready to build a life together.",
+    articles: [
+      "What Makes Marriages Between Professionals Thrive",
+      "Having 'The Talk' About Marriage Timelines",
+      "Merging Lives: Careers, Families, and Futures",
+      "Pre-Marital Counselling: Why It Matters",
+    ],
+    color: "from-[hsl(var(--secondary))] to-[hsl(280,70%,55%)]",
+  },
+];
+
+const EducationPage = () => {
+  return (
+    <div className="min-h-screen bg-primary-foreground font-display">
+      {/* Header */}
+      <header className="border-b border-background/10">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+          <Link to="/" className="flex items-center gap-3">
+            <img src={blackLovelinkLogo} alt="BlackLoveLink" className="h-10 w-auto" />
+          </Link>
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-sm font-semibold text-background/60 hover:text-background transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back to Home
+          </Link>
+        </nav>
+      </header>
+
+      {/* Hero */}
+      <section className="px-6 py-20 lg:py-28">
+        <div className="mx-auto max-w-4xl text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 rounded-full bg-background/10 px-4 py-2 mb-6"
+          >
+            <BookOpen className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-background/80">Education Hub</span>
+          </motion.div>
+
+          <motion.h1
+            className="text-4xl font-black tracking-tight text-background sm:text-6xl"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            Love Smarter,{" "}
+            <span className="text-gradient-brand">Connect Deeper</span>
+          </motion.h1>
+
+          <motion.p
+            className="mt-6 text-lg text-background/50 max-w-2xl mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            Expert-curated guides for accomplished Black professionals navigating serious
+            relationships, marriage, and everything in between. Because love deserves intention.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* Categories Grid */}
+      <section className="px-6 pb-24">
+        <div className="mx-auto max-w-7xl grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {categories.map((cat, idx) => (
+            <motion.div
+              key={cat.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              className="group rounded-2xl border border-background/10 bg-background/5 p-6 hover:bg-background/10 transition-all duration-300"
+            >
+              <div
+                className={`inline-flex rounded-xl bg-gradient-to-br ${cat.color} p-3 mb-4`}
+              >
+                <cat.icon className="h-6 w-6 text-primary-foreground" />
+              </div>
+
+              <h3 className="text-xl font-bold text-background mb-2">{cat.title}</h3>
+              <p className="text-sm text-background/50 mb-5 leading-relaxed">
+                {cat.description}
+              </p>
+
+              <ul className="space-y-2">
+                {cat.articles.map((article) => (
+                  <li key={article}>
+                    <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-background/70 hover:bg-background/10 transition-colors group/item">
+                      <ChevronRight className="h-3.5 w-3.5 text-primary flex-shrink-0 opacity-0 group-hover/item:opacity-100 transition-opacity" />
+                      <span className="group-hover/item:text-background transition-colors">
+                        {article}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="gradient-brand px-6 py-16 text-center">
+        <h2 className="text-3xl font-black text-primary-foreground mb-4">
+          Ready to Find Your Person?
+        </h2>
+        <p className="text-primary-foreground/80 mb-8 max-w-lg mx-auto">
+          Put what you've learned into practice. Join BlackLoveLink and start making
+          meaningful connections today.
+        </p>
+        <Link
+          to="/swipe"
+          className="inline-block rounded-full bg-primary-foreground px-10 py-4 text-lg font-bold text-background transition-transform hover:scale-105"
+        >
+          Start Your Journey
+        </Link>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-background/10 bg-primary-foreground px-6 py-8 text-center">
+        <p className="text-sm text-background/40">
+          © {new Date().getFullYear()} BlackLoveLink. All rights reserved.
+        </p>
+      </footer>
+    </div>
+  );
+};
+
+export default EducationPage;

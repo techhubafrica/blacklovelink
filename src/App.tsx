@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import SwipePage from "./pages/SwipePage";
 import ProfilePage from "./pages/ProfilePage";
 import MessagesPage from "./pages/MessagesPage";
+import EducationPage from "./pages/EducationPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/swipe" element={<SwipePage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/messages" element={<MessagesPage />} />
+            <Route path="/education" element={<EducationPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
