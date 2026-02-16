@@ -7,6 +7,7 @@ import profile1 from "@/assets/profile-1.jpg";
 import profile2 from "@/assets/profile-2.jpg";
 import profile3 from "@/assets/profile-3.jpg";
 import ConnectionCards from "@/components/ConnectionCards";
+import HeroChatbot from "@/components/HeroChatbot";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import { useTranslation } from "@/hooks/useTranslation";
 import { Language, languageNames } from "@/contexts/LanguageContext";
@@ -29,6 +30,9 @@ const Index = () => {
                 {l}
               </a>
             ))}
+            <Link to="/education" className="text-sm font-semibold text-primary-foreground/90 underline decoration-primary-foreground/40 underline-offset-4 hover:text-primary-foreground">
+              Education
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">
@@ -101,6 +105,9 @@ const Index = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* ── AI CHATBOT ── */}
+      <HeroChatbot />
 
       {/* ── MISSION SECTION (Light Theme) ── */}
       <section id="mission" className="relative bg-primary-foreground px-6 py-28 lg:py-36 overflow-hidden scroll-mt-0">
