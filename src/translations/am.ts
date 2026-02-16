@@ -40,8 +40,8 @@ export const am: TranslationKeys = {
         line3: 'በዓለም ዙሪያ',
     },
 
-    // Swipe Stories
-    swipeStories: 'Swipe Stories™',
+    // Success Stories
+    swipeStories: 'Success Stories™',
 
     // Connection Section
     connection: {

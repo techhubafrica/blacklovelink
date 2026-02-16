@@ -40,8 +40,8 @@ export const ar: TranslationKeys = {
         line3: 'حول العالم',
     },
 
-    // Swipe Stories
-    swipeStories: 'Swipe Stories™',
+    // Success Stories
+    swipeStories: 'Success Stories™',
 
     // Connection Section
     connection: {

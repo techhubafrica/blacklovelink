@@ -262,7 +262,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ── SWIPE STORIES BANNER ── */}
+      {/* ── SUCCESS STORIES BANNER ── */}
       <div className="gradient-brand py-4 text-center">
         <span className="text-lg font-bold text-primary-foreground">
           {t.swipeStories} <ChevronDown className="inline h-5 w-5" />

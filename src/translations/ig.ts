@@ -40,8 +40,8 @@ export const ig: TranslationKeys = {
         line3: 'gburugburu ụwa',
     },
 
-    // Swipe Stories
-    swipeStories: 'Swipe Stories™',
+    // Success Stories
+    swipeStories: 'Success Stories™',
 
     // Connection Section
     connection: {

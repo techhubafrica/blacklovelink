@@ -40,8 +40,8 @@ export const sw: TranslationKeys = {
         line3: 'duniani kote',
     },
 
-    // Swipe Stories
-    swipeStories: 'Swipe Stories™',
+    // Success Stories
+    swipeStories: 'Success Stories™',
 
     // Connection Section
     connection: {

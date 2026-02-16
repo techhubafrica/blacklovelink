@@ -40,8 +40,8 @@ export const yo: TranslationKeys = {
         line3: 'ní àgbáyé',
     },
 
-    // Swipe Stories
-    swipeStories: 'Swipe Stories™',
+    // Success Stories
+    swipeStories: 'Success Stories™',
 
     // Connection Section
     connection: {
