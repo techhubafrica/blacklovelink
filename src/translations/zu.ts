@@ -40,8 +40,8 @@ export const zu: TranslationKeys = {
         line3: 'emhlabeni wonke',
     },
 
-    // Swipe Stories
-    swipeStories: 'Swipe Stories™',
+    // Success Stories
+    swipeStories: 'Success Stories™',
 
     // Connection Section
     connection: {

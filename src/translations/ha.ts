@@ -40,8 +40,8 @@ export const ha: TranslationKeys = {
         line3: 'a duniya',
     },
 
-    // Swipe Stories
-    swipeStories: 'Swipe Stories™',
+    // Success Stories
+    swipeStories: 'Success Stories™',
 
     // Connection Section
     connection: {

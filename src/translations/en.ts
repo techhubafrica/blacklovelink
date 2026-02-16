@@ -38,8 +38,8 @@ export const en = {
         line3: 'around the globe',
     },
 
-    // Swipe Stories
-    swipeStories: 'Swipe Stories™',
+    // Success Stories
+    swipeStories: 'Success Stories™',
 
     // Connection Section
     connection: {
