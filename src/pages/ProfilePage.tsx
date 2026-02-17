@@ -1,6 +1,6 @@
 import { Settings, Edit2, Shield, Star } from "lucide-react";
 import TopNav from "@/components/TopNav";
-import profile1 from "@/assets/profile-1.jpg";
+import profile1 from "@/assets/profile-1.png";
 
 const ProfilePage = () => {
   return (
