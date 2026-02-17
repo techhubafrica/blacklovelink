@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import story1 from "@/assets/story-1.jpg";
-import story2 from "@/assets/story-2.jpg";
-import story3 from "@/assets/story-3.jpg";
+import story1 from "@/assets/story-1.png";
+import story2 from "@/assets/story-2.png";
+import story3 from "@/assets/story-3.png";
 
 const connections = [
   {
@@ -123,9 +123,8 @@ const ConnectionCards = () => {
             <button
               key={i}
               onClick={() => setRotation(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                rotation === i ? "w-6 bg-background" : "w-2 bg-background/30"
-              }`}
+              className={`h-2 rounded-full transition-all duration-300 ${rotation === i ? "w-6 bg-background" : "w-2 bg-background/30"
+                }`}
             />
           ))}
         </div>

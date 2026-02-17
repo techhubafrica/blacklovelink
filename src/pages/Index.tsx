@@ -1,11 +1,11 @@
 import { Flame, ChevronDown, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import heroBg from "@/assets/hero-bg.jpg";
-import coupleHero from "@/assets/couple-hero.jpg";
-import profile1 from "@/assets/profile-1.jpg";
-import profile2 from "@/assets/profile-2.jpg";
-import profile3 from "@/assets/profile-3.jpg";
+import heroBg from "@/assets/hero-bg.png";
+import coupleHero from "@/assets/couple-hero.png";
+import profile1 from "@/assets/profile-1.png";
+import profile2 from "@/assets/profile-2.png";
+import profile3 from "@/assets/profile-3.png";
 import ConnectionCards from "@/components/ConnectionCards";
 import HeroChatbot from "@/components/HeroChatbot";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
@@ -46,8 +46,8 @@ const Index = () => {
                     key={lang}
                     onClick={() => setLanguage(lang)}
                     className={`w-full px-4 py-2 text-left text-sm transition-colors ${language === lang
-                        ? 'bg-accent text-accent-foreground font-semibold'
-                        : 'text-foreground hover:bg-accent'
+                      ? 'bg-accent text-accent-foreground font-semibold'
+                      : 'text-foreground hover:bg-accent'
                       }`}
                   >
                     {languageNames[lang]}
