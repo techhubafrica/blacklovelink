@@ -17,53 +17,84 @@ const Index = () => {
   const { t, language, setLanguage } = useTranslation();
   return (
     <div className="min-h-screen bg-foreground font-display">
-      {/* ── NAVBAR ── */}
-      <header className="absolute inset-x-0 top-0 z-30">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <Link to="/" className="flex items-center">
-            <img src={blackLovelinkLogo} alt="BlackLoveLink" className="h-10 w-auto" />
+      {/* ── PREMIUM NAVBAR ── */}
+      <motion.header
+        className="fixed inset-x-0 top-0 z-50 backdrop-blur-xl bg-black/20 border-b border-white/10"
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-4">
+          {/* Logo */}
+          <Link to="/" className="flex items-center group">
+            <img
+              src={blackLovelinkLogo}
+              alt="BlackLoveLink"
+              className="h-11 w-auto transition-transform duration-300 group-hover:scale-105"
+            />
           </Link>
 
-          <div className="hidden items-center gap-8 md:flex">
+          {/* Nav Links - Hidden on mobile */}
+          <div className="hidden items-center gap-1 lg:flex">
             {[t.nav.home, t.nav.howItWorks, t.nav.connections, t.nav.successStories, t.nav.trustSafety, t.nav.support].map((l) => (
-              <a key={l} href="#" className="text-sm font-semibold text-primary-foreground/90 underline decoration-primary-foreground/40 underline-offset-4 hover:text-primary-foreground">
-                {l}
+              <a
+                key={l}
+                href="#"
+                className="group relative px-4 py-2 text-sm font-medium text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+              >
+                <span className="relative z-10">{l}</span>
+                <span className="absolute inset-0 rounded-lg bg-white/0 transition-all duration-300 group-hover:bg-white/5" />
               </a>
             ))}
-            <Link to="/education" className="text-sm font-semibold text-primary-foreground/90 underline decoration-primary-foreground/40 underline-offset-4 hover:text-primary-foreground">
-              Education
+            <Link
+              to="/education"
+              className="group relative px-4 py-2 text-sm font-medium text-primary-foreground/80 transition-colors hover:text-primary-foreground"
+            >
+              <span className="relative z-10">Education</span>
+              <span className="absolute inset-0 rounded-lg bg-white/0 transition-all duration-300 group-hover:bg-white/5" />
             </Link>
           </div>
 
-          <div className="flex items-center gap-4">
+          {/* Right Side - Language & CTA */}
+          <div className="flex items-center gap-3">
+            {/* Language Dropdown */}
             <div className="relative group hidden md:block">
-              <button className="flex items-center gap-1.5 text-sm font-semibold text-primary-foreground/90 hover:text-primary-foreground">
-                <Globe className="h-4 w-4" /> {t.nav.language} <ChevronDown className="h-3 w-3" />
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-primary-foreground/90 bg-white/5 backdrop-blur-sm border border-white/10 transition-all duration-300 hover:bg-white/10 hover:border-white/20">
+                <Globe className="h-4 w-4" />
+                <span className="hidden lg:inline">{t.nav.language}</span>
+                <ChevronDown className="h-3 w-3 transition-transform duration-300 group-hover:rotate-180" />
               </button>
-              <div className="absolute right-0 top-full mt-2 w-44 rounded-lg bg-card/95 backdrop-blur-md py-2 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                {(Object.keys(languageNames) as Language[]).map((lang) => (
-                  <button
-                    key={lang}
-                    onClick={() => setLanguage(lang)}
-                    className={`w-full px-4 py-2 text-left text-sm transition-colors ${language === lang
-                      ? 'bg-accent text-accent-foreground font-semibold'
-                      : 'text-foreground hover:bg-accent'
-                      }`}
-                  >
-                    {languageNames[lang]}
-                  </button>
-                ))}
+
+              {/* Dropdown Menu */}
+              <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl bg-background/95 backdrop-blur-2xl border border-white/10 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden">
+                <div className="py-2">
+                  {(Object.keys(languageNames) as Language[]).map((lang) => (
+                    <button
+                      key={lang}
+                      onClick={() => setLanguage(lang)}
+                      className={`w-full px-4 py-2.5 text-left text-sm font-medium transition-all duration-200 ${language === lang
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-foreground hover:bg-accent/50'
+                        }`}
+                    >
+                      {languageNames[lang]}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
+
+            {/* Sign In Button */}
             <Link
               to="/swipe"
-              className="rounded-full bg-primary-foreground px-6 py-2.5 text-sm font-bold text-background transition-opacity hover:opacity-90"
+              className="group relative overflow-hidden rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-background transition-all duration-300 hover:shadow-xl hover:shadow-primary-foreground/20 hover:scale-105"
             >
-              {t.nav.signIn}
+              <span className="relative z-10">{t.nav.signIn}</span>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
             </Link>
           </div>
         </nav>
-      </header>
+      </motion.header>
 
       {/* ── HERO ── */}
       <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
