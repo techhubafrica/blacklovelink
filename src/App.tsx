@@ -9,6 +9,11 @@ import SwipePage from "./pages/SwipePage";
 import ProfilePage from "./pages/ProfilePage";
 import MessagesPage from "./pages/MessagesPage";
 import EducationPage from "./pages/EducationPage";
+import HowItWorksPage from "./pages/HowItWorksPage";
+import SuccessStoriesPage from "./pages/SuccessStoriesPage";
+import ConnectionsPage from "./pages/ConnectionsPage";
+import TrustSafetyPage from "./pages/TrustSafetyPage";
+import SupportPage from "./pages/SupportPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +31,11 @@ const App = () => (
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/messages" element={<MessagesPage />} />
             <Route path="/education" element={<EducationPage />} />
+            <Route path="/how-it-works" element={<HowItWorksPage />} />
+            <Route path="/success-stories" element={<SuccessStoriesPage />} />
+            <Route path="/connections" element={<ConnectionsPage />} />
+            <Route path="/trust-safety" element={<TrustSafetyPage />} />
+            <Route path="/support" element={<SupportPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

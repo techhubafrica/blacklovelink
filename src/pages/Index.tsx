@@ -54,24 +54,117 @@ const Index = () => {
 
           {/* Desktop Nav Links */}
           <div className="hidden items-center gap-1 lg:flex">
-            {[t.nav.home, t.nav.howItWorks, t.nav.connections, t.nav.successStories, t.nav.trustSafety, t.nav.support].map((l, i) => (
-              <motion.a
-                key={l}
-                href="#"
+            <motion.a
+              href="/"
+              className="group relative px-4 py-2.5 text-sm font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0, duration: 0.5 }}
+            >
+              <span className="relative z-10">{t.nav.home}</span>
+              <motion.span
+                className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileHover={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.a>
+
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+            >
+              <Link
+                to="/how-it-works"
                 className="group relative px-4 py-2.5 text-sm font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * i, duration: 0.5 }}
               >
-                <span className="relative z-10">{l}</span>
+                <span className="relative z-10">{t.nav.howItWorks}</span>
                 <motion.span
                   className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0"
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileHover={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3 }}
                 />
-              </motion.a>
-            ))}
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              <Link
+                to="/connections"
+                className="group relative px-4 py-2.5 text-sm font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground"
+              >
+                <span className="relative z-10">{t.nav.connections}</span>
+                <motion.span
+                  className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileHover={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
+              <Link
+                to="/success-stories"
+                className="group relative px-4 py-2.5 text-sm font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground"
+              >
+                <span className="relative z-10">{t.nav.successStories}</span>
+                <motion.span
+                  className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileHover={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+            >
+              <Link
+                to="/trust-safety"
+                className="group relative px-4 py-2.5 text-sm font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground"
+              >
+                <span className="relative z-10">{t.nav.trustSafety}</span>
+                <motion.span
+                  className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileHover={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+            >
+              <Link
+                to="/support"
+                className="group relative px-4 py-2.5 text-sm font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground"
+              >
+                <span className="relative z-10">{t.nav.support}</span>
+                <motion.span
+                  className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileHover={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </Link>
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}

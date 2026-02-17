@@ -1,0 +1,205 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Shield, UserCheck, Lock, Eye, AlertCircle, MessageSquare, Phone, Mail } from "lucide-react";
+import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
+
+const TrustSafetyPage = () => {
+    const features = [
+        {
+            icon: UserCheck,
+            title: "Profile Verification",
+            description: "Every member goes through our verification process. We use photo verification and document checks to ensure you're connecting with real people, not bots or fake profiles."
+        },
+        {
+            icon: Lock,
+            title: "Data Encryption",
+            description: "Your data is protected with bank-level encryption. We use industry-standard SSL/TLS protocols to keep your personal information and conversations secure."
+        },
+        {
+            icon: Eye,
+            title: "Privacy Controls",
+            description: "You control what you share and when. Hide your profile, block users, control who can message you, and manage your visibility with granular privacy settings."
+        },
+        {
+            icon: Shield,
+            title: "Safety Guidelines",
+            description: "Our community guidelines keep BlackLoveLink a respectful space. We have zero tolerance for harassment, hate speech, or inappropriate behavior. Violations result in immediate action."
+        },
+        {
+            icon: AlertCircle,
+            title: "24/7 Moderation",
+            description: "Our dedicated safety team reviews reports around the clock. If you encounter concerning behavior, we investigate and take action quickly to protect our community."
+        },
+        {
+            icon: MessageSquare,
+            title: "Safe Messaging",
+            description: "Connect on your terms. Share your contact information only when you're ready. Report or block anyone who makes you uncomfortable with a single tap."
+        }
+    ];
+
+    const safetyTips = [
+        "Take your time getting to know someone before meeting in person",
+        "Meet in public places for your first few dates",
+        "Tell a friend or family member about your plans",
+        "Trust your instincts – if something feels off, it probably is",
+        "Never share financial information or send money",
+        "Report suspicious behavior immediately",
+        "Keep conversations on the platform until you feel comfortable",
+        "Video chat before meeting to verify identity"
+    ];
+
+    return (
+        <div className="min-h-screen bg-foreground font-display">
+            {/* Header */}
+            <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-xl bg-black/20 border-b border-white/10">
+                <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-4">
+                    <Link to="/" className="flex items-center">
+                        <img src={blackLovelinkLogo} alt="BlackLoveLink" className="h-11 w-auto" />
+                    </Link>
+                    <Link
+                        to="/swipe"
+                        className="rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-background transition-all hover:scale-105"
+                    >
+                        Get Started
+                    </Link>
+                </nav>
+            </header>
+
+            {/* Hero Section */}
+            <section className="relative pt-32 pb-20 px-6">
+                <div className="mx-auto max-w-7xl">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="text-center"
+                    >
+                        <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8">
+                            <Shield className="w-5 h-5 text-primary" />
+                            <span className="text-primary font-semibold">Your Safety is Our Priority</span>
+                        </div>
+                        <h1 className="text-5xl md:text-7xl font-black text-primary-foreground mb-6">
+                            Trust & <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Safety</span>
+                        </h1>
+                        <p className="text-xl md:text-2xl text-primary-foreground/70 max-w-3xl mx-auto leading-relaxed">
+                            We're committed to creating a safe, respectful space where Black professionals can build authentic connections with confidence.
+                        </p>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Features Section */}
+            <section className="py-20 px-6">
+                <div className="mx-auto max-w-6xl">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {features.map((feature, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="p-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all group"
+                            >
+                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <feature.icon className="w-7 h-7 text-background" />
+                                </div>
+                                <h3 className="text-2xl font-black text-primary-foreground mb-4">
+                                    {feature.title}
+                                </h3>
+                                <p className="text-primary-foreground/70 leading-relaxed">
+                                    {feature.description}
+                                </p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Safety Tips Section */}
+            <section className="py-20 px-6 bg-black/20">
+                <div className="mx-auto max-w-4xl">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <h2 className="text-4xl md:text-5xl font-black text-primary-foreground mb-4">
+                            Dating Safety Tips
+                        </h2>
+                        <p className="text-xl text-primary-foreground/70">
+                            Stay safe while finding your perfect match
+                        </p>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {safetyTips.map((tip, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.05 }}
+                                className="flex items-start gap-4 p-6 rounded-2xl bg-white/5 border border-white/10"
+                            >
+                                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center text-background text-sm font-bold">
+                                    ✓
+                                </div>
+                                <p className="text-primary-foreground/90">{tip}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Report Section */}
+            <section className="py-20 px-6">
+                <div className="mx-auto max-w-5xl">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="p-12 rounded-3xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20"
+                    >
+                        <div className="text-center">
+                            <AlertCircle className="w-16 h-16 text-primary mx-auto mb-6" />
+                            <h2 className="text-3xl md:text-4xl font-black text-primary-foreground mb-4">
+                                See Something Concerning?
+                            </h2>
+                            <p className="text-xl text-primary-foreground/70 mb-8">
+                                Report it immediately. Our safety team investigates all reports within 24 hours.
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                <Link
+                                    to="/support"
+                                    className="rounded-full bg-primary px-8 py-3 text-sm font-bold text-background hover:scale-105 transition-all"
+                                >
+                                    Report a Concern
+                                </Link>
+                                <a
+                                    href="mailto:safety@blacklovelink.com"
+                                    className="rounded-full bg-white/10 border border-white/20 px-8 py-3 text-sm font-bold text-primary-foreground hover:bg-white/20 transition-all"
+                                >
+                                    Email Safety Team
+                                </a>
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Footer */}
+            <footer className="border-t border-white/10 py-12 px-6">
+                <div className="mx-auto max-w-7xl text-center">
+                    <p className="text-primary-foreground/60">
+                        © 2024 BlackLoveLink. Building authentic connections.
+                    </p>
+                </div>
+            </footer>
+        </div>
+    );
+};
+
+export default TrustSafetyPage;
