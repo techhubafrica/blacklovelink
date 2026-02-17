@@ -143,15 +143,7 @@ const Index = () => {
                 to="/swipe"
                 className="group relative overflow-hidden rounded-full bg-gradient-to-r from-primary-foreground to-primary-foreground/90 px-8 py-3 text-sm font-bold text-background shadow-lg shadow-primary-foreground/20 transition-all duration-300 hover:shadow-2xl hover:shadow-primary-foreground/30 hover:scale-105"
               >
-                <span className="relative z-10 flex items-center gap-2">
-                  {t.nav.signIn}
-                  <motion.span
-                    animate={{ x: [0, 4, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    →
-                  </motion.span>
-                </span>
+                <span className="relative z-10">{t.nav.signIn}</span>
                 <motion.span
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
                   initial={{ x: '-100%' }}
