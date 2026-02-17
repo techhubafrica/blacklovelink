@@ -151,7 +151,7 @@ const HowItWorksPage = () => {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.05 }}
-                                className="flex items-center gap-4 p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
+                                className="flex items-center gap-4 p-6 rounded-2xl bg-background/40 backdrop-blur-sm border border-white/10 hover:bg-background/60 transition-all"
                             >
                                 <feature.icon className="w-6 h-6 text-primary flex-shrink-0" />
                                 <span className="text-primary-foreground font-semibold">{feature.text}</span>

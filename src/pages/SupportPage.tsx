@@ -120,7 +120,7 @@ const SupportPage = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="p-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all  text-center group"
+                                className="p-8 rounded-3xl bg-background/40 backdrop-blur-sm border border-white/10 hover:bg-background/60 transition-all  text-center group"
                             >
                                 <div className={`w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br ${method.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                                     <method.icon className="w-8 h-8 text-white" />
@@ -162,7 +162,7 @@ const SupportPage = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         onSubmit={handleSubmit}
-                        className="p-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 space-y-6"
+                        className="p-8 rounded-3xl bg-background/40 backdrop-blur-sm border border-white/10 space-y-6"
                     >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -173,7 +173,7 @@ const SupportPage = () => {
                                     type="text"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-primary-foreground focus:border-primary focus:outline-none transition-colors"
+                                    className="w-full px-4 py-3 rounded-xl bg-background/40 border border-white/10 text-primary-foreground focus:border-primary focus:outline-none transition-colors"
                                     placeholder="Your name"
                                     required
                                 />
@@ -186,7 +186,7 @@ const SupportPage = () => {
                                     type="email"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-primary-foreground focus:border-primary focus:outline-none transition-colors"
+                                    className="w-full px-4 py-3 rounded-xl bg-background/40 border border-white/10 text-primary-foreground focus:border-primary focus:outline-none transition-colors"
                                     placeholder="your@email.com"
                                     required
                                 />
@@ -201,7 +201,7 @@ const SupportPage = () => {
                                 type="text"
                                 value={formData.subject}
                                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-primary-foreground focus:border-primary focus:outline-none transition-colors"
+                                className="w-full px-4 py-3 rounded-xl bg-background/40 border border-white/10 text-primary-foreground focus:border-primary focus:outline-none transition-colors"
                                 placeholder="How can we help?"
                                 required
                             />
@@ -214,7 +214,7 @@ const SupportPage = () => {
                             <textarea
                                 value={formData.message}
                                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-primary-foreground focus:border-primary focus:outline-none transition-colors resize-none"
+                                className="w-full px-4 py-3 rounded-xl bg-background/40 border border-white/10 text-primary-foreground focus:border-primary focus:outline-none transition-colors resize-none"
                                 rows={6}
                                 placeholder="Tell us more about your question or concern..."
                                 required
@@ -257,7 +257,7 @@ const SupportPage = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.05 }}
-                                className="p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 group"
+                                className="p-6 rounded-2xl bg-background/40 backdrop-blur-sm border border-white/10 group"
                             >
                                 <summary className="text-lg font-bold text-primary-foreground cursor-pointer list-none flex items-center justify-between">
                                     {faq.question}

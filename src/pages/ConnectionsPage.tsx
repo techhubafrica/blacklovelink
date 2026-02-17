@@ -154,7 +154,7 @@ const ConnectionsPage = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="p-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all group"
+                                className="p-8 rounded-3xl bg-background/40 backdrop-blur-sm border border-white/10 hover:bg-background/60 transition-all group"
                             >
                                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                     <feature.icon className="w-7 h-7 text-background" />

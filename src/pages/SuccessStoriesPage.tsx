@@ -167,7 +167,7 @@ const SuccessStoriesPage = () => {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="text-center p-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10"
+                                className="text-center p-8 rounded-3xl bg-background/40 backdrop-blur-sm border border-white/10"
                             >
                                 <div className="text-5xl md:text-6xl font-black text-primary mb-2">
                                     {stat.number}
