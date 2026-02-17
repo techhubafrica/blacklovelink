@@ -106,7 +106,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ── AI CHATBOT ── */}
+      {/* ── AI CHATBOT (Floating Bubble) ── */}
       <HeroChatbot />
 
       {/* ── MISSION SECTION (Light Theme) ── */}
