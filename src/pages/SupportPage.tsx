@@ -79,7 +79,7 @@ const SupportPage = () => {
                     </Link>
                     <Link
                         to="/swipe"
-                        className="rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-background transition-all hover:scale-105"
+                        className="rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-white transition-all hover:scale-105"
                     >
                         Get Started
                     </Link>
@@ -99,10 +99,10 @@ const SupportPage = () => {
                             <HelpCircle className="w-5 h-5 text-primary" />
                             <span className="text-primary font-semibold">We're Here to Help</span>
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-black text-primary-foreground mb-6">
+                        <h1 className="text-5xl md:text-7xl font-black text-gray-900 mb-6">
                             Support <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Center</span>
                         </h1>
-                        <p className="text-xl md:text-2xl text-primary-foreground/70 max-w-3xl mx-auto leading-relaxed">
+                        <p className="text-xl md:text-2xl text-gray-900/70 max-w-3xl mx-auto leading-relaxed">
                             Have questions? Need help? Our dedicated support team is here for you.
                         </p>
                     </motion.div>
@@ -125,10 +125,10 @@ const SupportPage = () => {
                                 <div className={`w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br ${method.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                                     <method.icon className="w-8 h-8 text-white" />
                                 </div>
-                                <h3 className="text-2xl font-black text-primary-foreground mb-2">
+                                <h3 className="text-2xl font-black text-gray-900 mb-2">
                                     {method.title}
                                 </h3>
-                                <p className="text-primary-foreground/60 mb-6">
+                                <p className="text-gray-900/60 mb-6">
                                     {method.description}
                                 </p>
                                 <div className="text-primary font-bold text-lg">
@@ -149,10 +149,10 @@ const SupportPage = () => {
                         viewport={{ once: true }}
                         className="text-center mb-12"
                     >
-                        <h2 className="text-4xl md:text-5xl font-black text-primary-foreground mb-4">
+                        <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
                             Send Us a Message
                         </h2>
-                        <p className="text-xl text-primary-foreground/70">
+                        <p className="text-xl text-gray-900/70">
                             We'll get back to you within 24 hours
                         </p>
                     </motion.div>
@@ -166,27 +166,27 @@ const SupportPage = () => {
                     >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label className="block text-sm font-semibold text-primary-foreground mb-2">
+                                <label className="block text-sm font-semibold text-gray-900 mb-2">
                                     Name
                                 </label>
                                 <input
                                     type="text"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/40 border border-white/10 text-primary-foreground focus:border-primary focus:outline-none transition-colors"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/40 border border-white/10 text-gray-900 focus:border-primary focus:outline-none transition-colors"
                                     placeholder="Your name"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-primary-foreground mb-2">
+                                <label className="block text-sm font-semibold text-gray-900 mb-2">
                                     Email
                                 </label>
                                 <input
                                     type="email"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/40 border border-white/10 text-primary-foreground focus:border-primary focus:outline-none transition-colors"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/40 border border-white/10 text-gray-900 focus:border-primary focus:outline-none transition-colors"
                                     placeholder="your@email.com"
                                     required
                                 />
@@ -194,27 +194,27 @@ const SupportPage = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-primary-foreground mb-2">
+                            <label className="block text-sm font-semibold text-gray-900 mb-2">
                                 Subject
                             </label>
                             <input
                                 type="text"
                                 value={formData.subject}
                                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                className="w-full px-4 py-3 rounded-xl bg-gray-50/40 border border-white/10 text-primary-foreground focus:border-primary focus:outline-none transition-colors"
+                                className="w-full px-4 py-3 rounded-xl bg-gray-50/40 border border-white/10 text-gray-900 focus:border-primary focus:outline-none transition-colors"
                                 placeholder="How can we help?"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-primary-foreground mb-2">
+                            <label className="block text-sm font-semibold text-gray-900 mb-2">
                                 Message
                             </label>
                             <textarea
                                 value={formData.message}
                                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                className="w-full px-4 py-3 rounded-xl bg-gray-50/40 border border-white/10 text-primary-foreground focus:border-primary focus:outline-none transition-colors resize-none"
+                                className="w-full px-4 py-3 rounded-xl bg-gray-50/40 border border-white/10 text-gray-900 focus:border-primary focus:outline-none transition-colors resize-none"
                                 rows={6}
                                 placeholder="Tell us more about your question or concern..."
                                 required
@@ -223,7 +223,7 @@ const SupportPage = () => {
 
                         <button
                             type="submit"
-                            className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-primary text-background font-bold hover:scale-105 transition-all"
+                            className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-primary text-white font-bold hover:scale-105 transition-all"
                         >
                             <Send className="w-5 h-5" />
                             Send Message
@@ -241,10 +241,10 @@ const SupportPage = () => {
                         viewport={{ once: true }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-black text-primary-foreground mb-4">
+                        <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
                             Frequently Asked Questions
                         </h2>
-                        <p className="text-xl text-primary-foreground/70">
+                        <p className="text-xl text-gray-900/70">
                             Quick answers to common questions
                         </p>
                     </motion.div>
@@ -259,11 +259,11 @@ const SupportPage = () => {
                                 transition={{ delay: index * 0.05 }}
                                 className="p-6 rounded-2xl bg-gray-50/40 backdrop-blur-sm border border-white/10 group"
                             >
-                                <summary className="text-lg font-bold text-primary-foreground cursor-pointer list-none flex items-center justify-between">
+                                <summary className="text-lg font-bold text-gray-900 cursor-pointer list-none flex items-center justify-between">
                                     {faq.question}
                                     <span className="text-2xl group-open:rotate-45 transition-transform">+</span>
                                 </summary>
-                                <p className="mt-4 text-primary-foreground/70 leading-relaxed">
+                                <p className="mt-4 text-gray-900/70 leading-relaxed">
                                     {faq.answer}
                                 </p>
                             </motion.details>
@@ -275,7 +275,7 @@ const SupportPage = () => {
             {/* Footer */}
             <footer className="border-t border-white/10 py-12 px-6">
                 <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-primary-foreground/60">
+                    <p className="text-gray-900/60">
                         © 2024 BlackLoveLink. Building authentic connections.
                     </p>
                 </div>

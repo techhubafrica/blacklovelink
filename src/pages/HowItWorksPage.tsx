@@ -60,7 +60,7 @@ const HowItWorksPage = () => {
                     </Link>
                     <Link
                         to="/swipe"
-                        className="rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-background transition-all hover:scale-105"
+                        className="rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-white transition-all hover:scale-105"
                     >
                         Get Started
                     </Link>
@@ -76,10 +76,10 @@ const HowItWorksPage = () => {
                         transition={{ duration: 0.6 }}
                         className="text-center"
                     >
-                        <h1 className="text-5xl md:text-7xl font-black text-primary-foreground mb-6">
+                        <h1 className="text-5xl md:text-7xl font-black text-gray-900 mb-6">
                             How It <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Works</span>
                         </h1>
-                        <p className="text-xl md:text-2xl text-primary-foreground/70 max-w-3xl mx-auto leading-relaxed">
+                        <p className="text-xl md:text-2xl text-gray-900/70 max-w-3xl mx-auto leading-relaxed">
                             Finding authentic love shouldn't be complicated. Here's how BlackLoveLink helps you build meaningful connections.
                         </p>
                     </motion.div>
@@ -103,20 +103,20 @@ const HowItWorksPage = () => {
                                 <div className="flex-shrink-0">
                                     <div className={`relative w-32 h-32 rounded-3xl bg-gradient-to-br ${step.color} p-1`}>
                                         <div className="w-full h-full rounded-3xl bg-gray-50 flex items-center justify-center">
-                                            <step.icon className="w-16 h-16 text-primary-foreground" strokeWidth={1.5} />
+                                            <step.icon className="w-16 h-16 text-gray-900" strokeWidth={1.5} />
                                         </div>
                                     </div>
-                                    <div className="absolute -top-6 -right-6 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-background font-black text-xl">
+                                    <div className="absolute -top-6 -right-6 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-black text-xl">
                                         {index + 1}
                                     </div>
                                 </div>
 
                                 {/* Content */}
                                 <div className="flex-1 text-center md:text-left">
-                                    <h3 className="text-3xl md:text-4xl font-black text-primary-foreground mb-4">
+                                    <h3 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
                                         {step.title}
                                     </h3>
-                                    <p className="text-lg text-primary-foreground/70 leading-relaxed">
+                                    <p className="text-lg text-gray-900/70 leading-relaxed">
                                         {step.description}
                                     </p>
                                 </div>
@@ -135,10 +135,10 @@ const HowItWorksPage = () => {
                         viewport={{ once: true }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-black text-primary-foreground mb-4">
+                        <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
                             Everything You Need
                         </h2>
-                        <p className="text-xl text-primary-foreground/70">
+                        <p className="text-xl text-gray-900/70">
                             Built with your safety and success in mind
                         </p>
                     </motion.div>
@@ -154,7 +154,7 @@ const HowItWorksPage = () => {
                                 className="flex items-center gap-4 p-6 rounded-2xl bg-gray-50/40 backdrop-blur-sm border border-white/10 hover:bg-gray-50/60 transition-all"
                             >
                                 <feature.icon className="w-6 h-6 text-primary flex-shrink-0" />
-                                <span className="text-primary-foreground font-semibold">{feature.text}</span>
+                                <span className="text-gray-900 font-semibold">{feature.text}</span>
                             </motion.div>
                         ))}
                     </div>
@@ -169,15 +169,15 @@ const HowItWorksPage = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-4xl md:text-6xl font-black text-primary-foreground mb-6">
+                        <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
                             Ready to Get Started?
                         </h2>
-                        <p className="text-xl text-primary-foreground/70 mb-12">
+                        <p className="text-xl text-gray-900/70 mb-12">
                             Join thousands of Black professionals finding authentic connections
                         </p>
                         <Link
                             to="/swipe"
-                            className="inline-block rounded-full bg-primary-foreground px-12 py-4 text-lg font-bold text-background shadow-2xl shadow-primary-foreground/20 transition-all hover:scale-105"
+                            className="inline-block rounded-full bg-primary-foreground px-12 py-4 text-lg font-bold text-white shadow-2xl shadow-primary-foreground/20 transition-all hover:scale-105"
                         >
                             Create Your Profile
                         </Link>
@@ -188,7 +188,7 @@ const HowItWorksPage = () => {
             {/* Footer */}
             <footer className="border-t border-white/10 py-12 px-6">
                 <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-primary-foreground/60">
+                    <p className="text-gray-900/60">
                         © 2024 BlackLoveLink. Building authentic connections.
                     </p>
                 </div>

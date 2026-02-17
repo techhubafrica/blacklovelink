@@ -59,7 +59,7 @@ const TrustSafetyPage = () => {
                     </Link>
                     <Link
                         to="/swipe"
-                        className="rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-background transition-all hover:scale-105"
+                        className="rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-white transition-all hover:scale-105"
                     >
                         Get Started
                     </Link>
@@ -79,10 +79,10 @@ const TrustSafetyPage = () => {
                             <Shield className="w-5 h-5 text-primary" />
                             <span className="text-primary font-semibold">Your Safety is Our Priority</span>
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-black text-primary-foreground mb-6">
+                        <h1 className="text-5xl md:text-7xl font-black text-gray-900 mb-6">
                             Trust & <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Safety</span>
                         </h1>
-                        <p className="text-xl md:text-2xl text-primary-foreground/70 max-w-3xl mx-auto leading-relaxed">
+                        <p className="text-xl md:text-2xl text-gray-900/70 max-w-3xl mx-auto leading-relaxed">
                             We're committed to creating a safe, respectful space where Black professionals can build authentic connections with confidence.
                         </p>
                     </motion.div>
@@ -103,12 +103,12 @@ const TrustSafetyPage = () => {
                                 className="p-8 rounded-3xl bg-gray-50/40 backdrop-blur-sm border border-white/10 hover:bg-gray-50/60 transition-all group"
                             >
                                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <feature.icon className="w-7 h-7 text-background" />
+                                    <feature.icon className="w-7 h-7 text-white" />
                                 </div>
-                                <h3 className="text-2xl font-black text-primary-foreground mb-4">
+                                <h3 className="text-2xl font-black text-gray-900 mb-4">
                                     {feature.title}
                                 </h3>
-                                <p className="text-primary-foreground/70 leading-relaxed">
+                                <p className="text-gray-900/70 leading-relaxed">
                                     {feature.description}
                                 </p>
                             </motion.div>
@@ -126,10 +126,10 @@ const TrustSafetyPage = () => {
                         viewport={{ once: true }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-black text-primary-foreground mb-4">
+                        <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
                             Dating Safety Tips
                         </h2>
-                        <p className="text-xl text-primary-foreground/70">
+                        <p className="text-xl text-gray-900/70">
                             Stay safe while finding your perfect match
                         </p>
                     </motion.div>
@@ -144,10 +144,10 @@ const TrustSafetyPage = () => {
                                 transition={{ delay: index * 0.05 }}
                                 className="flex items-start gap-4 p-6 rounded-2xl bg-gray-50/40 border border-white/10"
                             >
-                                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center text-background text-sm font-bold">
+                                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold">
                                     ✓
                                 </div>
-                                <p className="text-primary-foreground/90">{tip}</p>
+                                <p className="text-gray-900/90">{tip}</p>
                             </motion.div>
                         ))}
                     </div>
@@ -165,22 +165,22 @@ const TrustSafetyPage = () => {
                     >
                         <div className="text-center">
                             <AlertCircle className="w-16 h-16 text-primary mx-auto mb-6" />
-                            <h2 className="text-3xl md:text-4xl font-black text-primary-foreground mb-4">
+                            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
                                 See Something Concerning?
                             </h2>
-                            <p className="text-xl text-primary-foreground/70 mb-8">
+                            <p className="text-xl text-gray-900/70 mb-8">
                                 Report it immediately. Our safety team investigates all reports within 24 hours.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <Link
                                     to="/support"
-                                    className="rounded-full bg-primary px-8 py-3 text-sm font-bold text-background hover:scale-105 transition-all"
+                                    className="rounded-full bg-primary px-8 py-3 text-sm font-bold text-white hover:scale-105 transition-all"
                                 >
                                     Report a Concern
                                 </Link>
                                 <a
                                     href="mailto:safety@blacklovelink.com"
-                                    className="rounded-full bg-gray-50/60 border border-white/20 px-8 py-3 text-sm font-bold text-primary-foreground hover:bg-white/20 transition-all"
+                                    className="rounded-full bg-gray-50/60 border border-white/20 px-8 py-3 text-sm font-bold text-gray-900 hover:bg-white/20 transition-all"
                                 >
                                     Email Safety Team
                                 </a>
@@ -193,7 +193,7 @@ const TrustSafetyPage = () => {
             {/* Footer */}
             <footer className="border-t border-white/10 py-12 px-6">
                 <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-primary-foreground/60">
+                    <p className="text-gray-900/60">
                         © 2024 BlackLoveLink. Building authentic connections.
                     </p>
                 </div>

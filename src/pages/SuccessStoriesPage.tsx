@@ -54,7 +54,7 @@ const SuccessStoriesPage = () => {
                     </Link>
                     <Link
                         to="/swipe"
-                        className="rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-background transition-all hover:scale-105"
+                        className="rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-white transition-all hover:scale-105"
                     >
                         Find Your Story
                     </Link>
@@ -74,10 +74,10 @@ const SuccessStoriesPage = () => {
                             <Heart className="w-5 h-5 text-primary fill-primary" />
                             <span className="text-primary font-semibold">Real Love, Real Stories</span>
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-black text-primary-foreground mb-6">
+                        <h1 className="text-5xl md:text-7xl font-black text-gray-900 mb-6">
                             Success <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Stories</span>
                         </h1>
-                        <p className="text-xl md:text-2xl text-primary-foreground/70 max-w-3xl mx-auto leading-relaxed">
+                        <p className="text-xl md:text-2xl text-gray-900/70 max-w-3xl mx-auto leading-relaxed">
                             Every connection has a story. Here are just a few of the thousands of couples who found authentic love on BlackLoveLink.
                         </p>
                     </motion.div>
@@ -125,13 +125,13 @@ const SuccessStoriesPage = () => {
                             <div className="flex-1 space-y-6">
                                 <div className="relative">
                                     <Quote className="absolute -top-4 -left-4 w-12 h-12 text-primary/20" />
-                                    <p className="text-lg text-primary-foreground/70 leading-relaxed pl-8">
+                                    <p className="text-lg text-gray-900/70 leading-relaxed pl-8">
                                         {story.story}
                                     </p>
                                 </div>
 
                                 <div className="border-l-4 border-primary pl-6 py-4 bg-primary/5 rounded-r-2xl">
-                                    <p className="text-xl font-semibold text-primary-foreground italic">
+                                    <p className="text-xl font-semibold text-gray-900 italic">
                                         "{story.quote}"
                                     </p>
                                 </div>
@@ -150,7 +150,7 @@ const SuccessStoriesPage = () => {
                         viewport={{ once: true }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-black text-primary-foreground mb-4">
+                        <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
                             You Could Be Next
                         </h2>
                     </motion.div>
@@ -172,7 +172,7 @@ const SuccessStoriesPage = () => {
                                 <div className="text-5xl md:text-6xl font-black text-primary mb-2">
                                     {stat.number}
                                 </div>
-                                <div className="text-xl text-primary-foreground/70 font-semibold">
+                                <div className="text-xl text-gray-900/70 font-semibold">
                                     {stat.label}
                                 </div>
                             </motion.div>
@@ -189,15 +189,15 @@ const SuccessStoriesPage = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-4xl md:text-6xl font-black text-primary-foreground mb-6">
+                        <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
                             Write Your Own Story
                         </h2>
-                        <p className="text-xl text-primary-foreground/70 mb-12">
+                        <p className="text-xl text-gray-900/70 mb-12">
                             Your success story starts with a single match
                         </p>
                         <Link
                             to="/swipe"
-                            className="inline-block rounded-full bg-primary-foreground px-12 py-4 text-lg font-bold text-background shadow-2xl shadow-primary-foreground/20 transition-all hover:scale-105"
+                            className="inline-block rounded-full bg-primary-foreground px-12 py-4 text-lg font-bold text-white shadow-2xl shadow-primary-foreground/20 transition-all hover:scale-105"
                         >
                             Start Matching Today
                         </Link>
@@ -208,7 +208,7 @@ const SuccessStoriesPage = () => {
             {/* Footer */}
             <footer className="border-t border-white/10 py-12 px-6">
                 <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-primary-foreground/60">
+                    <p className="text-gray-900/60">
                         © 2024 BlackLoveLink. Building authentic connections.
                     </p>
                 </div>
