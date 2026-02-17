@@ -1,8 +1,8 @@
-import profile1 from "@/assets/profile-1.jpg";
-import profile2 from "@/assets/profile-2.jpg";
-import profile3 from "@/assets/profile-3.jpg";
-import profile4 from "@/assets/profile-4.jpg";
-import profile5 from "@/assets/profile-5.jpg";
+import profile1 from "@/assets/profile-1.png";
+import profile2 from "@/assets/profile-2.png";
+import profile3 from "@/assets/profile-3.png";
+import profile4 from "@/assets/profile-4.png";
+import profile5 from "@/assets/profile-5.png";
 
 export interface Profile {
   id: number;
