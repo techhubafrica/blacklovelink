@@ -14,7 +14,7 @@ const SuccessStoriesPage = () => {
             image: story1,
             names: "Amara & Kwame",
             location: "Atlanta, GA",
-            date: "Met in January 2024",
+            date: "Met in January 2026",
             story: "We matched on BlackLoveLink during a cold January evening. What started as a conversation about our shared love for Ethiopian cuisine turned into late-night calls, weekend adventures, and eventually, us moving in together. We're both entrepreneurs, and having someone who understands the hustle while keeping me grounded has been a blessing.",
             quote: "I never thought I'd find someone who gets both my ambition and my need for balance. Kwame is my partner in every sense."
         },
@@ -38,7 +38,7 @@ const SuccessStoriesPage = () => {
             image: story4,
             names: "Destiny & Andre",
             location: "Los Angeles, CA",
-            date: "Met in June 2024",
+            date: "Met in June 2026",
             story: "As a creative director, I was skeptical about dating apps. Andre's profile stood out – he was genuine, ambitious, and had this infectious energy. We took things slow, built a real friendship first. Three months in, I knew he was different. Now we're collaborating on projects, building dreams together, and planning our future. BlackLoveLink gave me the space to find real love at my pace.",
             quote: "Andre is my best friend, my creative partner, and my love. I couldn't ask for more."
         }
@@ -209,7 +209,7 @@ const SuccessStoriesPage = () => {
             <footer className="border-t border-white/10 py-12 px-6">
                 <div className="mx-auto max-w-7xl text-center">
                     <p className="text-gray-900/60">
-                        © 2024 BlackLoveLink. Building authentic connections.
+                        © 2026 BlackLoveLink. Building authentic connections.
                     </p>
                 </div>
             </footer>
