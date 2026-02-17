@@ -51,7 +51,7 @@ const HowItWorksPage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-background font-display">
+        <div className="min-h-screen bg-gray-50 font-display">
             {/* Header */}
             <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-xl bg-black/20 border-b border-white/10">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-4">
@@ -102,7 +102,7 @@ const HowItWorksPage = () => {
                                 {/* Icon */}
                                 <div className="flex-shrink-0">
                                     <div className={`relative w-32 h-32 rounded-3xl bg-gradient-to-br ${step.color} p-1`}>
-                                        <div className="w-full h-full rounded-3xl bg-background flex items-center justify-center">
+                                        <div className="w-full h-full rounded-3xl bg-gray-50 flex items-center justify-center">
                                             <step.icon className="w-16 h-16 text-primary-foreground" strokeWidth={1.5} />
                                         </div>
                                     </div>
@@ -151,7 +151,7 @@ const HowItWorksPage = () => {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.05 }}
-                                className="flex items-center gap-4 p-6 rounded-2xl bg-background/40 backdrop-blur-sm border border-white/10 hover:bg-background/60 transition-all"
+                                className="flex items-center gap-4 p-6 rounded-2xl bg-gray-50/40 backdrop-blur-sm border border-white/10 hover:bg-gray-50/60 transition-all"
                             >
                                 <feature.icon className="w-6 h-6 text-primary flex-shrink-0" />
                                 <span className="text-primary-foreground font-semibold">{feature.text}</span>

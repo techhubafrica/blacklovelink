@@ -45,7 +45,7 @@ const SuccessStoriesPage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-background font-display">
+        <div className="min-h-screen bg-gray-50 font-display">
             {/* Header */}
             <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-xl bg-black/20 border-b border-white/10">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-4">
@@ -167,7 +167,7 @@ const SuccessStoriesPage = () => {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="text-center p-8 rounded-3xl bg-background/40 backdrop-blur-sm border border-white/10"
+                                className="text-center p-8 rounded-3xl bg-gray-50/40 backdrop-blur-sm border border-white/10"
                             >
                                 <div className="text-5xl md:text-6xl font-black text-primary mb-2">
                                     {stat.number}
