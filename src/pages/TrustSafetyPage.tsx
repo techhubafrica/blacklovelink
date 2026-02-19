@@ -50,7 +50,7 @@ const TrustSafetyPage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-background font-display">
+        <div className="min-h-screen bg-white font-display">
             {/* Header */}
             <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-2xl bg-background/80 border-b border-border">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-4">
