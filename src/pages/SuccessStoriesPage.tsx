@@ -23,7 +23,7 @@ const SuccessStoriesPage = () => {
             names: "Marcus & Zara",
             location: "New York, NY",
             date: "Met in March 2023",
-            story: "After years of disappointing dates on other apps, I almost gave up. Then I found BlackLoveLink and matched with Marcus within my first week. We bonded over our love of jazz, Black literature, and Sunday brunch. A year later, we're planning our wedding in Martha's Vineyard. Finding love with someone who celebrates my Blackness while building a future together feels like coming home.",
+            story: "After years of disappointing dates on other apps, I almost gave up. Then I found BlackLoveLink and matched with Marcus within my first week. We bonded over our love of jazz, Black literature, and Sunday brunch. A year later, we're planning our wedding in Martha's Vineyard.",
             quote: "Marcus showed me that the right person is worth the wait. Our connection is authentic, deep, and everything I dreamed of."
         },
         {
@@ -31,7 +31,7 @@ const SuccessStoriesPage = () => {
             names: "Simone & Jamal",
             location: "Houston, TX",
             date: "Met in August 2023",
-            story: "I'm a doctor, he's a software engineer. We're both workaholics who thought we didn't have time for dating. BlackLoveLink's verification process gave me confidence to open up, and Jamal's profile made me laugh out loud. Our first date was supposed to be coffee – it turned into a 6-hour conversation.  Now we're engaged and learning to make time for what matters: us.",
+            story: "I'm a doctor, he's a software engineer. We're both workaholics who thought we didn't have time for dating. BlackLoveLink's verification process gave me confidence to open up, and Jamal's profile made me laugh out loud. Our first date was supposed to be coffee – it turned into a 6-hour conversation. Now we're engaged.",
             quote: "Jamal gets my crazy schedule and still makes me feel like a priority. That's love."
         },
         {
@@ -39,22 +39,22 @@ const SuccessStoriesPage = () => {
             names: "Destiny & Andre",
             location: "Los Angeles, CA",
             date: "Met in June 2026",
-            story: "As a creative director, I was skeptical about dating apps. Andre's profile stood out – he was genuine, ambitious, and had this infectious energy. We took things slow, built a real friendship first. Three months in, I knew he was different. Now we're collaborating on projects, building dreams together, and planning our future. BlackLoveLink gave me the space to find real love at my pace.",
+            story: "As a creative director, I was skeptical about dating apps. Andre's profile stood out – he was genuine, ambitious, and had this infectious energy. We took things slow, built a real friendship first. Three months in, I knew he was different.",
             quote: "Andre is my best friend, my creative partner, and my love. I couldn't ask for more."
         }
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50 font-display">
+        <div className="min-h-screen bg-background font-display">
             {/* Header */}
-            <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-xl bg-black/20 border-b border-white/10">
+            <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-2xl bg-background/80 border-b border-border">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-4">
                     <Link to="/" className="flex items-center">
                         <img src={blackLovelinkLogo} alt="BlackLoveLink" className="h-11 w-auto" />
                     </Link>
                     <Link
-                        to="/swipe"
-                        className="rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-white transition-all hover:scale-105"
+                        to="/auth"
+                        className="rounded-full gradient-brand px-7 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:scale-105"
                     >
                         Find Your Story
                     </Link>
@@ -74,10 +74,10 @@ const SuccessStoriesPage = () => {
                             <Heart className="w-5 h-5 text-primary fill-primary" />
                             <span className="text-primary font-semibold">Real Love, Real Stories</span>
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-black text-gray-900 mb-6">
-                            Success <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Stories</span>
+                        <h1 className="text-5xl md:text-7xl font-black text-foreground mb-6">
+                            Success <span className="text-gradient-brand">Stories</span>
                         </h1>
-                        <p className="text-xl md:text-2xl text-gray-900/70 max-w-3xl mx-auto leading-relaxed">
+                        <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                             Every connection has a story. Here are just a few of the thousands of couples who found authentic love on BlackLoveLink.
                         </p>
                     </motion.div>
@@ -96,7 +96,6 @@ const SuccessStoriesPage = () => {
                             transition={{ duration: 0.7 }}
                             className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 items-center`}
                         >
-                            {/* Image */}
                             <div className="flex-1">
                                 <div className="relative rounded-3xl overflow-hidden group">
                                     <img
@@ -121,17 +120,15 @@ const SuccessStoriesPage = () => {
                                 </div>
                             </div>
 
-                            {/* Content */}
                             <div className="flex-1 space-y-6">
                                 <div className="relative">
                                     <Quote className="absolute -top-4 -left-4 w-12 h-12 text-primary/20" />
-                                    <p className="text-lg text-gray-900/70 leading-relaxed pl-8">
+                                    <p className="text-lg text-muted-foreground leading-relaxed pl-8">
                                         {story.story}
                                     </p>
                                 </div>
-
                                 <div className="border-l-4 border-primary pl-6 py-4 bg-primary/5 rounded-r-2xl">
-                                    <p className="text-xl font-semibold text-gray-900 italic">
+                                    <p className="text-xl font-semibold text-foreground italic">
                                         "{story.quote}"
                                     </p>
                                 </div>
@@ -142,7 +139,7 @@ const SuccessStoriesPage = () => {
             </section>
 
             {/* Stats Section */}
-            <section className="py-20 px-6 bg-black/20">
+            <section className="py-20 px-6 bg-card">
                 <div className="mx-auto max-w-6xl">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -150,7 +147,7 @@ const SuccessStoriesPage = () => {
                         viewport={{ once: true }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+                        <h2 className="text-4xl md:text-5xl font-black text-foreground mb-4">
                             You Could Be Next
                         </h2>
                     </motion.div>
@@ -167,12 +164,12 @@ const SuccessStoriesPage = () => {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="text-center p-8 rounded-3xl bg-gray-50/40 backdrop-blur-sm border border-white/10"
+                                className="text-center p-8 rounded-3xl bg-muted/50 border border-border"
                             >
                                 <div className="text-5xl md:text-6xl font-black text-primary mb-2">
                                     {stat.number}
                                 </div>
-                                <div className="text-xl text-gray-900/70 font-semibold">
+                                <div className="text-xl text-foreground/70 font-semibold">
                                     {stat.label}
                                 </div>
                             </motion.div>
@@ -189,15 +186,15 @@ const SuccessStoriesPage = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
+                        <h2 className="text-4xl md:text-6xl font-black text-foreground mb-6">
                             Write Your Own Story
                         </h2>
-                        <p className="text-xl text-gray-900/70 mb-12">
+                        <p className="text-xl text-muted-foreground mb-12">
                             Your success story starts with a single match
                         </p>
                         <Link
-                            to="/swipe"
-                            className="inline-block rounded-full bg-primary-foreground px-12 py-4 text-lg font-bold text-white shadow-2xl shadow-primary-foreground/20 transition-all hover:scale-105"
+                            to="/auth"
+                            className="inline-block rounded-full gradient-brand px-12 py-4 text-lg font-bold text-primary-foreground shadow-button transition-all hover:scale-105"
                         >
                             Start Matching Today
                         </Link>
@@ -206,9 +203,9 @@ const SuccessStoriesPage = () => {
             </section>
 
             {/* Footer */}
-            <footer className="border-t border-white/10 py-12 px-6">
+            <footer className="border-t border-border py-12 px-6">
                 <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-gray-900/60">
+                    <p className="text-muted-foreground">
                         © 2026 BlackLoveLink. Building authentic connections.
                     </p>
                 </div>

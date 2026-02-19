@@ -45,41 +45,40 @@ const SupportPage = () => {
             title: "Email Us",
             description: "Get a response within 24 hours",
             action: "support@blacklovelink.com",
-            color: "from-blue-500 to-indigo-500"
+            color: "from-primary to-secondary"
         },
         {
             icon: MessageCircle,
             title: "Live Chat",
             description: "Available Mon-Fri, 9AM-6PM ET",
             action: "Start Chat",
-            color: "from-green-500 to-emerald-500"
+            color: "from-secondary to-primary"
         },
         {
             icon: Phone,
             title: "Call Us",
             description: "Speak with our team directly",
             action: "1-800-LOVE-LINK",
-            color: "from-purple-500 to-pink-500"
+            color: "from-primary to-secondary"
         }
     ];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle form submission
         console.log("Form submitted:", formData);
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 font-display">
+        <div className="min-h-screen bg-background font-display">
             {/* Header */}
-            <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-xl bg-black/20 border-b border-white/10">
+            <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-2xl bg-background/80 border-b border-border">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-4">
                     <Link to="/" className="flex items-center">
                         <img src={blackLovelinkLogo} alt="BlackLoveLink" className="h-11 w-auto" />
                     </Link>
                     <Link
-                        to="/swipe"
-                        className="rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-white transition-all hover:scale-105"
+                        to="/auth"
+                        className="rounded-full gradient-brand px-7 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:scale-105"
                     >
                         Get Started
                     </Link>
@@ -99,10 +98,10 @@ const SupportPage = () => {
                             <HelpCircle className="w-5 h-5 text-primary" />
                             <span className="text-primary font-semibold">We're Here to Help</span>
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-black text-gray-900 mb-6">
-                            Support <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Center</span>
+                        <h1 className="text-5xl md:text-7xl font-black text-foreground mb-6">
+                            Support <span className="text-gradient-brand">Center</span>
                         </h1>
-                        <p className="text-xl md:text-2xl text-gray-900/70 max-w-3xl mx-auto leading-relaxed">
+                        <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                             Have questions? Need help? Our dedicated support team is here for you.
                         </p>
                     </motion.div>
@@ -120,15 +119,15 @@ const SupportPage = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="p-8 rounded-3xl bg-gray-50/40 backdrop-blur-sm border border-white/10 hover:bg-gray-50/60 transition-all  text-center group"
+                                className="p-8 rounded-3xl bg-card border border-border hover:bg-muted transition-all text-center group"
                             >
                                 <div className={`w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br ${method.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                                    <method.icon className="w-8 h-8 text-white" />
+                                    <method.icon className="w-8 h-8 text-primary-foreground" />
                                 </div>
-                                <h3 className="text-2xl font-black text-gray-900 mb-2">
+                                <h3 className="text-2xl font-black text-foreground mb-2">
                                     {method.title}
                                 </h3>
-                                <p className="text-gray-900/60 mb-6">
+                                <p className="text-muted-foreground mb-6">
                                     {method.description}
                                 </p>
                                 <div className="text-primary font-bold text-lg">
@@ -141,7 +140,7 @@ const SupportPage = () => {
             </section>
 
             {/* Contact Form */}
-            <section className="py-20 px-6 bg-black/20">
+            <section className="py-20 px-6 bg-card">
                 <div className="mx-auto max-w-3xl">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -149,10 +148,10 @@ const SupportPage = () => {
                         viewport={{ once: true }}
                         className="text-center mb-12"
                     >
-                        <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+                        <h2 className="text-4xl md:text-5xl font-black text-foreground mb-4">
                             Send Us a Message
                         </h2>
-                        <p className="text-xl text-gray-900/70">
+                        <p className="text-xl text-muted-foreground">
                             We'll get back to you within 24 hours
                         </p>
                     </motion.div>
@@ -162,31 +161,27 @@ const SupportPage = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         onSubmit={handleSubmit}
-                        className="p-8 rounded-3xl bg-gray-50/40 backdrop-blur-sm border border-white/10 space-y-6"
+                        className="p-8 rounded-3xl bg-muted/50 border border-border space-y-6"
                     >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                    Name
-                                </label>
+                                <label className="block text-sm font-semibold text-foreground mb-2">Name</label>
                                 <input
                                     type="text"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/40 border border-white/10 text-gray-900 focus:border-primary focus:outline-none transition-colors"
+                                    className="w-full px-4 py-3 rounded-xl bg-background border border-border text-foreground focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground"
                                     placeholder="Your name"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                    Email
-                                </label>
+                                <label className="block text-sm font-semibold text-foreground mb-2">Email</label>
                                 <input
                                     type="email"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50/40 border border-white/10 text-gray-900 focus:border-primary focus:outline-none transition-colors"
+                                    className="w-full px-4 py-3 rounded-xl bg-background border border-border text-foreground focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground"
                                     placeholder="your@email.com"
                                     required
                                 />
@@ -194,27 +189,23 @@ const SupportPage = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                Subject
-                            </label>
+                            <label className="block text-sm font-semibold text-foreground mb-2">Subject</label>
                             <input
                                 type="text"
                                 value={formData.subject}
                                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                className="w-full px-4 py-3 rounded-xl bg-gray-50/40 border border-white/10 text-gray-900 focus:border-primary focus:outline-none transition-colors"
+                                className="w-full px-4 py-3 rounded-xl bg-background border border-border text-foreground focus:border-primary focus:outline-none transition-colors placeholder:text-muted-foreground"
                                 placeholder="How can we help?"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                Message
-                            </label>
+                            <label className="block text-sm font-semibold text-foreground mb-2">Message</label>
                             <textarea
                                 value={formData.message}
                                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                className="w-full px-4 py-3 rounded-xl bg-gray-50/40 border border-white/10 text-gray-900 focus:border-primary focus:outline-none transition-colors resize-none"
+                                className="w-full px-4 py-3 rounded-xl bg-background border border-border text-foreground focus:border-primary focus:outline-none transition-colors resize-none placeholder:text-muted-foreground"
                                 rows={6}
                                 placeholder="Tell us more about your question or concern..."
                                 required
@@ -223,7 +214,7 @@ const SupportPage = () => {
 
                         <button
                             type="submit"
-                            className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-primary text-white font-bold hover:scale-105 transition-all"
+                            className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full gradient-brand text-primary-foreground font-bold hover:scale-105 transition-all"
                         >
                             <Send className="w-5 h-5" />
                             Send Message
@@ -241,10 +232,10 @@ const SupportPage = () => {
                         viewport={{ once: true }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+                        <h2 className="text-4xl md:text-5xl font-black text-foreground mb-4">
                             Frequently Asked Questions
                         </h2>
-                        <p className="text-xl text-gray-900/70">
+                        <p className="text-xl text-muted-foreground">
                             Quick answers to common questions
                         </p>
                     </motion.div>
@@ -257,13 +248,13 @@ const SupportPage = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.05 }}
-                                className="p-6 rounded-2xl bg-gray-50/40 backdrop-blur-sm border border-white/10 group"
+                                className="p-6 rounded-2xl bg-card border border-border group"
                             >
-                                <summary className="text-lg font-bold text-gray-900 cursor-pointer list-none flex items-center justify-between">
+                                <summary className="text-lg font-bold text-foreground cursor-pointer list-none flex items-center justify-between">
                                     {faq.question}
-                                    <span className="text-2xl group-open:rotate-45 transition-transform">+</span>
+                                    <span className="text-2xl text-muted-foreground group-open:rotate-45 transition-transform">+</span>
                                 </summary>
-                                <p className="mt-4 text-gray-900/70 leading-relaxed">
+                                <p className="mt-4 text-muted-foreground leading-relaxed">
                                     {faq.answer}
                                 </p>
                             </motion.details>
@@ -273,9 +264,9 @@ const SupportPage = () => {
             </section>
 
             {/* Footer */}
-            <footer className="border-t border-white/10 py-12 px-6">
+            <footer className="border-t border-border py-12 px-6">
                 <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-gray-900/60">
+                    <p className="text-muted-foreground">
                         © 2026 BlackLoveLink. Building authentic connections.
                     </p>
                 </div>

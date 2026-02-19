@@ -24,7 +24,7 @@ const categories = [
       "Navigating Difficult Conversations with Grace",
       "Digital Communication Etiquette for Modern Dating",
     ],
-    color: "from-[hsl(var(--primary))] to-[hsl(var(--secondary))]",
+    color: "from-primary to-secondary",
   },
   {
     icon: Heart,
@@ -36,7 +36,7 @@ const categories = [
       "Building Trust in a Long-Distance Relationship",
       "Financial Compatibility: The Talk No One Has Early Enough",
     ],
-    color: "from-[hsl(var(--secondary))] to-[hsl(var(--primary))]",
+    color: "from-secondary to-primary",
   },
   {
     icon: Shield,
@@ -48,7 +48,7 @@ const categories = [
       "Consent and Communication in Modern Love",
       "How to Respectfully End a Connection That Isn't Working",
     ],
-    color: "from-[hsl(45,100%,55%)] to-[hsl(var(--primary))]",
+    color: "from-primary to-secondary",
   },
   {
     icon: Globe,
@@ -60,7 +60,7 @@ const categories = [
       "Dating Across African Cultures: What to Know",
       "Diaspora Dating: Balancing Two Worlds",
     ],
-    color: "from-[hsl(var(--primary))] to-[hsl(160,60%,45%)]",
+    color: "from-secondary to-primary",
   },
   {
     icon: Sparkles,
@@ -72,7 +72,7 @@ const categories = [
       "Building Confidence in Your Dating Life",
       "Work-Life-Love Balance for Busy Professionals",
     ],
-    color: "from-[hsl(280,70%,55%)] to-[hsl(var(--primary))]",
+    color: "from-primary to-secondary",
   },
   {
     icon: Users,
@@ -84,22 +84,22 @@ const categories = [
       "Merging Lives: Careers, Families, and Futures",
       "Pre-Marital Counselling: Why It Matters",
     ],
-    color: "from-[hsl(var(--secondary))] to-[hsl(280,70%,55%)]",
+    color: "from-secondary to-primary",
   },
 ];
 
 const EducationPage = () => {
   return (
-    <div className="min-h-screen bg-primary-foreground font-display">
+    <div className="min-h-screen bg-background font-display">
       {/* Header */}
-      <header className="border-b border-background/10">
+      <header className="border-b border-border">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <Link to="/" className="flex items-center gap-3">
             <img src={blackLovelinkLogo} alt="BlackLoveLink" className="h-10 w-auto" />
           </Link>
           <Link
             to="/"
-            className="flex items-center gap-2 text-sm font-semibold text-background/60 hover:text-background transition-colors"
+            className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-4 w-4" /> Back to Home
           </Link>
@@ -112,14 +112,14 @@ const EducationPage = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 rounded-full bg-background/10 px-4 py-2 mb-6"
+            className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 mb-6"
           >
             <BookOpen className="h-4 w-4 text-primary" />
-            <span className="text-sm font-semibold text-background/80">Education Hub</span>
+            <span className="text-sm font-semibold text-primary">Education Hub</span>
           </motion.div>
 
           <motion.h1
-            className="text-4xl font-black tracking-tight text-background sm:text-6xl"
+            className="text-4xl font-black tracking-tight text-foreground sm:text-6xl"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -129,7 +129,7 @@ const EducationPage = () => {
           </motion.h1>
 
           <motion.p
-            className="mt-6 text-lg text-background/50 max-w-2xl mx-auto leading-relaxed"
+            className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -150,7 +150,7 @@ const EducationPage = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              className="group rounded-2xl border border-background/10 bg-background/5 p-6 hover:bg-background/10 transition-all duration-300"
+              className="group rounded-2xl border border-border bg-card p-6 hover:bg-muted transition-all duration-300"
             >
               <div
                 className={`inline-flex rounded-xl bg-gradient-to-br ${cat.color} p-3 mb-4`}
@@ -158,17 +158,17 @@ const EducationPage = () => {
                 <cat.icon className="h-6 w-6 text-primary-foreground" />
               </div>
 
-              <h3 className="text-xl font-bold text-background mb-2">{cat.title}</h3>
-              <p className="text-sm text-background/50 mb-5 leading-relaxed">
+              <h3 className="text-xl font-bold text-foreground mb-2">{cat.title}</h3>
+              <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
                 {cat.description}
               </p>
 
               <ul className="space-y-2">
                 {cat.articles.map((article) => (
                   <li key={article}>
-                    <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-background/70 hover:bg-background/10 transition-colors group/item">
+                    <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-muted-foreground hover:bg-muted transition-colors group/item">
                       <ChevronRight className="h-3.5 w-3.5 text-primary flex-shrink-0 opacity-0 group-hover/item:opacity-100 transition-opacity" />
-                      <span className="group-hover/item:text-background transition-colors">
+                      <span className="group-hover/item:text-foreground transition-colors">
                         {article}
                       </span>
                     </button>
@@ -190,7 +190,7 @@ const EducationPage = () => {
           meaningful connections today.
         </p>
         <Link
-          to="/swipe"
+          to="/auth"
           className="inline-block rounded-full bg-primary-foreground px-10 py-4 text-lg font-bold text-background transition-transform hover:scale-105"
         >
           Start Your Journey
@@ -198,8 +198,8 @@ const EducationPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-background/10 bg-primary-foreground px-6 py-8 text-center">
-        <p className="text-sm text-background/40">
+      <footer className="border-t border-border bg-background px-6 py-8 text-center">
+        <p className="text-sm text-muted-foreground">
           © {new Date().getFullYear()} BlackLoveLink. All rights reserved.
         </p>
       </footer>
