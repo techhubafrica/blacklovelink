@@ -343,14 +343,14 @@ const Index = () => {
               <span className="text-primary">Love</span>
               <span className="text-secondary">Link</span>
             </h1>
-            <p className="mt-4 text-xl sm:text-2xl font-medium text-primary-foreground/80">{t.hero.title}</p>
+
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="mt-10 flex flex-col sm:flex-row items-center gap-4"
+            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link
               to="/swipe"
