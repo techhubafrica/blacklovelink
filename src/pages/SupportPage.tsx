@@ -69,7 +69,7 @@ const SupportPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-white font-display">
+        <div className="min-h-screen font-display" style={{ "--background": "0 0% 100%", "--foreground": "240 10% 10%", "--card": "0 0% 100%", "--card-foreground": "240 10% 10%", "--muted": "240 5% 93%", "--muted-foreground": "240 4% 40%", "--border": "240 5% 84%", backgroundColor: "white", color: "#111" } as React.CSSProperties}>
             {/* Header */}
             <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-2xl bg-background/80 border-b border-border">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-4">
