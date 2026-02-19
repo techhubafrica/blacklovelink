@@ -14,6 +14,7 @@ import SuccessStoriesPage from "./pages/SuccessStoriesPage";
 import ConnectionsPage from "./pages/ConnectionsPage";
 import TrustSafetyPage from "./pages/TrustSafetyPage";
 import SupportPage from "./pages/SupportPage";
+import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<AuthPage />} />
             <Route path="/swipe" element={<SwipePage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/messages" element={<MessagesPage />} />

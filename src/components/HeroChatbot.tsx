@@ -102,22 +102,24 @@ const HeroChatbot = () => {
       {/* Floating Bubble Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full shadow-2xl gradient-brand"
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.95 }}
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-full px-5 py-3.5 shadow-2xl gradient-brand"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.97 }}
         style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.25), 0 0 0 4px hsla(var(--primary)/0.15)" }}
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
-            <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-              <X className="h-6 w-6 text-primary-foreground" />
+            <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }} className="flex items-center gap-2">
+              <X className="h-5 w-5 text-primary-foreground" />
+              <span className="text-sm font-bold text-primary-foreground">Close</span>
             </motion.div>
           ) : (
-            <motion.div key="open" initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.5, opacity: 0 }} transition={{ duration: 0.15 }} className="relative">
-              <MessageCircle className="h-6 w-6 text-primary-foreground" fill="currentColor" />
-              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+            <motion.div key="open" initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.5, opacity: 0 }} transition={{ duration: 0.15 }} className="flex items-center gap-2 relative">
+              <MessageCircle className="h-5 w-5 text-primary-foreground" fill="currentColor" />
+              <span className="text-sm font-bold text-primary-foreground">Chat with Us</span>
+              <span className="absolute -top-1 -right-3 flex h-2.5 w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-foreground/60" />
-                <span className="relative inline-flex h-3 w-3 rounded-full bg-primary-foreground" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary-foreground" />
               </span>
             </motion.div>
           )}

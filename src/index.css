@@ -15,16 +15,16 @@
     --popover: 0 0% 11%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 350 89% 60%;
+    --primary: 0 80% 48%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 15 90% 58%;
+    --secondary: 145 63% 32%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 55%;
 
-    --accent: 340 82% 52%;
+    --accent: 145 63% 32%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -32,31 +32,31 @@
 
     --border: 0 0% 18%;
     --input: 0 0% 18%;
-    --ring: 350 89% 60%;
+    --ring: 0 80% 48%;
 
     --radius: 0.75rem;
 
-    --gradient-brand: linear-gradient(135deg, hsl(15, 90%, 58%), hsl(350, 89%, 60%), hsl(340, 82%, 52%));
-    --gradient-brand-hover: linear-gradient(135deg, hsl(15, 90%, 52%), hsl(350, 89%, 54%), hsl(340, 82%, 46%));
+    --gradient-brand: linear-gradient(135deg, hsl(0, 80%, 48%), hsl(145, 63%, 32%));
+    --gradient-brand-hover: linear-gradient(135deg, hsl(0, 80%, 42%), hsl(145, 63%, 26%));
     --gradient-gold: linear-gradient(135deg, hsl(45, 100%, 55%), hsl(35, 100%, 50%));
     --gradient-nope: linear-gradient(135deg, hsl(0, 85%, 55%), hsl(350, 80%, 45%));
-    --gradient-like: linear-gradient(135deg, hsl(150, 70%, 45%), hsl(160, 75%, 40%));
+    --gradient-like: linear-gradient(135deg, hsl(145, 63%, 32%), hsl(160, 75%, 40%));
     --gradient-superlike: linear-gradient(135deg, hsl(200, 90%, 55%), hsl(210, 95%, 50%));
 
     --shadow-card: 0 20px 60px -15px hsla(0, 0%, 0%, 0.5);
-    --shadow-glow: 0 0 40px hsla(350, 89%, 60%, 0.3);
+    --shadow-glow: 0 0 40px hsla(0, 80%, 48%, 0.3);
     --shadow-button: 0 8px 25px -5px hsla(0, 0%, 0%, 0.4);
 
     --font-display: 'Montserrat', sans-serif;
 
     --sidebar-background: 0 0% 7%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 350 89% 60%;
+    --sidebar-primary: 0 80% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 15%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 350 89% 60%;
+    --sidebar-ring: 0 80% 48%;
   }
 }
 

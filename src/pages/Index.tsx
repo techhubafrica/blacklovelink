@@ -233,7 +233,7 @@ const Index = () => {
               transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
             >
               <Link
-                to="/swipe"
+                to="/auth"
                 className="group relative overflow-hidden rounded-full bg-gradient-to-r from-primary-foreground to-primary-foreground/90 px-8 py-3 text-sm font-bold text-background shadow-lg shadow-primary-foreground/20 transition-all duration-300 hover:shadow-2xl hover:shadow-primary-foreground/30 hover:scale-105"
               >
                 <span className="relative z-10">{t.nav.signIn}</span>
@@ -333,14 +333,18 @@ const Index = () => {
         <div className="absolute inset-0 bg-black/40" />
 
         <div className="relative z-10 text-center px-4">
-          <motion.h1
-            className="text-6xl font-black tracking-tight sm:text-8xl"
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <span className="text-primary-foreground">{t.hero.title}</span>
-          </motion.h1>
+            <h1 className="text-5xl font-black tracking-tight sm:text-7xl lg:text-8xl">
+              <span className="text-primary-foreground">Black</span>
+              <span className="text-primary">Love</span>
+              <span className="text-secondary">Link</span>
+            </h1>
+            <p className="mt-4 text-xl sm:text-2xl font-medium text-primary-foreground/80">{t.hero.title}</p>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}

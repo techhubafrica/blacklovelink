@@ -48,16 +48,16 @@ const ConnectionsPage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50 font-display">
+        <div className="min-h-screen bg-background font-display">
             {/* Header */}
-            <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-xl bg-black/20 border-b border-white/10">
+            <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-2xl bg-background/80 border-b border-border">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-4">
                     <Link to="/" className="flex items-center">
                         <img src={blackLovelinkLogo} alt="BlackLoveLink" className="h-11 w-auto" />
                     </Link>
                     <Link
-                        to="/swipe"
-                        className="rounded-full bg-primary-foreground px-7 py-2.5 text-sm font-bold text-white transition-all hover:scale-105"
+                        to="/auth"
+                        className="rounded-full gradient-brand px-7 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:scale-105"
                     >
                         Start Connecting
                     </Link>
@@ -77,15 +77,15 @@ const ConnectionsPage = () => {
                                 <Heart className="w-5 h-5 text-primary fill-primary" />
                                 <span className="text-primary font-semibold">Making Meaningful Connections</span>
                             </div>
-                            <h1 className="text-5xl md:text-7xl font-black text-gray-900 mb-6">
-                                Find Your <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Connection</span>
+                            <h1 className="text-5xl md:text-7xl font-black text-foreground mb-6">
+                                Find Your <span className="text-gradient-brand">Connection</span>
                             </h1>
-                            <p className="text-xl text-gray-900/70 leading-relaxed mb-8">
+                            <p className="text-xl text-muted-foreground leading-relaxed mb-8">
                                 Connect with verified Black professionals who share your values, ambitions, and vision for the future. Every swipe brings you closer to something real.
                             </p>
                             <Link
-                                to="/swipe"
-                                className="inline-block rounded-full bg-primary px-10 py-4 text-lg font-bold text-white shadow-2xl shadow-primary/20 hover:scale-105 transition-all"
+                                to="/auth"
+                                className="inline-block rounded-full gradient-brand px-10 py-4 text-lg font-bold text-primary-foreground shadow-button hover:scale-105 transition-all"
                             >
                                 Start Matching
                             </Link>
@@ -113,14 +113,10 @@ const ConnectionsPage = () => {
                                             repeat: Infinity,
                                             delay: index * 0.2,
                                         }}
-                                        className="absolute w-72 h-96 rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10"
+                                        className="absolute w-72 h-96 rounded-3xl overflow-hidden shadow-2xl border-4 border-border"
                                         style={{ zIndex: 3 - index }}
                                     >
-                                        <img
-                                            src={img}
-                                            alt="Profile"
-                                            className="w-full h-full object-cover"
-                                        />
+                                        <img src={img} alt="Profile" className="w-full h-full object-cover" />
                                     </motion.div>
                                 ))}
                             </div>
@@ -130,7 +126,7 @@ const ConnectionsPage = () => {
             </section>
 
             {/* Features Section */}
-            <section className="py-20 px-6 bg-black/20">
+            <section className="py-20 px-6 bg-card">
                 <div className="mx-auto max-w-6xl">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -138,10 +134,10 @@ const ConnectionsPage = () => {
                         viewport={{ once: true }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+                        <h2 className="text-4xl md:text-5xl font-black text-foreground mb-4">
                             Connection Features
                         </h2>
-                        <p className="text-xl text-gray-900/70">
+                        <p className="text-xl text-muted-foreground">
                             Everything you need to find meaningful connections
                         </p>
                     </motion.div>
@@ -154,15 +150,15 @@ const ConnectionsPage = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="p-8 rounded-3xl bg-gray-50/40 backdrop-blur-sm border border-white/10 hover:bg-gray-50/60 transition-all group"
+                                className="p-8 rounded-3xl bg-muted/50 border border-border hover:bg-muted transition-all group"
                             >
-                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <feature.icon className="w-7 h-7 text-white" />
+                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <feature.icon className="w-7 h-7 text-primary-foreground" />
                                 </div>
-                                <h3 className="text-2xl font-black text-gray-900 mb-4">
+                                <h3 className="text-2xl font-black text-foreground mb-4">
                                     {feature.title}
                                 </h3>
-                                <p className="text-gray-900/70 leading-relaxed">
+                                <p className="text-muted-foreground leading-relaxed">
                                     {feature.description}
                                 </p>
                             </motion.div>
@@ -182,15 +178,15 @@ const ConnectionsPage = () => {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.1 }}
-                                className="text-center p-12 rounded-3xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20"
+                                className="text-center p-12 rounded-3xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20"
                             >
                                 <div className="text-6xl font-black text-primary mb-2">
                                     {stat.number}
                                 </div>
-                                <div className="text-2xl font-bold text-gray-900 mb-2">
+                                <div className="text-2xl font-bold text-foreground mb-2">
                                     {stat.label}
                                 </div>
-                                <div className="text-gray-900/60">
+                                <div className="text-muted-foreground">
                                     {stat.description}
                                 </div>
                             </motion.div>
@@ -200,7 +196,7 @@ const ConnectionsPage = () => {
             </section>
 
             {/* How It Works Section */}
-            <section className="py-20 px-6 bg-black/20">
+            <section className="py-20 px-6 bg-card">
                 <div className="mx-auto max-w-5xl">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -208,10 +204,10 @@ const ConnectionsPage = () => {
                         viewport={{ once: true }}
                         className="text-center mb-16"
                     >
-                        <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+                        <h2 className="text-4xl md:text-5xl font-black text-foreground mb-4">
                             It's Simple
                         </h2>
-                        <p className="text-xl text-gray-900/70">
+                        <p className="text-xl text-muted-foreground">
                             Start connecting in three easy steps
                         </p>
                     </motion.div>
@@ -233,10 +229,10 @@ const ConnectionsPage = () => {
                                 <div className="text-6xl font-black text-primary/20 mb-4">
                                     {item.step}
                                 </div>
-                                <h3 className="text-2xl font-black text-gray-900 mb-3">
+                                <h3 className="text-2xl font-black text-foreground mb-3">
                                     {item.title}
                                 </h3>
-                                <p className="text-gray-900/70">
+                                <p className="text-muted-foreground">
                                     {item.description}
                                 </p>
                             </motion.div>
@@ -253,15 +249,15 @@ const ConnectionsPage = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
+                        <h2 className="text-4xl md:text-6xl font-black text-foreground mb-6">
                             Your Next Connection Awaits
                         </h2>
-                        <p className="text-xl text-gray-900/70 mb-12">
+                        <p className="text-xl text-muted-foreground mb-12">
                             Join thousands finding meaningful relationships
                         </p>
                         <Link
-                            to="/swipe"
-                            className="inline-block rounded-full bg-primary-foreground px-12 py-4 text-lg font-bold text-white shadow-2xl shadow-primary-foreground/20 transition-all hover:scale-105"
+                            to="/auth"
+                            className="inline-block rounded-full gradient-brand px-12 py-4 text-lg font-bold text-primary-foreground shadow-button transition-all hover:scale-105"
                         >
                             Start Swiping
                         </Link>
@@ -270,9 +266,9 @@ const ConnectionsPage = () => {
             </section>
 
             {/* Footer */}
-            <footer className="border-t border-white/10 py-12 px-6">
+            <footer className="border-t border-border py-12 px-6">
                 <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-gray-900/60">
+                    <p className="text-muted-foreground">
                         © 2026 BlackLoveLink. Building authentic connections.
                     </p>
                 </div>
