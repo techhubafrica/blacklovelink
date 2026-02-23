@@ -353,7 +353,7 @@ const Index = () => {
             className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link
-              to="/swipe"
+              to="/auth"
               className="gradient-brand inline-block rounded-full px-10 py-4 text-lg font-bold text-primary-foreground shadow-button transition-transform hover:scale-105"
             >
               {t.hero.startJourney}
