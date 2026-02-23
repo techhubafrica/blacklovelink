@@ -50,14 +50,14 @@ const ConnectionsPage = () => {
     return (
         <div className="min-h-screen font-display" style={{ "--background": "0 0% 100%", "--foreground": "240 10% 10%", "--card": "0 0% 100%", "--card-foreground": "240 10% 10%", "--muted": "240 5% 93%", "--muted-foreground": "240 4% 40%", "--border": "240 5% 84%", backgroundColor: "white", color: "#111" } as React.CSSProperties}>
             {/* Header */}
-            <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-2xl bg-background/80 border-b border-border">
+            <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-2xl bg-white border-b border-gray-200">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-4">
                     <Link to="/" className="flex items-center">
                         <img src={blackLovelinkLogo} alt="BlackLoveLink" className="h-11 w-auto" />
                     </Link>
                     <Link
                         to="/auth"
-                        className="rounded-full gradient-brand px-7 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:scale-105"
+                        className="rounded-full bg-red-600 px-7 py-2.5 text-sm font-bold text-white transition-all hover:scale-105"
                     >
                         Start Connecting
                     </Link>
@@ -85,7 +85,7 @@ const ConnectionsPage = () => {
                             </p>
                             <Link
                                 to="/auth"
-                                className="inline-block rounded-full gradient-brand px-10 py-4 text-lg font-bold text-primary-foreground shadow-button hover:scale-105 transition-all"
+                                className="inline-block rounded-full bg-red-600 px-10 py-4 text-lg font-bold text-white shadow-button hover:scale-105 transition-all"
                             >
                                 Start Matching
                             </Link>
@@ -257,7 +257,7 @@ const ConnectionsPage = () => {
                         </p>
                         <Link
                             to="/auth"
-                            className="inline-block rounded-full gradient-brand px-12 py-4 text-lg font-bold text-primary-foreground shadow-button transition-all hover:scale-105"
+                            className="inline-block rounded-full bg-red-600 px-12 py-4 text-lg font-bold text-white shadow-button transition-all hover:scale-105"
                         >
                             Start Swiping
                         </Link>
@@ -278,3 +278,4 @@ const ConnectionsPage = () => {
 };
 
 export default ConnectionsPage;
+
