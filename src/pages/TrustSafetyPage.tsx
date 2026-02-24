@@ -51,20 +51,7 @@ const TrustSafetyPage = () => {
 
     return (
         <div className="min-h-screen font-display" style={{ "--background": "0 0% 100%", "--foreground": "240 10% 10%", "--card": "0 0% 100%", "--card-foreground": "240 10% 10%", "--muted": "240 5% 93%", "--muted-foreground": "240 4% 40%", "--border": "240 5% 84%", backgroundColor: "white", color: "#111" } as React.CSSProperties}>
-            {/* Header */}
-            <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-2xl bg-white border-b border-gray-200">
-                <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-4">
-                    <Link to="/" className="flex items-center">
-                        <img src={blackLovelinkLogo} alt="BlackLoveLink" className="h-11 w-auto" />
-                    </Link>
-                    <Link
-                        to="/auth"
-                        className="rounded-full bg-red-600 px-7 py-2.5 text-sm font-bold text-white transition-all hover:scale-105"
-                    >
-                        Get Started
-                    </Link>
-                </nav>
-            </header>
+            <SharedNavbar />
 
             {/* Hero Section */}
             <section className="relative pt-32 pb-20 px-6">
@@ -203,4 +190,5 @@ const TrustSafetyPage = () => {
 };
 
 export default TrustSafetyPage;
+
 
