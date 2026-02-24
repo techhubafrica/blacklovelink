@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
-import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import { useToast } from "@/hooks/use-toast";
@@ -10,13 +9,15 @@ import { useToast } from "@/hooks/use-toast";
 const AuthPage = () => {
   const [loading, setLoading] = useState<string | null>(null);
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const handleOAuth = async (provider: "google" | "apple") => {
     setLoading(provider);
     try {
-      const { error } = await lovable.auth.signInWithOAuth(provider, {
-        redirect_uri: window.location.origin,
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: window.location.origin,
+        },
       });
       if (error) {
         toast({
@@ -35,6 +36,7 @@ const AuthPage = () => {
       setLoading(null);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-background font-display flex flex-col">
