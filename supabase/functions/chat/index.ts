@@ -1,89 +1,83 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
+const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
 
-serve(async (req) => {
-  if (req.method === "OPTIONS")
-    return new Response(null, { headers: corsHeaders });
+const SYSTEM_PROMPT = `You are the BlackLoveLink AI assistant — a warm, knowledgeable guide for the BlackLoveLink platform. 
+BlackLoveLink is a premium dating platform designed for verified Black professionals to build authentic, meaningful connections.
+
+You help users understand:
+- How to create and verify their profile
+- How the matching system works
+- Safety and privacy features
+- Subscription and membership options
+- How to report issues or get support
+
+Tone: warm, encouraging, professional. Keep responses concise and helpful.
+Always stay on topic about BlackLoveLink. If asked unrelated questions, gently redirect back to the platform.`;
+
+Deno.serve(async (req: Request) => {
+  // Handle CORS preflight
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+    });
+  }
 
   try {
     const { messages } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const response = await fetch(
-      "https://ai.gateway.lovable.dev/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-3-flash-preview",
-          messages: [
-            {
-              role: "system",
-              content: `You are the BlackLoveLink AI assistant — a warm, knowledgeable guide for BlackLoveLink, the premier dating and relationship platform for accomplished Black professionals aged 27+ across Africa and the diaspora who are seeking serious, marriage-minded connections.
-
-Your role:
-- Answer questions about BlackLoveLink's features, mission, and values
-- Share relationship advice, communication tips, and cultural dating insights
-- Help users understand how the platform works
-- Be encouraging, respectful, and culturally aware
-- Keep responses concise (2-4 sentences unless asked for more detail)
-- Celebrate Black love, culture, and heritage in your tone
-
-Key facts about BlackLoveLink:
-- Targets vetted, accomplished Black professionals
-- Focuses on genuine compatibility over superficial swiping
-- Celebrates cultural identity and shared heritage
-- Tagline: "Connections That Speak Your Love Language"
-- 50K+ verified profiles, 98% match success rate
-- Available in multiple African languages (English, French, Swahili, Arabic, Portuguese, Hausa, Yoruba, Igbo, Amharic, Zulu)
-
-If asked about topics unrelated to BlackLoveLink or relationships, politely redirect.`,
-            },
-            ...messages,
-          ],
-          stream: true,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      if (response.status === 429) {
-        return new Response(
-          JSON.stringify({ error: "Rate limited. Please try again shortly." }),
-          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      if (response.status === 402) {
-        return new Response(
-          JSON.stringify({ error: "Service temporarily unavailable." }),
-          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      const t = await response.text();
-      console.error("AI gateway error:", response.status, t);
+    if (!OPENAI_API_KEY) {
       return new Response(
-        JSON.stringify({ error: "AI gateway error" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: "OpenAI API key not configured" }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
       );
     }
 
-    return new Response(response.body, {
-      headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          ...messages,
+        ],
+        stream: true,
+        max_tokens: 500,
+        temperature: 0.7,
+      }),
     });
-  } catch (e) {
-    console.error("chat error:", e);
-    return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      return new Response(JSON.stringify({ error }), {
+        status: response.status,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Stream the response back
+    return new Response(response.body, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "no-cache",
+      },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: String(err) }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   }
 });
