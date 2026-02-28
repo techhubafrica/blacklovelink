@@ -17,6 +17,7 @@ import { Language, languageNames } from "@/contexts/LanguageContext";
 
 const Index = () => {
   const { t, language, setLanguage } = useTranslation();
+  const { stats, loading, formatStat } = usePlatformStats();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
 
