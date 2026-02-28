@@ -27,16 +27,29 @@ export const usePlatformStats = () => {
         const fetchStats = async () => {
             try {
                 // Query counts from operational tables simultaneously. Use head: true for performance.
+                // Helper to safely execute a count query without crashing if a table doesn't exist
+                const safeCountQuery = async (table: string) => {
+                    try {
+                        const { count, error } = await supabase
+                            .from(table)
+                            .select("*", { count: "exact", head: true });
+                        if (error) throw error;
+                        return { count };
+                    } catch (e) {
+                        return { count: 0 };
+                    }
+                };
+
                 const [
                     { count: activeUsersCount },
                     { count: matchesCount },
                     { count: messagesCount },
                     { count: storiesCount },
                 ] = await Promise.all([
-                    supabase.from("profiles").select("*", { count: "exact", head: true }).catch(() => ({ count: 0 })),
-                    supabase.from("matches").select("*", { count: "exact", head: true }).catch(() => ({ count: 0 })),
-                    supabase.from("messages").select("*", { count: "exact", head: true }).catch(() => ({ count: 0 })),
-                    supabase.from("success_stories").select("*", { count: "exact", head: true }).catch(() => ({ count: 0 })),
+                    safeCountQuery("profiles"),
+                    safeCountQuery("matches"),
+                    safeCountQuery("messages"),
+                    safeCountQuery("success_stories"),
                 ]);
 
                 if (isMounted) {
