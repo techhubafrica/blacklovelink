@@ -62,7 +62,7 @@ const AuthPage = () => {
             if (!session) return;
             const isNew = !session.user.user_metadata?.profile_completed;
             if (isNew) {
-                setStep("google-otp");
+                navigate("/create-profile");
             } else {
                 navigate("/swipe");
             }
