@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
-import type { Profile } from "@/data/profiles";
+import type { UserProfile } from "@/hooks/useProfileData";
 
 interface MatchOverlayProps {
-  profile: Profile | null;
+  profile: UserProfile | null;
   onClose: () => void;
 }
 
@@ -32,7 +32,7 @@ const MatchOverlay = ({ profile, onClose }: MatchOverlayProps) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            You and {profile.name} liked each other
+            You and {profile.full_name} liked each other
           </motion.p>
 
           <motion.div
@@ -41,7 +41,7 @@ const MatchOverlay = ({ profile, onClose }: MatchOverlayProps) => {
             animate={{ scale: 1 }}
             transition={{ type: "spring", delay: 0.3 }}
           >
-            <img src={profile.image} alt={profile.name} className="h-full w-full object-cover" />
+            <img src={profile.avatar_url ?? "/placeholder.svg"} alt={profile.full_name} className="h-full w-full object-cover" />
           </motion.div>
 
           <motion.div

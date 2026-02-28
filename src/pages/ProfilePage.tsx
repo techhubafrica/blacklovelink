@@ -1,15 +1,27 @@
 import { Settings, Edit2, Shield, Star, Crown, CheckCircle2 } from "lucide-react";
 import TopNav from "@/components/TopNav";
 import { useAuth } from "@/hooks/useAuth";
-import profile1 from "@/assets/profile-1.png";
+import { useCurrentUserProfile } from "@/hooks/useProfileData";
+import { Link } from "react-router-dom";
 
 const ProfilePage = () => {
   const { user } = useAuth();
-  const displayName = user?.user_metadata?.full_name ?? user?.email?.split("@")[0] ?? "You";
-  const avatarUrl = user?.user_metadata?.avatar_url ?? profile1;
+  const { profile, loading } = useCurrentUserProfile();
 
-  // Mock profile completeness (in real app, calculated from profile data)
-  const completeness = 72;
+  // Use data from Supabase profile, fall back to auth metadata
+  const displayName = profile?.full_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "You";
+  const avatarUrl = profile?.avatar_url || user?.user_metadata?.avatar_url || "/placeholder.svg";
+
+  // Calculate profile completeness from real data
+  const fieldsComplete = [
+    !!profile?.full_name,
+    !!profile?.occupation_title,
+    !!profile?.dob,
+    !!profile?.gender,
+    !!profile?.intent,
+    (profile?.photos?.length ?? 0) >= 2,
+  ];
+  const completeness = profile ? Math.round((fieldsComplete.filter(Boolean).length / fieldsComplete.length) * 100) : 0;
 
   return (
     <div className="flex h-[100dvh] flex-col bg-background">
@@ -22,19 +34,26 @@ const ProfilePage = () => {
           <div className="flex flex-col items-center">
             <div className="relative">
               <div className="h-28 w-28 overflow-hidden rounded-full border-4 border-primary shadow-glow">
-                <img src={avatarUrl} alt="Your profile" className="h-full w-full object-cover" />
+                {loading ? (
+                  <div className="h-full w-full bg-muted animate-pulse" />
+                ) : (
+                  <img src={avatarUrl} alt="Your profile" className="h-full w-full object-cover" />
+                )}
               </div>
-              <button className="absolute bottom-0 right-0 flex h-9 w-9 items-center justify-center rounded-full gradient-brand text-primary-foreground shadow-button">
+              <Link to="/create-profile" className="absolute bottom-0 right-0 flex h-9 w-9 items-center justify-center rounded-full gradient-brand text-primary-foreground shadow-button">
                 <Edit2 className="h-4 w-4" />
-              </button>
+              </Link>
             </div>
             <h2 className="mt-3 text-2xl font-bold text-foreground">{displayName}</h2>
-
-            {/* Verified badge */}
-            <div className="mt-1.5 flex items-center gap-1.5 text-xs font-semibold text-blue-500">
-              <CheckCircle2 className="w-4 h-4" fill="currentColor" />
-              LinkedIn Verified
-            </div>
+            {profile?.verified && (
+              <div className="mt-1.5 flex items-center gap-1.5 text-xs font-semibold text-blue-500">
+                <CheckCircle2 className="w-4 h-4" fill="currentColor" />
+                LinkedIn Verified
+              </div>
+            )}
+            {profile?.intent && (
+              <p className="mt-1 text-sm text-muted-foreground">{profile.intent}</p>
+            )}
           </div>
 
           {/* Profile completeness */}

@@ -18,6 +18,7 @@ import {
 import LinkedInVerifyModal from "@/components/LinkedInVerifyModal";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const GENDERS = ["Male", "Female"];
 const INTENTS = [
@@ -136,10 +137,73 @@ const ProfileCreationPage = () => {
     const handleContinue = async () => {
         if (!canContinue) return;
         setSaving(true);
-        // In a real app, save profile to Supabase here
-        await new Promise((res) => setTimeout(res, 1000));
-        setSaving(false);
-        navigate("/permissions");
+        try {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session?.user) throw new Error("Not authenticated");
+
+            const userId = session.user.id;
+            const uploadedUrls: string[] = [];
+
+            // Upload each photo to Supabase Storage
+            for (let i = 0; i < photos.length; i++) {
+                const slot = photos[i];
+                if (!slot.file) continue;
+                const ext = slot.file.name.split(".").pop() ?? "jpg";
+                const path = `${userId}/${Date.now()}_${i}.${ext}`;
+                const { error: uploadError } = await supabase.storage
+                    .from("profile-photos")
+                    .upload(path, slot.file, { upsert: true });
+                if (uploadError) {
+                    console.warn("Photo upload failed:", uploadError.message);
+                    continue;
+                }
+                const { data: urlData } = supabase.storage
+                    .from("profile-photos")
+                    .getPublicUrl(path);
+                uploadedUrls.push(urlData.publicUrl);
+            }
+
+            const avatarUrl = uploadedUrls[0] ?? null;
+
+            // Calculate age from DOB
+            const birthDate = new Date(dob);
+            const today = new Date();
+            let ageCalc = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) ageCalc--;
+
+            // Upsert profile to the `profiles` table
+            const { error: dbError } = await supabase.from("profiles").upsert({
+                user_id: userId,
+                full_name: fullName.trim(),
+                occupation_title: occupation.title,
+                occupation_company: occupation.company,
+                verified: occupation.verified,
+                dob,
+                age: ageCalc,
+                gender,
+                intent,
+                interests,
+                photos: uploadedUrls,
+                avatar_url: avatarUrl,
+                profile_completed: true,
+                updated_at: new Date().toISOString(),
+            }, { onConflict: "user_id" });
+
+            if (dbError) throw dbError;
+
+            toast({ title: "Profile saved! 🎉", description: "Your profile is live." });
+            navigate("/permissions");
+        } catch (err: unknown) {
+            console.error("Profile save error:", err);
+            toast({
+                title: "Error saving profile",
+                description: err instanceof Error ? err.message : "Please try again.",
+                variant: "destructive",
+            });
+        } finally {
+            setSaving(false);
+        }
     };
 
     const inputClass =

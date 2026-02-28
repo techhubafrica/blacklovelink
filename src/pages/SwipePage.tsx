@@ -4,15 +4,16 @@ import SwipeCard from "@/components/SwipeCard";
 import ActionButtons from "@/components/ActionButtons";
 import MatchOverlay from "@/components/MatchOverlay";
 import TopNav from "@/components/TopNav";
-import { profiles, type Profile } from "@/data/profiles";
+import { useProfiles, type UserProfile } from "@/hooks/useProfileData";
 import { SlidersHorizontal, X, RotateCcw } from "lucide-react";
 
 const INTENTS = ["All", "Long-term relationship", "Marriage", "Open to explore", "Networking only"];
 const INTERESTS_OPTIONS = ["Travel", "Fitness", "Tech", "Entrepreneurship", "Faith", "Music", "Art", "Reading", "Wellness"];
 
 const SwipePage = () => {
+  const { profiles, loading } = useProfiles();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [matchedProfile, setMatchedProfile] = useState<Profile | null>(null);
+  const [matchedProfile, setMatchedProfile] = useState<UserProfile | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
 
   // Filter state
@@ -23,9 +24,11 @@ const SwipePage = () => {
 
   // Apply filters to profiles
   const filteredProfiles = profiles.filter((p) => {
-    if (p.age < ageRange[0] || p.age > ageRange[1]) return false;
+    if (p.age !== null && p.age !== undefined) {
+      if (p.age < ageRange[0] || p.age > ageRange[1]) return false;
+    }
     if (intentFilter !== "All" && p.intent !== intentFilter) return false;
-    if (interestFilter.length > 0 && !interestFilter.some((i) => p.interests.includes(i))) return false;
+    if (interestFilter.length > 0 && !interestFilter.some((i) => (p.interests ?? []).includes(i))) return false;
     return true;
   });
 
@@ -61,6 +64,13 @@ const SwipePage = () => {
   return (
     <div className="flex h-[100dvh] flex-col bg-background">
       <TopNav />
+
+      {/* Loading state */}
+      {loading && (
+        <div className="flex flex-1 items-center justify-center">
+          <p className="text-muted-foreground">Finding matches nearby…</p>
+        </div>
+      )}
 
       {/* ─── Filter drawer button ─── */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-border">
@@ -214,8 +224,8 @@ const SwipePage = () => {
                       key={opt}
                       onClick={() => setIntentFilter(opt)}
                       className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${intentFilter === opt
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border bg-muted text-foreground hover:border-primary/40"
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-muted text-foreground hover:border-primary/40"
                         }`}
                     >
                       {opt}
@@ -233,8 +243,8 @@ const SwipePage = () => {
                       key={interest}
                       onClick={() => toggleInterest(interest)}
                       className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${interestFilter.includes(interest)
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border bg-muted text-foreground hover:border-primary/40"
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-muted text-foreground hover:border-primary/40"
                         }`}
                     >
                       {interest}

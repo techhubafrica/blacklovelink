@@ -1,9 +1,9 @@
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { MapPin, Briefcase, CheckCircle2, Heart, X } from "lucide-react";
-import type { Profile } from "@/data/profiles";
+import type { UserProfile } from "@/hooks/useProfileData";
 
 interface SwipeCardProps {
-  profile: Profile;
+  profile: UserProfile;
   onSwipe: (direction: "left" | "right" | "up") => void;
   isTop: boolean;
 }
@@ -49,8 +49,8 @@ const SwipeCard = ({ profile, onSwipe, isTop }: SwipeCardProps) => {
       <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl bg-card">
         {/* Profile image */}
         <img
-          src={profile.image}
-          alt={profile.name}
+          src={profile.avatar_url ?? profile.photos?.[0] ?? "/placeholder.svg"}
+          alt={profile.full_name}
           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           draggable={false}
         />
@@ -79,7 +79,7 @@ const SwipeCard = ({ profile, onSwipe, isTop }: SwipeCardProps) => {
           {/* Name + age + verified */}
           <div className="flex items-center gap-2">
             <h3 className="text-2xl font-black text-white">
-              {profile.name}, {profile.age}
+              {profile.full_name}, {profile.age ?? ""}
             </h3>
             {profile.verified && (
               <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0" fill="currentColor" />
@@ -89,7 +89,7 @@ const SwipeCard = ({ profile, onSwipe, isTop }: SwipeCardProps) => {
           {/* Occupation */}
           <div className="flex items-center gap-1.5 text-white/80 text-sm">
             <Briefcase className="w-4 h-4 flex-shrink-0" />
-            <span className="truncate">{profile.occupation} · {profile.company}</span>
+            <span className="truncate">{profile.occupation_title} · {profile.occupation_company}</span>
           </div>
 
           {/* Distance + intent */}
@@ -99,7 +99,7 @@ const SwipeCard = ({ profile, onSwipe, isTop }: SwipeCardProps) => {
               {profile.distance}
             </div>
             <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${intentColorClass}`}>
-              {profile.intent}
+              {profile.intent ?? ""}
             </span>
           </div>
 
@@ -108,7 +108,7 @@ const SwipeCard = ({ profile, onSwipe, isTop }: SwipeCardProps) => {
 
           {/* Interest tags */}
           <div className="flex gap-1.5 flex-wrap pt-1">
-            {profile.interests.slice(0, 3).map((tag) => (
+            {(profile.interests ?? []).slice(0, 3).map((tag) => (
               <span key={tag} className="text-xs bg-white/15 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
                 {tag}
               </span>
