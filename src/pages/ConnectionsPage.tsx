@@ -7,6 +7,7 @@ import profile1 from "@/assets/profile-1.png";
 import profile2 from "@/assets/profile-2.png";
 import profile3 from "@/assets/profile-3.png";
 import { usePlatformStats } from "@/hooks/usePlatformStats";
+import SharedNavbar from "@/components/SharedNavbar";
 
 const ConnectionsPage = () => {
     const { stats: platformStats, loading, formatStat } = usePlatformStats();

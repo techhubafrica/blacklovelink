@@ -91,24 +91,7 @@ const Index = () => {
               </Link>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            >
-              <Link
-                to="/connections"
-                className="group relative px-4 py-2.5 text-sm font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground"
-              >
-                <span className="relative z-10">{t.nav.connections}</span>
-                <motion.span
-                  className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileHover={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </Link>
-            </motion.div>
+
 
             <motion.div
               initial={{ opacity: 0, y: -20 }}
@@ -295,7 +278,7 @@ const Index = () => {
               className="lg:hidden border-t border-white/10 bg-black/40 backdrop-blur-2xl overflow-hidden"
             >
               <div className="px-6 py-6 space-y-2">
-                {[t.nav.home, t.nav.howItWorks, t.nav.connections, t.nav.successStories, t.nav.trustSafety, t.nav.support].map((l, i) => (
+                {[t.nav.home, t.nav.howItWorks, t.nav.successStories, t.nav.trustSafety, t.nav.support].map((l, i) => (
                   <motion.a
                     key={l}
                     href="#"

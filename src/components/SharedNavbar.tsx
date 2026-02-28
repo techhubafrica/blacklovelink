@@ -20,7 +20,6 @@ const SharedNavbar = () => {
     const navLinks = [
         { label: t.nav.home, to: "/" },
         { label: t.nav.howItWorks, to: "/how-it-works" },
-        { label: t.nav.connections, to: "/connections" },
         { label: t.nav.successStories, to: "/success-stories" },
         { label: t.nav.trustSafety, to: "/trust-safety" },
         { label: t.nav.support, to: "/support" },
