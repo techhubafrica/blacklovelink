@@ -3,12 +3,15 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Quote, Heart, MapPin, Calendar } from "lucide-react";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
+import SharedNavbar from "@/components/SharedNavbar";
 import story1 from "@/assets/story-1.png";
 import story2 from "@/assets/story-2.png";
 import story3 from "@/assets/story-3.png";
 import story4 from "@/assets/story-4.png";
+import { usePlatformStats } from "@/hooks/usePlatformStats";
 
 const SuccessStoriesPage = () => {
+    const { stats, loading, formatStat } = usePlatformStats();
     const stories = [
         {
             image: story1,
@@ -141,9 +144,9 @@ const SuccessStoriesPage = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {[
-                            { number: "50,000+", label: "Success Stories" },
-                            { number: "2M+", label: "Messages Daily" },
-                            { number: "95%", label: "Satisfaction Rate" }
+                            { number: loading ? "..." : formatStat(stats.successStories), label: "Success Stories" },
+                            { number: loading ? "..." : formatStat(stats.messagesDaily), label: "Messages Daily" },
+                            { number: loading ? "..." : formatStat(stats.satisfactionRate, true), label: "Satisfaction Rate" }
                         ].map((stat, index) => (
                             <motion.div
                                 key={index}

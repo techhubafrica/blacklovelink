@@ -6,8 +6,10 @@ import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import profile1 from "@/assets/profile-1.png";
 import profile2 from "@/assets/profile-2.png";
 import profile3 from "@/assets/profile-3.png";
+import { usePlatformStats } from "@/hooks/usePlatformStats";
 
 const ConnectionsPage = () => {
+    const { stats: platformStats, loading, formatStat } = usePlatformStats();
     const features = [
         {
             icon: Target,
@@ -42,9 +44,9 @@ const ConnectionsPage = () => {
     ];
 
     const stats = [
-        { number: "2M+", label: "Active Users", description: "Verified Black professionals" },
-        { number: "500K+", label: "Matches Daily", description: "Real connections happening now" },
-        { number: "85%", label: "Match Success", description: "Lead to conversations" }
+        { number: loading ? "..." : formatStat(platformStats.activeUsers), label: "Active Users", description: "Verified Black professionals" },
+        { number: loading ? "..." : formatStat(platformStats.matchesDaily), label: "Matches Daily", description: "Real connections happening now" },
+        { number: loading ? "..." : formatStat(platformStats.matchSuccessRate, true), label: "Match Success", description: "Lead to conversations" }
     ];
 
     return (

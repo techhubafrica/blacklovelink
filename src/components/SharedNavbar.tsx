@@ -30,8 +30,8 @@ const SharedNavbar = () => {
     return (
         <motion.header
             className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled
-                    ? "backdrop-blur-2xl bg-black/40 border-b border-white/20 shadow-2xl shadow-black/20"
-                    : "backdrop-blur-xl bg-black/20 border-b border-white/10"
+                ? "backdrop-blur-2xl bg-black/40 border-b border-white/20 shadow-2xl shadow-black/20"
+                : "backdrop-blur-xl bg-black/20 border-b border-white/10"
                 }`}
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -95,8 +95,8 @@ const SharedNavbar = () => {
                                         key={lang}
                                         onClick={() => setLanguage(lang)}
                                         className={`w-full px-4 py-3 text-left text-sm font-medium rounded-xl transition-all duration-200 ${language === lang
-                                                ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg"
-                                                : "text-foreground hover:bg-accent/50"
+                                            ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg"
+                                            : "text-foreground hover:bg-accent/50"
                                             }`}
                                         initial={{ opacity: 0, x: -10 }}
                                         animate={{ opacity: 1, x: 0 }}
@@ -118,7 +118,7 @@ const SharedNavbar = () => {
                     >
                         <Link
                             to="/auth"
-                            className="group relative overflow-hidden rounded-full bg-gradient-to-r from-primary-foreground to-primary-foreground/90 px-8 py-3 text-sm font-bold text-background shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                            className="group relative overflow-hidden rounded-full gradient-brand px-8 py-3 text-sm font-bold text-white shadow-button transition-all duration-300 hover:opacity-90 hover:scale-105"
                         >
                             <span className="relative z-10">{t.nav.signIn}</span>
                             <motion.span

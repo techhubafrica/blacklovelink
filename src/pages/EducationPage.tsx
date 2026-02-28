@@ -191,7 +191,7 @@ const EducationPage = () => {
         </p>
         <Link
           to="/auth"
-          className="inline-block rounded-full bg-primary-foreground px-10 py-4 text-lg font-bold text-background transition-transform hover:scale-105"
+          className="inline-block rounded-full bg-white px-10 py-4 text-lg font-bold text-foreground transition-transform hover:scale-105"
         >
           Start Your Journey
         </Link>

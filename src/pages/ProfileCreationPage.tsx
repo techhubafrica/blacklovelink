@@ -1,0 +1,490 @@
+import { useState, useRef, useCallback } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+    CheckCircle2,
+    Linkedin,
+    Upload,
+    X,
+    Camera,
+    Calendar,
+    User,
+    Heart,
+    Briefcase,
+    ChevronLeft,
+    Loader2,
+    Star,
+} from "lucide-react";
+import LinkedInVerifyModal from "@/components/LinkedInVerifyModal";
+import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
+import { useToast } from "@/hooks/use-toast";
+
+const GENDERS = ["Male", "Female"];
+const INTENTS = [
+    "Long-term relationship",
+    "Marriage",
+    "Networking only",
+    "Open to explore",
+];
+const ALL_INTERESTS = [
+    "Travel", "Fitness", "Tech", "Entrepreneurship", "Faith",
+    "Music", "Art", "Reading", "Nature", "Food & Dining",
+    "Sports", "Fashion", "Business", "Wellness", "Photography",
+    "Film & TV", "Gaming", "Cooking", "Dance", "Volunteering",
+];
+
+interface PhotoSlot {
+    file: File | null;
+    preview: string | null;
+}
+
+function calculateAge(dob: string): number {
+    if (!dob) return 0;
+    const birth = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    return age;
+}
+
+const ProfileCreationPage = () => {
+    const navigate = useNavigate();
+    const { toast } = useToast();
+    const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+    // Form state
+    const [fullName, setFullName] = useState("");
+    const [occupation, setOccupation] = useState({ title: "", company: "", verified: false });
+    const [dob, setDob] = useState("");
+    const [gender, setGender] = useState("");
+    const [intent, setIntent] = useState("");
+    const [interests, setInterests] = useState<string[]>([]);
+    const [photos, setPhotos] = useState<PhotoSlot[]>(
+        Array(5).fill(null).map(() => ({ file: null, preview: null }))
+    );
+    const [linkedInOpen, setLinkedInOpen] = useState(false);
+    const [saving, setSaving] = useState(false);
+
+    // Computed
+    const age = calculateAge(dob);
+    const ageValid = age >= 18;
+    const photoCount = photos.filter((p) => p.preview !== null).length;
+    const canContinue =
+        fullName.trim().length > 0 &&
+        occupation.verified &&
+        dob !== "" &&
+        ageValid &&
+        gender !== "" &&
+        intent !== "" &&
+        photoCount >= 2;
+
+    // Completion percentage for the visual bar
+    const steps = [
+        !!fullName.trim(),
+        occupation.verified,
+        dob !== "" && ageValid,
+        gender !== "",
+        intent !== "",
+        photoCount >= 2,
+    ];
+    const completionPct = Math.round((steps.filter(Boolean).length / steps.length) * 100);
+
+    /* ─── Photo handlers ─── */
+    const handlePhotoChange = useCallback(
+        (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPhotos((prev) => {
+                    const next = [...prev];
+                    next[index] = { file, preview: reader.result as string };
+                    return next;
+                });
+            };
+            reader.readAsDataURL(file);
+        },
+        []
+    );
+
+    const handleRemovePhoto = useCallback((index: number) => {
+        setPhotos((prev) => {
+            const next = [...prev];
+            next[index] = { file: null, preview: null };
+            return next;
+        });
+        if (fileInputRefs.current[index]) {
+            fileInputRefs.current[index]!.value = "";
+        }
+    }, []);
+
+    /* ─── Interest toggle ─── */
+    const toggleInterest = (interest: string) => {
+        setInterests((prev) =>
+            prev.includes(interest) ? prev.filter((i) => i !== interest) : [...prev, interest]
+        );
+    };
+
+    /* ─── LinkedIn verified callback ─── */
+    const handleLinkedInVerified = (title: string, company: string) => {
+        setOccupation({ title, company, verified: true });
+        toast({ title: "Occupation verified ✓", description: `${title} at ${company}` });
+    };
+
+    /* ─── Continue ─── */
+    const handleContinue = async () => {
+        if (!canContinue) return;
+        setSaving(true);
+        // In a real app, save profile to Supabase here
+        await new Promise((res) => setTimeout(res, 1000));
+        setSaving(false);
+        navigate("/permissions");
+    };
+
+    const inputClass =
+        "w-full px-4 py-3 rounded-xl bg-muted border border-border text-foreground text-base focus:outline-none focus:ring-2 focus:ring-primary/40 transition placeholder:text-muted-foreground/60";
+
+    return (
+        <div className="min-h-screen bg-background font-display flex flex-col">
+            {/* Header */}
+            <header className="sticky top-0 z-20 border-b border-border bg-background/80 backdrop-blur-md px-6 py-4">
+                <nav className="mx-auto flex max-w-6xl items-center justify-between">
+                    <Link to="/" className="flex items-center">
+                        <img src={blackLovelinkLogo} alt="BlackLoveLink" className="h-9 w-auto" />
+                    </Link>
+                    <div className="flex items-center gap-4">
+                        {/* Completion bar */}
+                        <div className="hidden sm:flex items-center gap-3">
+                            <span className="text-xs font-medium text-muted-foreground">Profile {completionPct}%</span>
+                            <div className="w-28 h-2 rounded-full bg-muted overflow-hidden">
+                                <motion.div
+                                    className="h-full gradient-brand rounded-full"
+                                    initial={false}
+                                    animate={{ width: `${completionPct}%` }}
+                                    transition={{ duration: 0.5 }}
+                                />
+                            </div>
+                        </div>
+                        <Link
+                            to="/auth"
+                            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                        >
+                            <ChevronLeft className="w-4 h-4" /> Back
+                        </Link>
+                    </div>
+                </nav>
+            </header>
+
+            <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-6xl">
+                    {/* Page heading */}
+                    <div className="mb-8">
+                        <h1 className="text-3xl font-black text-foreground">
+                            Create your <span className="text-gradient-brand">profile</span>
+                        </h1>
+                        <p className="mt-1 text-muted-foreground">
+                            Tell us about yourself so we can find your perfect match.
+                        </p>
+                    </div>
+
+                    {/* Two-column layout */}
+                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                        {/* ─── Left: Form ─── */}
+                        <div className="lg:col-span-3 space-y-6">
+
+                            {/* Full Name */}
+                            <div className="rounded-2xl bg-card border border-border p-6 space-y-3">
+                                <h2 className="flex items-center gap-2 font-semibold text-foreground text-base">
+                                    <User className="w-4 h-4 text-primary" /> Full Name
+                                    <span className="text-destructive ml-0.5">*</span>
+                                </h2>
+                                <input
+                                    type="text"
+                                    id="fullName"
+                                    placeholder="Your full name"
+                                    value={fullName}
+                                    onChange={(e) => setFullName(e.target.value)}
+                                    className={inputClass}
+                                />
+                                {fullName.trim() && (
+                                    <p className="text-xs text-green-500 flex items-center gap-1">
+                                        <CheckCircle2 className="w-3 h-3" /> Looks good
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* Occupation / LinkedIn */}
+                            <div className="rounded-2xl bg-card border border-border p-6 space-y-3">
+                                <h2 className="flex items-center gap-2 font-semibold text-foreground text-base">
+                                    <Briefcase className="w-4 h-4 text-primary" /> Occupation
+                                    <span className="text-destructive ml-0.5">*</span>
+                                </h2>
+                                {occupation.verified ? (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="flex items-center gap-3 p-4 rounded-xl bg-green-500/5 border border-green-500/20"
+                                    >
+                                        <div className="w-10 h-10 rounded-full bg-[#0077B5]/10 flex items-center justify-center flex-shrink-0">
+                                            <Linkedin className="w-5 h-5 text-[#0077B5]" />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <p className="font-semibold text-foreground truncate">{occupation.title}</p>
+                                            <p className="text-sm text-muted-foreground truncate">{occupation.company}</p>
+                                        </div>
+                                        <div className="ml-auto flex items-center gap-1.5 bg-green-500/10 text-green-600 text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0">
+                                            <CheckCircle2 className="w-3 h-3" /> Verified
+                                        </div>
+                                        <button
+                                            onClick={() => setOccupation({ title: "", company: "", verified: false })}
+                                            className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </motion.div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        <p className="text-sm text-muted-foreground">
+                                            Verify your occupation via LinkedIn to build trust with other members.
+                                        </p>
+                                        <button
+                                            onClick={() => setLinkedInOpen(true)}
+                                            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#0077B5] text-white font-semibold text-sm hover:bg-[#005f8d] transition"
+                                        >
+                                            <Linkedin className="w-4 h-4" />
+                                            Verify with LinkedIn
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Date of Birth */}
+                            <div className="rounded-2xl bg-card border border-border p-6 space-y-3">
+                                <h2 className="flex items-center gap-2 font-semibold text-foreground text-base">
+                                    <Calendar className="w-4 h-4 text-primary" /> Date of Birth
+                                    <span className="text-destructive ml-0.5">*</span>
+                                </h2>
+                                <input
+                                    type="date"
+                                    id="dob"
+                                    value={dob}
+                                    onChange={(e) => setDob(e.target.value)}
+                                    max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split("T")[0]}
+                                    className={inputClass}
+                                />
+                                {dob && !ageValid && (
+                                    <p className="text-xs text-destructive">You must be at least 18 years old to join.</p>
+                                )}
+                                {dob && ageValid && (
+                                    <p className="text-xs text-green-500 flex items-center gap-1">
+                                        <CheckCircle2 className="w-3 h-3" /> Age verified – {age} years old
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* Gender */}
+                            <div className="rounded-2xl bg-card border border-border p-6 space-y-3">
+                                <h2 className="flex items-center gap-2 font-semibold text-foreground text-base">
+                                    <User className="w-4 h-4 text-primary" /> Gender
+                                    <span className="text-destructive ml-0.5">*</span>
+                                </h2>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {GENDERS.map((g) => (
+                                        <button
+                                            key={g}
+                                            onClick={() => setGender(g)}
+                                            className={`px-4 py-3 rounded-xl text-sm font-medium border transition-all ${gender === g
+                                                ? "border-primary bg-primary/10 text-primary"
+                                                : "border-border bg-muted text-foreground hover:border-primary/40"
+                                                }`}
+                                        >
+                                            {g}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Relationship Intent */}
+                            <div className="rounded-2xl bg-card border border-border p-6 space-y-3">
+                                <h2 className="flex items-center gap-2 font-semibold text-foreground text-base">
+                                    <Heart className="w-4 h-4 text-primary" /> Relationship Intent
+                                    <span className="text-destructive ml-0.5">*</span>
+                                </h2>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    {INTENTS.map((opt) => (
+                                        <button
+                                            key={opt}
+                                            onClick={() => setIntent(opt)}
+                                            className={`px-4 py-3 rounded-xl text-sm font-medium border text-left transition-all ${intent === opt
+                                                ? "border-primary bg-primary/10 text-primary"
+                                                : "border-border bg-muted text-foreground hover:border-primary/40"
+                                                }`}
+                                        >
+                                            {opt}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Interests (optional) */}
+                            <div className="rounded-2xl bg-card border border-border p-6 space-y-3">
+                                <h2 className="flex items-center gap-2 font-semibold text-foreground text-base">
+                                    <Star className="w-4 h-4 text-primary" /> Interests
+                                    <span className="text-xs font-normal text-muted-foreground ml-1">(optional)</span>
+                                </h2>
+                                <p className="text-sm text-muted-foreground">
+                                    Select what you're passionate about — helps us find compatible matches.
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                    {ALL_INTERESTS.map((interest) => (
+                                        <button
+                                            key={interest}
+                                            onClick={() => toggleInterest(interest)}
+                                            className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${interests.includes(interest)
+                                                ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                                                : "border-border bg-muted text-foreground hover:border-primary/40"
+                                                }`}
+                                        >
+                                            {interest}
+                                        </button>
+                                    ))}
+                                </div>
+                                {interests.length > 0 && (
+                                    <p className="text-xs text-muted-foreground">{interests.length} selected</p>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* ─── Right: Photo Upload ─── */}
+                        <div className="lg:col-span-2">
+                            <div className="sticky top-28 rounded-2xl bg-card border border-border p-6 space-y-4">
+                                <div>
+                                    <h2 className="flex items-center gap-2 font-semibold text-foreground text-base">
+                                        <Camera className="w-4 h-4 text-primary" /> Profile Photos
+                                        <span className="text-destructive ml-0.5">*</span>
+                                    </h2>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        Upload 2–5 photos. At least 2 required to continue.
+                                    </p>
+
+                                    {/* Photo count indicator */}
+                                    <div className="mt-3 flex items-center gap-2">
+                                        {Array(5).fill(null).map((_, i) => (
+                                            <div
+                                                key={i}
+                                                className={`h-1.5 flex-1 rounded-full transition-colors ${i < photoCount ? "bg-primary" : "bg-border"
+                                                    }`}
+                                            />
+                                        ))}
+                                        <span className="text-xs text-muted-foreground ml-1">{photoCount}/5</span>
+                                    </div>
+                                </div>
+
+                                {/* Photo slots */}
+                                <div className="grid grid-cols-2 gap-3">
+                                    {photos.map((slot, index) => (
+                                        <div key={index} className={`relative ${index === 0 ? "col-span-2" : ""}`}>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                ref={(el) => { fileInputRefs.current[index] = el; }}
+                                                onChange={(e) => handlePhotoChange(index, e)}
+                                                className="hidden"
+                                                id={`photo-slot-${index}`}
+                                            />
+
+                                            {slot.preview ? (
+                                                <div className={`relative overflow-hidden rounded-xl border-2 border-primary ${index === 0 ? "aspect-[4/3]" : "aspect-square"}`}>
+                                                    <img
+                                                        src={slot.preview}
+                                                        alt={`Photo ${index + 1}`}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                    {/* Overlay actions */}
+                                                    <button
+                                                        onClick={() => handleRemovePhoto(index)}
+                                                        className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-black/80 transition"
+                                                    >
+                                                        <X className="w-3 h-3" />
+                                                    </button>
+                                                    {index === 0 && (
+                                                        <div className="absolute bottom-2 left-2 bg-primary text-primary-foreground text-xs font-semibold px-2 py-0.5 rounded-full">
+                                                            Main Photo
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <label
+                                                    htmlFor={`photo-slot-${index}`}
+                                                    className={`flex flex-col items-center justify-center rounded-xl bg-muted border-2 border-dashed border-border cursor-pointer hover:border-primary hover:bg-primary/5 transition-all group ${index === 0 ? "aspect-[4/3]" : "aspect-square"
+                                                        } ${index < 2 ? "border-primary/40" : ""}`}
+                                                >
+                                                    <Upload className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                                                    <span className="mt-1 text-xs text-muted-foreground group-hover:text-primary transition-colors font-medium">
+                                                        {index === 0 ? "Main photo" : `Photo ${index + 1}`}
+                                                    </span>
+                                                    {index < 2 && (
+                                                        <span className="mt-0.5 text-xs text-primary/70">Required</span>
+                                                    )}
+                                                </label>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {photoCount < 2 && (
+                                    <p className="text-xs text-muted-foreground text-center">
+                                        {2 - photoCount} more photo{2 - photoCount > 1 ? "s" : ""} needed to continue
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ─── Continue Button ─── */}
+                    <div className="mt-8 pb-12">
+                        <div className="rounded-2xl bg-card border border-border p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div className="text-sm text-muted-foreground">
+                                {canContinue ? (
+                                    <span className="text-green-500 font-medium flex items-center gap-2">
+                                        <CheckCircle2 className="w-4 h-4" /> Profile ready! Click Continue to proceed.
+                                    </span>
+                                ) : (
+                                    <span>
+                                        Complete all required fields to enable the Continue button.
+                                    </span>
+                                )}
+                            </div>
+                            <motion.button
+                                onClick={handleContinue}
+                                disabled={!canContinue || saving}
+                                className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl gradient-brand text-primary-foreground font-bold text-base shadow-button hover:opacity-90 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                                whileHover={canContinue ? { scale: 1.02 } : {}}
+                                whileTap={canContinue ? { scale: 0.98 } : {}}
+                            >
+                                {saving ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        Saving…
+                                    </>
+                                ) : (
+                                    "Continue →"
+                                )}
+                            </motion.button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            {/* LinkedIn Modal */}
+            <LinkedInVerifyModal
+                isOpen={linkedInOpen}
+                onClose={() => setLinkedInOpen(false)}
+                onVerified={handleLinkedInVerified}
+            />
+        </div>
+    );
+};
+
+export default ProfileCreationPage;

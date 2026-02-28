@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Mail, Phone, MessageCircle, HelpCircle, Send } from "lucide-react";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
+import SharedNavbar from "@/components/SharedNavbar";
 
 const SupportPage = () => {
     const [formData, setFormData] = useState({
