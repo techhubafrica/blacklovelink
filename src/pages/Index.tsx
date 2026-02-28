@@ -367,7 +367,7 @@ const Index = () => {
             {/* Left – Text Content */}
             <div>
               <motion.h2
-                className="text-4xl font-black leading-[1.1] tracking-tight text-background sm:text-5xl lg:text-6xl"
+                className="text-4xl font-black leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-6xl"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
