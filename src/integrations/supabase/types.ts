@@ -14,13 +14,182 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      matches: {
+        Row: {
+          created_at: string
+          id: string
+          user_a: string
+          user_b: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_a: string
+          user_b: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_a?: string
+          user_b?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          match_id: string
+          read: boolean
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          match_id: string
+          read?: boolean
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          match_id?: string
+          read?: boolean
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          age: number | null
+          avatar_url: string | null
+          bio: string
+          created_at: string
+          dob: string | null
+          full_name: string
+          gender: string | null
+          id: string
+          intent: string | null
+          interests: string[] | null
+          occupation_company: string
+          occupation_title: string
+          photos: string[] | null
+          profile_completed: boolean
+          updated_at: string
+          user_id: string
+          verified: boolean
+        }
+        Insert: {
+          age?: number | null
+          avatar_url?: string | null
+          bio?: string
+          created_at?: string
+          dob?: string | null
+          full_name?: string
+          gender?: string | null
+          id?: string
+          intent?: string | null
+          interests?: string[] | null
+          occupation_company?: string
+          occupation_title?: string
+          photos?: string[] | null
+          profile_completed?: boolean
+          updated_at?: string
+          user_id: string
+          verified?: boolean
+        }
+        Update: {
+          age?: number | null
+          avatar_url?: string | null
+          bio?: string
+          created_at?: string
+          dob?: string | null
+          full_name?: string
+          gender?: string | null
+          id?: string
+          intent?: string | null
+          interests?: string[] | null
+          occupation_company?: string
+          occupation_title?: string
+          photos?: string[] | null
+          profile_completed?: boolean
+          updated_at?: string
+          user_id?: string
+          verified?: boolean
+        }
+        Relationships: []
+      }
+      success_stories: {
+        Row: {
+          approved: boolean
+          couple_names: string
+          created_at: string
+          id: string
+          photo_url: string | null
+          story: string
+        }
+        Insert: {
+          approved?: boolean
+          couple_names: string
+          created_at?: string
+          id?: string
+          photo_url?: string | null
+          story: string
+        }
+        Update: {
+          approved?: boolean
+          couple_names?: string
+          created_at?: string
+          id?: string
+          photo_url?: string | null
+          story?: string
+        }
+        Relationships: []
+      }
+      swipes: {
+        Row: {
+          created_at: string
+          direction: string
+          id: string
+          swiped_id: string
+          swiper_id: string
+        }
+        Insert: {
+          created_at?: string
+          direction: string
+          id?: string
+          swiped_id: string
+          swiper_id: string
+        }
+        Update: {
+          created_at?: string
+          direction?: string
+          id?: string
+          swiped_id?: string
+          swiper_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_match_member: {
+        Args: { _match_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

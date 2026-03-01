@@ -151,14 +151,14 @@ const ProfileCreationPage = () => {
                 const ext = slot.file.name.split(".").pop() ?? "jpg";
                 const path = `${userId}/${Date.now()}_${i}.${ext}`;
                 const { error: uploadError } = await supabase.storage
-                    .from("profile-photos")
+                    .from("avatars")
                     .upload(path, slot.file, { upsert: true });
                 if (uploadError) {
                     console.warn("Photo upload failed:", uploadError.message);
                     continue;
                 }
                 const { data: urlData } = supabase.storage
-                    .from("profile-photos")
+                    .from("avatars")
                     .getPublicUrl(path);
                 uploadedUrls.push(urlData.publicUrl);
             }

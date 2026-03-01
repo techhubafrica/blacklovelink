@@ -5,6 +5,7 @@ import ActionButtons from "@/components/ActionButtons";
 import MatchOverlay from "@/components/MatchOverlay";
 import TopNav from "@/components/TopNav";
 import { useProfiles, type UserProfile } from "@/hooks/useProfileData";
+import { useSwipe } from "@/hooks/useSwipe";
 import { SlidersHorizontal, X, RotateCcw } from "lucide-react";
 
 const INTENTS = ["All", "Long-term relationship", "Marriage", "Open to explore", "Networking only"];
@@ -12,6 +13,7 @@ const INTERESTS_OPTIONS = ["Travel", "Fitness", "Tech", "Entrepreneurship", "Fai
 
 const SwipePage = () => {
   const { profiles, loading } = useProfiles();
+  const { recordSwipe } = useSwipe();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [matchedProfile, setMatchedProfile] = useState<UserProfile | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
@@ -36,15 +38,19 @@ const SwipePage = () => {
   const allSwiped = currentIndex >= filteredProfiles.length;
 
   const handleSwipe = useCallback(
-    (direction: "left" | "right" | "up") => {
+    async (direction: "left" | "right" | "up") => {
       const current = filteredProfiles[currentIndex];
       if (!current) return;
-      if (direction === "right" && Math.random() < 0.35) {
+
+      // Record swipe to database
+      const { matched } = await recordSwipe(current, direction);
+      if (matched) {
         setMatchedProfile(current);
       }
+
       setCurrentIndex((prev) => prev + 1);
     },
-    [currentIndex, filteredProfiles]
+    [currentIndex, filteredProfiles, recordSwipe]
   );
 
   const resetFilters = () => {
@@ -72,7 +78,7 @@ const SwipePage = () => {
         </div>
       )}
 
-      {/* ─── Filter drawer button ─── */}
+      {/* Filter drawer button */}
       <div className="flex items-center justify-between px-4 py-2 border-b border-border">
         <p className="text-sm text-muted-foreground">
           {allSwiped ? "No more profiles" : `${filteredProfiles.length - currentIndex} matches nearby`}
@@ -89,9 +95,9 @@ const SwipePage = () => {
         </button>
       </div>
 
-      {/* ─── Card area ─── */}
+      {/* Card area */}
       <div className="relative flex flex-1 items-center justify-center overflow-hidden px-4 py-2">
-        {allSwiped ? (
+        {!loading && allSwiped ? (
           <div className="text-center">
             <p className="text-2xl font-bold text-foreground">You've seen everyone!</p>
             <p className="mt-2 text-muted-foreground">Adjust your filters or check back later.</p>
@@ -121,8 +127,8 @@ const SwipePage = () => {
         )}
       </div>
 
-      {/* ─── Action buttons ─── */}
-      {!allSwiped && (
+      {/* Action buttons */}
+      {!allSwiped && !loading && (
         <ActionButtons
           onNope={() => handleSwipe("left")}
           onLike={() => handleSwipe("right")}
@@ -134,7 +140,7 @@ const SwipePage = () => {
 
       <MatchOverlay profile={matchedProfile} onClose={() => setMatchedProfile(null)} />
 
-      {/* ─── Filter Drawer ─── */}
+      {/* Filter Drawer */}
       <AnimatePresence>
         {filterOpen && (
           <>
@@ -153,7 +159,6 @@ const SwipePage = () => {
               animate={{ y: 0, transition: { type: "spring", stiffness: 300, damping: 30 } }}
               exit={{ y: "100%", transition: { duration: 0.2 } }}
             >
-              {/* Drawer header */}
               <div className="flex items-center justify-between">
                 <h3 className="font-bold text-foreground text-lg">Filters</h3>
                 <div className="flex items-center gap-3">
@@ -175,25 +180,11 @@ const SwipePage = () => {
                 <div className="space-y-2">
                   <div className="flex items-center gap-3">
                     <span className="text-xs text-muted-foreground w-6">{ageRange[0]}</span>
-                    <input
-                      type="range"
-                      min={18}
-                      max={ageRange[1] - 1}
-                      value={ageRange[0]}
-                      onChange={(e) => setAgeRange([+e.target.value, ageRange[1]])}
-                      className="flex-1 h-2 accent-primary"
-                    />
+                    <input type="range" min={18} max={ageRange[1] - 1} value={ageRange[0]} onChange={(e) => setAgeRange([+e.target.value, ageRange[1]])} className="flex-1 h-2 accent-primary" />
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-xs text-muted-foreground w-6">{ageRange[1]}</span>
-                    <input
-                      type="range"
-                      min={ageRange[0] + 1}
-                      max={70}
-                      value={ageRange[1]}
-                      onChange={(e) => setAgeRange([ageRange[0], +e.target.value])}
-                      className="flex-1 h-2 accent-primary"
-                    />
+                    <input type="range" min={ageRange[0] + 1} max={70} value={ageRange[1]} onChange={(e) => setAgeRange([ageRange[0], +e.target.value])} className="flex-1 h-2 accent-primary" />
                   </div>
                 </div>
               </div>
@@ -204,15 +195,7 @@ const SwipePage = () => {
                   <label className="text-sm font-semibold text-foreground">Location Radius</label>
                   <span className="text-sm text-muted-foreground">{radiusKm} km</span>
                 </div>
-                <input
-                  type="range"
-                  min={5}
-                  max={200}
-                  step={5}
-                  value={radiusKm}
-                  onChange={(e) => setRadiusKm(+e.target.value)}
-                  className="w-full h-2 accent-primary"
-                />
+                <input type="range" min={5} max={200} step={5} value={radiusKm} onChange={(e) => setRadiusKm(+e.target.value)} className="w-full h-2 accent-primary" />
               </div>
 
               {/* Relationship Intent */}
@@ -220,14 +203,7 @@ const SwipePage = () => {
                 <label className="text-sm font-semibold text-foreground">Relationship Intent</label>
                 <div className="flex flex-wrap gap-2">
                   {INTENTS.map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => setIntentFilter(opt)}
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${intentFilter === opt
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-muted text-foreground hover:border-primary/40"
-                        }`}
-                    >
+                    <button key={opt} onClick={() => setIntentFilter(opt)} className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${intentFilter === opt ? "border-primary bg-primary text-primary-foreground" : "border-border bg-muted text-foreground hover:border-primary/40"}`}>
                       {opt}
                     </button>
                   ))}
@@ -239,24 +215,14 @@ const SwipePage = () => {
                 <label className="text-sm font-semibold text-foreground">Shared Interests</label>
                 <div className="flex flex-wrap gap-2">
                   {INTERESTS_OPTIONS.map((interest) => (
-                    <button
-                      key={interest}
-                      onClick={() => toggleInterest(interest)}
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${interestFilter.includes(interest)
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-muted text-foreground hover:border-primary/40"
-                        }`}
-                    >
+                    <button key={interest} onClick={() => toggleInterest(interest)} className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all ${interestFilter.includes(interest) ? "border-primary bg-primary text-primary-foreground" : "border-border bg-muted text-foreground hover:border-primary/40"}`}>
                       {interest}
                     </button>
                   ))}
                 </div>
               </div>
 
-              <button
-                onClick={() => { setCurrentIndex(0); setFilterOpen(false); }}
-                className="w-full py-4 rounded-2xl gradient-brand text-primary-foreground font-bold shadow-button hover:opacity-90 transition"
-              >
+              <button onClick={() => { setCurrentIndex(0); setFilterOpen(false); }} className="w-full py-4 rounded-2xl gradient-brand text-primary-foreground font-bold shadow-button hover:opacity-90 transition">
                 Apply Filters
               </button>
             </motion.div>

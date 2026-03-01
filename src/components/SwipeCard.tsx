@@ -94,10 +94,6 @@ const SwipeCard = ({ profile, onSwipe, isTop }: SwipeCardProps) => {
 
           {/* Distance + intent */}
           <div className="flex items-center gap-2 flex-wrap">
-            <div className="flex items-center gap-1 text-white/70 text-xs">
-              <MapPin className="w-3.5 h-3.5" />
-              {profile.distance}
-            </div>
             <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${intentColorClass}`}>
               {profile.intent ?? ""}
             </span>

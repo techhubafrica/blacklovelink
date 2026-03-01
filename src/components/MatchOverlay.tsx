@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import type { UserProfile } from "@/hooks/useProfileData";
 
 interface MatchOverlayProps {
@@ -7,6 +8,8 @@ interface MatchOverlayProps {
 }
 
 const MatchOverlay = ({ profile, onClose }: MatchOverlayProps) => {
+  const navigate = useNavigate();
+
   return (
     <AnimatePresence>
       {profile && (
@@ -57,7 +60,7 @@ const MatchOverlay = ({ profile, onClose }: MatchOverlayProps) => {
               Keep Swiping
             </button>
             <button
-              onClick={onClose}
+              onClick={() => { onClose(); navigate("/messages"); }}
               className="gradient-brand rounded-full px-8 py-3 font-semibold text-primary-foreground shadow-button transition-opacity hover:opacity-90"
             >
               Send a Message
