@@ -174,7 +174,7 @@ const ProfileCreationPage = () => {
 
             // Upsert profile to the `profiles` table
             const { error: dbError } = await supabase.from("profiles").upsert({
-                id: userId,              // id IS the auth user UUID
+                user_id: userId,
                 full_name: fullName.trim(),
                 occupation_title: occupation.title,
                 occupation_company: occupation.company,
@@ -188,7 +188,7 @@ const ProfileCreationPage = () => {
                 avatar_url: avatarUrl,
                 profile_completed: true,
                 updated_at: new Date().toISOString(),
-            }, { onConflict: "id" });
+            }, { onConflict: "user_id" });
 
             if (dbError) throw dbError;
 

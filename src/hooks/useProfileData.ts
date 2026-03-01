@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export interface UserProfile {
-    id: string;           // = auth user UUID (primary key, no separate user_id)
+    id: string;                 // auto-generated UUID primary key
+    user_id: string;            // references auth.users(id)
     full_name: string;
     occupation_title: string;
     occupation_company: string;
@@ -36,7 +37,7 @@ export const useCurrentUserProfile = () => {
                 const { data, error } = await supabase
                     .from("profiles")
                     .select("*")
-                    .eq("id", session.user.id)
+                    .eq("user_id", session.user.id)
                     .maybeSingle();
 
                 if (error) throw error;
@@ -74,7 +75,7 @@ export const useProfiles = () => {
 
                 // Exclude current user from swipe deck
                 if (session?.user) {
-                    query.neq("id", session.user.id);
+                    query.neq("user_id", session.user.id);
                 }
 
                 const { data, error } = await query;
