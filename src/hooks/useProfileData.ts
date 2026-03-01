@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export interface UserProfile {
-    id: string;                 // auto-generated UUID primary key
-    user_id: string;            // references auth.users(id)
+    id: string;
+    user_id: string;
     full_name: string;
     occupation_title: string;
     occupation_company: string;
@@ -67,15 +67,26 @@ export const useProfiles = () => {
             try {
                 const { data: { session } } = await supabase.auth.getSession();
 
-                const query = supabase
+                let query = supabase
                     .from("profiles")
                     .select("*")
                     .eq("profile_completed", true)
                     .order("created_at", { ascending: false });
 
-                // Exclude current user from swipe deck
+                // Exclude current user and already-swiped profiles
                 if (session?.user) {
-                    query.neq("user_id", session.user.id);
+                    query = query.neq("user_id", session.user.id);
+
+                    // Get already swiped user_ids
+                    const { data: swipedData } = await supabase
+                        .from("swipes")
+                        .select("swiped_id")
+                        .eq("swiper_id", session.user.id);
+
+                    if (swipedData && swipedData.length > 0) {
+                        const swipedIds = swipedData.map((s: any) => s.swiped_id);
+                        query = query.not("user_id", "in", `(${swipedIds.join(",")})`);
+                    }
                 }
 
                 const { data, error } = await query;

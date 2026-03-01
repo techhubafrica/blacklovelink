@@ -30,7 +30,7 @@ export const usePlatformStats = () => {
                 // Helper to safely execute a count query without crashing if a table doesn't exist
                 const safeCountQuery = async (table: string) => {
                     try {
-                        const { count, error } = await supabase
+                        const { count, error } = await (supabase as any)
                             .from(table)
                             .select("*", { count: "exact", head: true });
                         if (error) throw error;
