@@ -20,64 +20,39 @@ Black professionals aged 25+ (doctors, engineers, entrepreneurs, lawyers, artist
 
 ## Authentication & Verification (3-Step Process)
 1. **Google OAuth or Phone + Password** — Users sign up with Google or create an account with their phone number and a password.
-2. **Phone OTP Verification** — A one-time code is sent via SMS to verify the phone number. New Google users must also verify their phone.
-3. **LinkedIn Occupation Verification** — Members verify their occupation (job title + company) through our LinkedIn integration to build trust.
+2. **Phone OTP Verification** — A one-time code is sent via SMS to verify the phone number.
+3. **LinkedIn Occupation Verification** — Members verify their occupation (job title + company) through LinkedIn.
 
 ## Profile Creation
 After signing up, users complete a profile with:
-- Full Name
-- Occupation (LinkedIn verified)
-- Date of Birth (must be 25+)
-- Gender (Male or Female)
-- Relationship Intent (Long-term relationship, Marriage, Friendship first, Open to anything)
-- Interests (multi-select: fitness, travel, cooking, music, entrepreneurship, fashion, wellness, arts, etc.)
-- Minimum 2 profile photos (up to 5)
-
-## Post-Registration
-After profile creation, users are prompted to:
-- Allow location access (for distance-based matching)
-- Enable push notifications (so they never miss a match or message)
-Both are optional but improve the experience.
+- Full Name, Occupation (LinkedIn verified), Date of Birth, Gender, Relationship Intent, Interests, 2–5 photos.
 
 ## Matchmaking Dashboard
-- Users can swipe through verified profiles
-- Filter by: age range, location radius, relationship intent, shared interests
-- Each card shows: name, age, occupation, company, verified badge, distance, intent, and interests
-- Mutual interest unlocks messaging
+- Swipe through verified profiles, filter by age, location, intent, interests.
+- Mutual interest unlocks messaging.
 
 ## Premium — BlackLoveLink Gold
-Gold members get:
-- Unlimited likes
-- See who liked your profile
-- Visibility boost in matches
-- Priority customer support
+Unlimited likes, see who liked you, visibility boost, priority support.
 
 ## Safety Features
-- All profiles are verified (Google + Phone + LinkedIn)
-- Privacy controls on profile visibility
-- Block and report any member
-- 24/7 support team
-- Community guidelines enforced
+Verified profiles, privacy controls, block/report, 24/7 support.
 
 ## Tone & Behaviour
-- Be warm, encouraging, and professional
-- Keep responses concise and helpful
-- Always stay on topic about BlackLoveLink
-- If asked about pricing details, suggest contacting support at support@blacklovelink.com
-- If asked unrelated questions, gently redirect back to the platform
-- Never fabricate features or policies not listed above`;
+- Be warm, encouraging, and professional.
+- Keep responses concise and helpful.
+- Always stay on topic about BlackLoveLink.
+- For pricing: suggest support@blacklovelink.com
+- Never fabricate features or policies not listed above.`;
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
 
 Deno.serve(async (req: Request) => {
-  // Handle CORS preflight
   if (req.method === "OPTIONS") {
-    return new Response(null, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-    });
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
@@ -86,54 +61,66 @@ Deno.serve(async (req: Request) => {
     if (!GEMINI_API_KEY) {
       return new Response(
         JSON.stringify({ error: "Gemini API key not configured" }),
-        { status: 500, headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } }
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
+    // Use Gemini's native API (non-streaming for reliability)
+    const geminiMessages = messages.map((m: { role: string; content: string }) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text: m.content }],
+    }));
+
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/openai/chat/completions`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${GEMINI_API_KEY}`,
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "gemini-2.0-flash",
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            ...messages,
-          ],
-          stream: true,
-          max_tokens: 500,
-          temperature: 0.7,
+          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          contents: geminiMessages,
+          generationConfig: {
+            maxOutputTokens: 500,
+            temperature: 0.7,
+          },
         }),
       }
     );
 
     if (!response.ok) {
-      const error = await response.text();
-      return new Response(JSON.stringify({ error }), {
-        status: response.status,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-      });
+      const errorText = await response.text();
+      console.error("Gemini API error:", errorText);
+      return new Response(
+        JSON.stringify({ error: `Gemini API error: ${response.status}` }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
-    // Stream the response back
-    return new Response(response.body, {
+    const data = await response.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "I'm not sure how to help with that.";
+
+    // Return as a simple SSE stream so the frontend reader still works
+    const stream = new ReadableStream({
+      start(controller) {
+        const chunk = JSON.stringify({ choices: [{ delta: { content: text } }] });
+        controller.enqueue(new TextEncoder().encode(`data: ${chunk}\n\n`));
+        controller.enqueue(new TextEncoder().encode("data: [DONE]\n\n"));
+        controller.close();
+      },
+    });
+
+    return new Response(stream, {
       headers: {
+        ...corsHeaders,
         "Content-Type": "text/event-stream",
-        "Access-Control-Allow-Origin": "*",
         "Cache-Control": "no-cache",
       },
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: String(err) }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
+    console.error("Edge function error:", err);
+    return new Response(
+      JSON.stringify({ error: String(err) }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
   }
 });
