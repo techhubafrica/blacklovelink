@@ -32,10 +32,10 @@ export const en = {
 
     // Stats Section
     stats: {
-        line1: 'A new relationship starts on BlackLoveLink',
+        line1: 'Black professionals are choosing love on BlackLoveLink',
         line2: 'every',
-        highlight: '3 seconds',
-        line3: 'around the globe',
+        highlight: 'single day',
+        line3: 'across the diaspora',
     },
 
     // Success Stories
