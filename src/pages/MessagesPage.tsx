@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import TopNav from "@/components/TopNav";
-import { Search, Send, ArrowLeft } from "lucide-react";
+import { Search, Send, ArrowLeft, Heart } from "lucide-react";
 import { useMatches } from "@/hooks/useMatches";
 import { useMessages } from "@/hooks/useMessages";
 import { useAuth } from "@/hooks/useAuth";
+import { Skeleton } from "@/components/ui/skeleton";
+import { motion, AnimatePresence } from "framer-motion";
 
 const MessagesPage = () => {
   const { matches, loading } = useMatches();
@@ -127,14 +129,52 @@ const MessagesPage = () => {
           </div>
 
           {loading && (
-            <p className="text-center text-muted-foreground text-sm mt-8">Loading matches…</p>
+            <div className="space-y-6">
+              {/* Skeleton match circles */}
+              <div>
+                <Skeleton className="h-4 w-28 mb-3 rounded-full" />
+                <div className="flex gap-4 overflow-hidden pb-2">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="flex flex-col items-center flex-shrink-0">
+                      <Skeleton className="h-16 w-16 rounded-full" />
+                      <Skeleton className="h-3 w-12 mt-1.5 rounded-full" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* Skeleton conversation list */}
+              <div>
+                <Skeleton className="h-4 w-20 mb-3 rounded-full" />
+                <div className="space-y-2">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="flex items-center gap-3 rounded-xl bg-card p-3">
+                      <Skeleton className="h-14 w-14 rounded-full flex-shrink-0" />
+                      <div className="flex-1 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Skeleton className="h-4 w-28 rounded-full" />
+                          <Skeleton className="h-3 w-16 rounded-full" />
+                        </div>
+                        <Skeleton className="h-3 w-40 rounded-full" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
 
           {!loading && matches.length === 0 && (
-            <div className="text-center mt-12">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center mt-16"
+            >
+              <div className="mx-auto h-20 w-20 rounded-full gradient-brand flex items-center justify-center mb-4">
+                <Heart className="h-10 w-10 text-primary-foreground" />
+              </div>
               <p className="text-lg font-semibold text-foreground">No matches yet</p>
               <p className="text-sm text-muted-foreground mt-1">Keep swiping to find your match!</p>
-            </div>
+            </motion.div>
           )}
 
           {/* Matches */}
