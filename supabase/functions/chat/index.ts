@@ -89,7 +89,23 @@ Deno.serve(async (req: Request) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Gemini API error:", errorText);
+      console.error("Gemini API error:", response.status, errorText);
+
+      // Handle rate limiting gracefully
+      if (response.status === 429) {
+        const stream = new ReadableStream({
+          start(controller) {
+            const chunk = JSON.stringify({ choices: [{ delta: { content: "I'm getting a lot of questions right now! Please wait a moment and try again. 🙏" } }] });
+            controller.enqueue(new TextEncoder().encode(`data: ${chunk}\n\n`));
+            controller.enqueue(new TextEncoder().encode("data: [DONE]\n\n"));
+            controller.close();
+          },
+        });
+        return new Response(stream, {
+          headers: { ...corsHeaders, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" },
+        });
+      }
+
       return new Response(
         JSON.stringify({ error: `Gemini API error: ${response.status}` }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
