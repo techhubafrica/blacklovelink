@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -27,6 +27,17 @@ const queryClient = new QueryClient();
 const App = () => {
   const [showSplash, setShowSplash] = useState(true);
   const handleSplashFinished = useCallback(() => setShowSplash(false), []);
+
+  useEffect(() => {
+    const applyTheme = () => {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.toggle('dark', prefersDark);
+    };
+    applyTheme();
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    mql.addEventListener('change', applyTheme);
+    return () => mql.removeEventListener('change', applyTheme);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
