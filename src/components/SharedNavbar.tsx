@@ -29,8 +29,8 @@ const SharedNavbar = () => {
     return (
         <motion.header
             className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled
-                ? "backdrop-blur-2xl bg-black/40 border-b border-white/20 shadow-2xl shadow-black/20"
-                : "backdrop-blur-xl bg-black/20 border-b border-white/10"
+                ? "backdrop-blur-2xl bg-background/80 border-b border-border shadow-lg"
+                : "backdrop-blur-xl bg-background/60 border-b border-border/50"
                 }`}
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -59,11 +59,11 @@ const SharedNavbar = () => {
                         >
                             <Link
                                 to={link.to}
-                                className="group relative px-4 py-2.5 text-sm font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground"
+                                className="group relative px-4 py-2.5 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
                             >
                                 <span className="relative z-10">{link.label}</span>
                                 <motion.span
-                                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0"
+                                    className="absolute inset-0 rounded-xl bg-primary/5"
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     whileHover={{ opacity: 1, scale: 1 }}
                                     transition={{ duration: 0.3 }}
@@ -78,7 +78,7 @@ const SharedNavbar = () => {
                     {/* Language Dropdown */}
                     <div className="relative group hidden md:block">
                         <motion.button
-                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-primary-foreground/90 bg-white/5 backdrop-blur-md border border-white/10 transition-all duration-300 hover:bg-white/10 hover:border-white/20"
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-foreground/80 bg-muted/50 backdrop-blur-md border border-border transition-all duration-300 hover:bg-muted hover:border-border"
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                         >
@@ -87,7 +87,7 @@ const SharedNavbar = () => {
                             <ChevronDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-180" />
                         </motion.button>
 
-                        <div className="absolute right-0 top-full mt-3 w-52 rounded-2xl bg-background/98 backdrop-blur-2xl border border-white/10 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden">
+                        <div className="absolute right-0 top-full mt-3 w-52 rounded-2xl bg-card backdrop-blur-2xl border border-border shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden">
                             <div className="p-2">
                                 {(Object.keys(languageNames) as Language[]).map((lang, i) => (
                                     <motion.button
@@ -117,7 +117,7 @@ const SharedNavbar = () => {
                     >
                         <Link
                             to="/auth"
-                            className="group relative overflow-hidden rounded-full gradient-brand px-8 py-3 text-sm font-bold text-white shadow-button transition-all duration-300 hover:opacity-90 hover:scale-105"
+                            className="group relative overflow-hidden rounded-full gradient-brand px-8 py-3 text-sm font-bold text-primary-foreground shadow-button transition-all duration-300 hover:opacity-90 hover:scale-105"
                         >
                             <span className="relative z-10">{t.nav.signIn}</span>
                             <motion.span
@@ -131,7 +131,7 @@ const SharedNavbar = () => {
 
                     {/* Mobile Menu Button */}
                     <motion.button
-                        className="lg:hidden p-2 rounded-xl bg-white/5 backdrop-blur-md border border-white/10 text-primary-foreground hover:bg-white/10 transition-all"
+                        className="lg:hidden p-2 rounded-xl bg-muted/50 backdrop-blur-md border border-border text-foreground hover:bg-muted transition-all"
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         whileTap={{ scale: 0.95 }}
                     >
@@ -141,15 +141,15 @@ const SharedNavbar = () => {
                         >
                             <motion.span
                                 variants={{ closed: { rotate: 0, y: 0 }, open: { rotate: 45, y: 8 } }}
-                                className="w-full h-0.5 bg-primary-foreground rounded-full"
+                                className="w-full h-0.5 bg-foreground rounded-full"
                             />
                             <motion.span
                                 variants={{ closed: { opacity: 1 }, open: { opacity: 0 } }}
-                                className="w-full h-0.5 bg-primary-foreground rounded-full"
+                                className="w-full h-0.5 bg-foreground rounded-full"
                             />
                             <motion.span
                                 variants={{ closed: { rotate: 0, y: 0 }, open: { rotate: -45, y: -8 } }}
-                                className="w-full h-0.5 bg-primary-foreground rounded-full"
+                                className="w-full h-0.5 bg-foreground rounded-full"
                             />
                         </motion.div>
                     </motion.button>
@@ -164,7 +164,7 @@ const SharedNavbar = () => {
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="lg:hidden border-t border-white/10 bg-black/40 backdrop-blur-2xl overflow-hidden"
+                        className="lg:hidden border-t border-border bg-background/95 backdrop-blur-2xl overflow-hidden"
                     >
                         <div className="px-6 py-6 space-y-2">
                             {navLinks.map((link, i) => (
@@ -177,7 +177,7 @@ const SharedNavbar = () => {
                                     <Link
                                         to={link.to}
                                         onClick={() => setMobileMenuOpen(false)}
-                                        className="block px-4 py-3 text-sm font-medium text-primary-foreground/90 rounded-xl hover:bg-white/5 transition-colors"
+                                        className="block px-4 py-3 text-sm font-medium text-foreground/80 rounded-xl hover:bg-muted transition-colors"
                                     >
                                         {link.label}
                                     </Link>

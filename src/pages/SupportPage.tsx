@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Mail, Phone, MessageCircle, HelpCircle, Send } from "lucide-react";
-import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import SharedNavbar from "@/components/SharedNavbar";
 
 const SupportPage = () => {
@@ -70,7 +69,7 @@ const SupportPage = () => {
     };
 
     return (
-        <div className="min-h-screen font-display" style={{ "--background": "0 0% 100%", "--foreground": "240 10% 10%", "--card": "0 0% 100%", "--card-foreground": "240 10% 10%", "--muted": "240 5% 93%", "--muted-foreground": "240 4% 40%", "--border": "240 5% 84%", backgroundColor: "white", color: "#111" } as React.CSSProperties}>
+        <div className="min-h-screen font-display bg-background text-foreground">
             <SharedNavbar />
 
             {/* Hero Section */}
@@ -264,5 +263,3 @@ const SupportPage = () => {
 };
 
 export default SupportPage;
-
-

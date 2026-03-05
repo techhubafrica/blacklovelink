@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Shield, UserCheck, Lock, Eye, AlertCircle, MessageSquare } from "lucide-react";
-import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import SharedNavbar from "@/components/SharedNavbar";
 
 const TrustSafetyPage = () => {
@@ -51,7 +50,7 @@ const TrustSafetyPage = () => {
     ];
 
     return (
-        <div className="min-h-screen font-display" style={{ "--background": "0 0% 100%", "--foreground": "240 10% 10%", "--card": "0 0% 100%", "--card-foreground": "240 10% 10%", "--muted": "240 5% 93%", "--muted-foreground": "240 4% 40%", "--border": "240 5% 84%", backgroundColor: "white", color: "#111" } as React.CSSProperties}>
+        <div className="min-h-screen font-display bg-background text-foreground">
             <SharedNavbar />
 
             {/* Hero Section */}
@@ -162,13 +161,13 @@ const TrustSafetyPage = () => {
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <Link
                                     to="/support"
-                                    className="rounded-full bg-red-600 px-8 py-3 text-sm font-bold text-white hover:scale-105 transition-all"
+                                    className="rounded-full gradient-brand px-8 py-3 text-sm font-bold text-primary-foreground hover:scale-105 transition-all"
                                 >
                                     Report a Concern
                                 </Link>
                                 <a
                                     href="mailto:safety@blacklovelink.com"
-                                    className="rounded-full bg-gray-100 border border-gray-300 px-8 py-3 text-sm font-bold text-gray-900 hover:bg-gray-200 transition-all"
+                                    className="rounded-full bg-muted border border-border px-8 py-3 text-sm font-bold text-foreground hover:bg-accent transition-all"
                                 >
                                     Email Safety Team
                                 </a>
@@ -191,5 +190,3 @@ const TrustSafetyPage = () => {
 };
 
 export default TrustSafetyPage;
-
-
