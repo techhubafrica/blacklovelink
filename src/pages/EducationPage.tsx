@@ -8,10 +8,9 @@ import {
   BookOpen,
   Sparkles,
   Globe,
-  ArrowLeft,
   ChevronRight,
 } from "lucide-react";
-import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
+import SharedNavbar from "@/components/SharedNavbar";
 
 const categories = [
   {
@@ -90,24 +89,11 @@ const categories = [
 
 const EducationPage = () => {
   return (
-    <div className="min-h-screen bg-background font-display">
-      {/* Header */}
-      <header className="border-b border-border">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={blackLovelinkLogo} alt="BlackLoveLink" className="h-10 w-auto" />
-          </Link>
-          <Link
-            to="/"
-            className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" /> Back to Home
-          </Link>
-        </nav>
-      </header>
+    <div className="min-h-screen bg-background font-display text-foreground">
+      <SharedNavbar />
 
       {/* Hero */}
-      <section className="px-6 py-20 lg:py-28">
+      <section className="px-6 pt-32 pb-20 lg:py-28 lg:pt-36">
         <div className="mx-auto max-w-4xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -191,7 +177,7 @@ const EducationPage = () => {
         </p>
         <Link
           to="/auth"
-          className="inline-block rounded-full bg-white px-10 py-4 text-lg font-bold text-foreground transition-transform hover:scale-105"
+          className="inline-block rounded-full bg-background px-10 py-4 text-lg font-bold text-foreground transition-transform hover:scale-105"
         >
           Start Your Journey
         </Link>

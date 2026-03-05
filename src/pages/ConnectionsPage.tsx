@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Heart, Sparkles, Zap, Target, Users, TrendingUp } from "lucide-react";
-import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import profile1 from "@/assets/profile-1.png";
 import profile2 from "@/assets/profile-2.png";
 import profile3 from "@/assets/profile-3.png";
@@ -51,7 +50,7 @@ const ConnectionsPage = () => {
     ];
 
     return (
-        <div className="min-h-screen font-display" style={{ "--background": "0 0% 100%", "--foreground": "240 10% 10%", "--card": "0 0% 100%", "--card-foreground": "240 10% 10%", "--muted": "240 5% 93%", "--muted-foreground": "240 4% 40%", "--border": "240 5% 84%", backgroundColor: "white", color: "#111" } as React.CSSProperties}>
+        <div className="min-h-screen font-display bg-background text-foreground">
             <SharedNavbar />
 
             {/* Hero Section */}
@@ -75,7 +74,7 @@ const ConnectionsPage = () => {
                             </p>
                             <Link
                                 to="/auth"
-                                className="inline-block rounded-full bg-red-600 px-10 py-4 text-lg font-bold text-white shadow-button hover:scale-105 transition-all"
+                                className="inline-block rounded-full gradient-brand px-10 py-4 text-lg font-bold text-primary-foreground shadow-button hover:scale-105 transition-all"
                             >
                                 Start Matching
                             </Link>
@@ -247,7 +246,7 @@ const ConnectionsPage = () => {
                         </p>
                         <Link
                             to="/auth"
-                            className="inline-block rounded-full bg-red-600 px-12 py-4 text-lg font-bold text-white shadow-button transition-all hover:scale-105"
+                            className="inline-block rounded-full gradient-brand px-12 py-4 text-lg font-bold text-primary-foreground shadow-button transition-all hover:scale-105"
                         >
                             Start Swiping
                         </Link>
@@ -268,5 +267,3 @@ const ConnectionsPage = () => {
 };
 
 export default ConnectionsPage;
-
-
