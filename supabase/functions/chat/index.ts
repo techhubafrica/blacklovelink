@@ -1,6 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
-const CLAUDE_API_KEY = Deno.env.get("CLAUDE_API_KEY");
+const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
 
 const SYSTEM_PROMPT = `You are the BlackLoveLink AI assistant — a warm, knowledgeable, and encouraging guide for the BlackLoveLink platform.
 
@@ -58,36 +58,37 @@ Deno.serve(async (req: Request) => {
   try {
     const { messages } = await req.json();
 
-    if (!CLAUDE_API_KEY) {
+    if (!GROQ_API_KEY) {
       return new Response(
-        JSON.stringify({ error: "Claude API key not configured" }),
+        JSON.stringify({ error: "Groq API key not configured" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": CLAUDE_API_KEY,
-        "anthropic-version": "2023-06-01",
+        "Authorization": `Bearer ${GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "claude-3-haiku-20240307",
+        model: "llama-3.3-70b-versatile",
         max_tokens: 500,
-        system: SYSTEM_PROMPT,
-        messages: messages.map((m: { role: string; content: string }) => ({
-          role: m.role === "assistant" ? "assistant" : "user",
-          content: m.content,
-        })),
+        temperature: 0.7,
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          ...messages.map((m: { role: string; content: string }) => ({
+            role: m.role,
+            content: m.content,
+          })),
+        ],
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Claude API error:", response.status, errorText);
+      console.error("Groq API error:", response.status, errorText);
 
-      // Handle rate limiting gracefully
       if (response.status === 429) {
         const stream = new ReadableStream({
           start(controller) {
@@ -103,13 +104,13 @@ Deno.serve(async (req: Request) => {
       }
 
       return new Response(
-        JSON.stringify({ error: `Claude API error: ${response.status}` }),
+        JSON.stringify({ error: `Groq API error: ${response.status}`, detail: errorText }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const data = await response.json();
-    const text = data.content?.[0]?.text ?? "I'm not sure how to help with that.";
+    const text = data.choices?.[0]?.message?.content ?? "I'm not sure how to help with that.";
 
     // Return as SSE stream so the frontend reader still works
     const stream = new ReadableStream({
