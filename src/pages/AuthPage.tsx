@@ -40,7 +40,7 @@ async function getUserProfileStatus(userId: string): Promise<"complete" | "incom
     const { data, error } = await supabase
         .from("profiles")
         .select("profile_completed")
-        .eq("id", userId)
+        .eq("user_id", userId)
         .maybeSingle();
     if (error || !data) return "none";
     return data.profile_completed ? "complete" : "incomplete";
