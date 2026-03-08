@@ -1,6 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
-const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
+const CLAUDE_API_KEY = Deno.env.get("CLAUDE_API_KEY");
 
 const SYSTEM_PROMPT = `You are the BlackLoveLink AI assistant — a warm, knowledgeable, and encouraging guide for the BlackLoveLink platform.
 
@@ -58,38 +58,34 @@ Deno.serve(async (req: Request) => {
   try {
     const { messages } = await req.json();
 
-    if (!GEMINI_API_KEY) {
+    if (!CLAUDE_API_KEY) {
       return new Response(
-        JSON.stringify({ error: "Gemini API key not configured" }),
+        JSON.stringify({ error: "Claude API key not configured" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Use Gemini's native API (non-streaming for reliability)
-    const geminiMessages = messages.map((m: { role: string; content: string }) => ({
-      role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: m.content }],
-    }));
-
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents: geminiMessages,
-          generationConfig: {
-            maxOutputTokens: 500,
-            temperature: 0.7,
-          },
-        }),
-      }
-    );
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": CLAUDE_API_KEY,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-3-5-haiku-20241022",
+        max_tokens: 500,
+        system: SYSTEM_PROMPT,
+        messages: messages.map((m: { role: string; content: string }) => ({
+          role: m.role === "assistant" ? "assistant" : "user",
+          content: m.content,
+        })),
+      }),
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Gemini API error:", response.status, errorText);
+      console.error("Claude API error:", response.status, errorText);
 
       // Handle rate limiting gracefully
       if (response.status === 429) {
@@ -107,15 +103,15 @@ Deno.serve(async (req: Request) => {
       }
 
       return new Response(
-        JSON.stringify({ error: `Gemini API error: ${response.status}` }),
+        JSON.stringify({ error: `Claude API error: ${response.status}` }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const data = await response.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "I'm not sure how to help with that.";
+    const text = data.content?.[0]?.text ?? "I'm not sure how to help with that.";
 
-    // Return as a simple SSE stream so the frontend reader still works
+    // Return as SSE stream so the frontend reader still works
     const stream = new ReadableStream({
       start(controller) {
         const chunk = JSON.stringify({ choices: [{ delta: { content: text } }] });
