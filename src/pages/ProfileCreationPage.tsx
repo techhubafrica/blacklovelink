@@ -151,14 +151,14 @@ const ProfileCreationPage = () => {
                 const ext = slot.file.name.split(".").pop() ?? "jpg";
                 const path = `${userId}/${Date.now()}_${i}.${ext}`;
                 const { error: uploadError } = await supabase.storage
-                    .from("avatars")
+                    .from("profile-photos")
                     .upload(path, slot.file, { upsert: true });
                 if (uploadError) {
                     console.warn("Photo upload failed:", uploadError.message);
                     continue;
                 }
                 const { data: urlData } = supabase.storage
-                    .from("avatars")
+                    .from("profile-photos")
                     .getPublicUrl(path);
                 uploadedUrls.push(urlData.publicUrl);
             }
@@ -174,7 +174,7 @@ const ProfileCreationPage = () => {
 
             // Upsert profile to the `profiles` table
             const { error: dbError } = await supabase.from("profiles").upsert({
-                user_id: userId,
+                id: userId,
                 full_name: fullName.trim(),
                 occupation_title: occupation.title,
                 occupation_company: occupation.company,
@@ -188,7 +188,7 @@ const ProfileCreationPage = () => {
                 avatar_url: avatarUrl,
                 profile_completed: true,
                 updated_at: new Date().toISOString(),
-            }, { onConflict: "user_id" });
+            }, { onConflict: "id" });
 
             if (dbError) throw dbError;
 

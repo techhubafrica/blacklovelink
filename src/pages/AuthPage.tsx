@@ -18,8 +18,6 @@ type Step =
     | "otp"           // OTP after phone sign-up
     | "google-otp";   // Phone collection for brand-new Google users
 
-const DEMO_OTP = "123456";
-
 /* ─── Password strength ──────────────────────────────────────── */
 function passwordStrength(pw: string): { score: number; label: string; color: string } {
     let score = 0;
@@ -35,6 +33,17 @@ function passwordStrength(pw: string): { score: number; label: string; color: st
         { label: "Strong", color: "bg-green-500" },
     ];
     return { score, ...map[score] };
+}
+
+/* ─── Helper: check if user has completed profile in DB ──────── */
+async function getUserProfileStatus(userId: string): Promise<"complete" | "incomplete" | "none"> {
+    const { data, error } = await supabase
+        .from("profiles")
+        .select("profile_completed")
+        .eq("id", userId)
+        .maybeSingle();
+    if (error || !data) return "none";
+    return data.profile_completed ? "complete" : "incomplete";
 }
 
 /* ─── Component ──────────────────────────────────────────────── */
@@ -60,11 +69,11 @@ const AuthPage = () => {
     useEffect(() => {
         supabase.auth.getSession().then(async ({ data: { session } }) => {
             if (!session) return;
-            const isNew = !session.user.user_metadata?.profile_completed;
-            if (isNew) {
-                navigate("/create-profile");
-            } else {
+            const status = await getUserProfileStatus(session.user.id);
+            if (status === "complete") {
                 navigate("/swipe");
+            } else {
+                navigate("/create-profile");
             }
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,11 +106,11 @@ const AuthPage = () => {
         setLoading("signin");
         try {
             const { error } = await supabase.auth.signInWithPassword({ phone: fullPhone, password });
-            if (error) {
-                if (password === DEMO_OTP) { navigate("/swipe"); return; }
-                throw error;
-            }
-            navigate("/swipe");
+            if (error) throw error;
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) throw new Error("No session");
+            const status = await getUserProfileStatus(session.user.id);
+            navigate(status === "complete" ? "/swipe" : "/create-profile");
         } catch {
             toast({ title: "Sign in failed", description: "Incorrect phone number or password.", variant: "destructive" });
         } finally {
@@ -120,12 +129,25 @@ const AuthPage = () => {
         try {
             const { error } = await supabase.auth.signUp({ phone: fullPhone, password });
             if (error) {
-                console.warn("Phone signup error (may need Supabase Phone Auth):", error.message);
+                // If phone auth is not configured, show a helpful error
+                if (error.message.toLowerCase().includes("phone") || error.message.toLowerCase().includes("provider")) {
+                    toast({
+                        title: "Phone sign-up unavailable",
+                        description: "SMS verification is not yet configured. Please sign in with Google.",
+                        variant: "destructive",
+                    });
+                    return;
+                }
+                throw error;
             }
-            toast({ title: "Code sent!", description: `Verification code sent to ${fullPhone}. (Demo: ${DEMO_OTP})` });
+            toast({ title: "Code sent! 📲", description: `A verification code was sent to ${fullPhone}.` });
             setStep("otp");
-        } catch {
-            toast({ title: "Error", description: "Could not create account. Please try again.", variant: "destructive" });
+        } catch (err: unknown) {
+            toast({
+                title: "Sign-up failed",
+                description: err instanceof Error ? err.message : "Could not create account. Please try again.",
+                variant: "destructive",
+            });
         } finally {
             setLoading(null);
         }
@@ -139,11 +161,15 @@ const AuthPage = () => {
         }
         setLoading("send-otp");
         try {
-            await supabase.auth.signInWithOtp({ phone: fullPhone });
-        } catch { /* fallback */ }
-        toast({ title: "Code sent!", description: `Demo code: ${DEMO_OTP}` });
-        setStep("otp");
-        setLoading(null);
+            const { error } = await supabase.auth.signInWithOtp({ phone: fullPhone });
+            if (error) throw error;
+            toast({ title: "Code sent! 📲", description: `Verification code sent to ${fullPhone}.` });
+            setStep("otp");
+        } catch {
+            toast({ title: "Failed to send code", description: "SMS is not configured. Please sign in with Google.", variant: "destructive" });
+        } finally {
+            setLoading(null);
+        }
     };
 
     /* ─── Verify OTP ─────────────────────────────────────────────── */
@@ -152,14 +178,13 @@ const AuthPage = () => {
         if (code.length < 6) return;
         setLoading("otp");
         try {
-            if (code === DEMO_OTP) {
-                toast({ title: "Verified! 🎉", description: "Let's set up your profile." });
-                navigate("/create-profile");
-                return;
-            }
             const { error } = await supabase.auth.verifyOtp({ phone: fullPhone, token: code, type: "sms" });
             if (error) throw error;
-            navigate("/create-profile");
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) throw new Error("No session after OTP");
+            const status = await getUserProfileStatus(session.user.id);
+            toast({ title: "Verified! 🎉", description: status === "complete" ? "Welcome back!" : "Let's set up your profile." });
+            navigate(status === "complete" ? "/swipe" : "/create-profile");
         } catch {
             toast({ title: "Invalid code", description: "Please check the code and try again.", variant: "destructive" });
         } finally {

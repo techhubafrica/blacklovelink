@@ -57,9 +57,9 @@ const App = () => {
               <Route path="/trust-safety" element={<TrustSafetyPage />} />
               <Route path="/support" element={<SupportPage />} />
 
-              {/* Onboarding routes */}
-              <Route path="/create-profile" element={<ProfileCreationPage />} />
-              <Route path="/permissions" element={<PermissionsPage />} />
+              {/* Onboarding routes (auth required) */}
+              <Route path="/create-profile" element={<ProtectedRoute><ProfileCreationPage /></ProtectedRoute>} />
+              <Route path="/permissions" element={<ProtectedRoute><PermissionsPage /></ProtectedRoute>} />
 
               {/* App routes (auth required) */}
               <Route path="/swipe" element={<ProtectedRoute><SwipePage /></ProtectedRoute>} />
