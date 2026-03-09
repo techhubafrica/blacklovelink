@@ -160,7 +160,7 @@ const SiteFooter: React.FC = () => {
               to="/auth"
               className="gradient-brand rounded-full px-8 py-3 text-sm font-bold text-primary-foreground shadow-button transition-all hover:scale-105 hover:opacity-90"
             >
-              Join BlackLoveLink — It's Free
+              Join BlackLoveLink
             </Link>
           </div>
         </div>

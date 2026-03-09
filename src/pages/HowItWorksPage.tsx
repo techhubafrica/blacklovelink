@@ -306,7 +306,7 @@ const HowItWorksPage = () => {
                             to="/auth"
                             className="inline-block gradient-brand rounded-full px-12 py-4 text-lg font-bold text-primary-foreground shadow-button transition-all hover:scale-105"
                         >
-                            Create Your Profile — It's Free
+                            Create Your Profile
                         </Link>
                     </motion.div>
                 </div>

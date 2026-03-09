@@ -18,10 +18,7 @@ const SupportPage = () => {
             question: "How do I verify my profile?",
             answer: "After creating your account, navigate to Settings > Verification. You'll be asked to take a selfie that matches your profile photos and provide a valid ID. Verification typically takes 24-48 hours."
         },
-        {
-            question: "Is BlackLoveLink free to use?",
-            answer: "Yes! Creating a profile, browsing, and basic matching is completely free. We offer premium features like unlimited likes, advanced filters, and read receipts through our Premium membership."
-        },
+
         {
             question: "How does matching work?",
             answer: "Our algorithm considers your preferences, location, interests, and values. When you both show interest (like/super like), it's a match! You'll be notified and can start chatting."
