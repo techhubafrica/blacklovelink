@@ -6,6 +6,7 @@ import {
     Star, Users, Lock, Award, Target, Gem
 } from "lucide-react";
 import SharedNavbar from "@/components/SharedNavbar";
+import SiteFooter from "@/components/SiteFooter";
 
 const HowItWorksPage = () => {
 
@@ -311,14 +312,7 @@ const HowItWorksPage = () => {
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="border-t border-border py-12 px-6">
-                <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-muted-foreground">
-                        © 2026 BlackLoveLink. Building authentic connections for Black professionals.
-                    </p>
-                </div>
-            </footer>
+            <SiteFooter />
         </div>
     );
 };

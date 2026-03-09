@@ -1,6 +1,7 @@
 import React from "react";
 import { Flame, ChevronDown, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
+import SiteFooter from "@/components/SiteFooter";
 import { motion, AnimatePresence } from "framer-motion";
 import heroBg from "@/assets/hero-bg.png";
 import coupleHero from "@/assets/couple-hero.png";
@@ -550,48 +551,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="border-t border-border bg-muted/30 px-6 py-12">
-        <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <h5 className="mb-4 text-lg font-bold text-foreground">{t.footer.legal}</h5>
-            <ul className="space-y-2">
-              {[t.footer.privacy, t.footer.consumerHealth, t.footer.privacyPolicy, t.footer.terms, t.footer.cookiePolicy, t.footer.intellectualProperty, t.footer.accessibilityStatement].map((l) => (
-                <li key={l}>
-                  <a href="#" className="text-sm text-foreground/60 hover:text-foreground">{l}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h5 className="mb-4 text-lg font-bold text-foreground">{t.footer.careers}</h5>
-            <ul className="space-y-2">
-              {[t.footer.careersPortal, t.footer.techBlog].map((l) => (
-                <li key={l}>
-                  <a href="#" className="text-sm text-foreground/60 hover:text-foreground">{l}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h5 className="mb-4 text-lg font-bold text-foreground">{t.footer.social}</h5>
-            <div className="flex gap-4 text-foreground/60">
-              {["Instagram", "TikTok", "YouTube", "Twitter", "Facebook"].map((s) => (
-                <span key={s} className="text-sm hover:text-foreground cursor-pointer">{s}</span>
-              ))}
-            </div>
-          </div>
-          <div>
-            <ul className="space-y-2">
-              {[t.footer.faq, t.footer.destinations, t.footer.pressRoom, t.footer.contact, t.footer.promoCode].map((l) => (
-                <li key={l}>
-                  <a href="#" className="text-sm text-foreground/60 hover:text-foreground">{l}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 };

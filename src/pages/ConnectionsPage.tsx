@@ -7,6 +7,7 @@ import profile2 from "@/assets/profile-2.png";
 import profile3 from "@/assets/profile-3.png";
 import { usePlatformStats } from "@/hooks/usePlatformStats";
 import SharedNavbar from "@/components/SharedNavbar";
+import SiteFooter from "@/components/SiteFooter";
 
 const ConnectionsPage = () => {
     const { stats: platformStats, loading, formatStat } = usePlatformStats();
@@ -254,14 +255,7 @@ const ConnectionsPage = () => {
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="border-t border-border py-12 px-6">
-                <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-muted-foreground">
-                        © 2026 BlackLoveLink. Building authentic connections.
-                    </p>
-                </div>
-            </footer>
+            <SiteFooter />
         </div>
     );
 };

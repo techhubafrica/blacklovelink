@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Shield, UserCheck, Lock, Eye, AlertCircle, MessageSquare } from "lucide-react";
 import SharedNavbar from "@/components/SharedNavbar";
+import SiteFooter from "@/components/SiteFooter";
 
 const TrustSafetyPage = () => {
     const features = [
@@ -177,14 +178,7 @@ const TrustSafetyPage = () => {
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="border-t border-border py-12 px-6">
-                <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-muted-foreground">
-                        © 2026 BlackLoveLink. Building authentic connections.
-                    </p>
-                </div>
-            </footer>
+            <SiteFooter />
         </div>
     );
 };

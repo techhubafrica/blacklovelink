@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Quote, Heart, MapPin, Calendar } from "lucide-react";
 import SharedNavbar from "@/components/SharedNavbar";
+import SiteFooter from "@/components/SiteFooter";
 import story1 from "@/assets/story-1.png";
 import story2 from "@/assets/story-2.png";
 import story3 from "@/assets/story-3.png";
@@ -191,14 +192,7 @@ const SuccessStoriesPage = () => {
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="border-t border-border py-12 px-6">
-                <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-muted-foreground">
-                        © 2026 BlackLoveLink. Building authentic connections.
-                    </p>
-                </div>
-            </footer>
+            <SiteFooter />
         </div>
     );
 };

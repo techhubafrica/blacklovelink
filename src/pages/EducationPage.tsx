@@ -11,6 +11,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import SharedNavbar from "@/components/SharedNavbar";
+import SiteFooter from "@/components/SiteFooter";
 
 const categories = [
   {
@@ -183,12 +184,7 @@ const EducationPage = () => {
         </Link>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border bg-background px-6 py-8 text-center">
-        <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} BlackLoveLink. All rights reserved.
-        </p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 };
