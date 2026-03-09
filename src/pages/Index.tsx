@@ -332,15 +332,12 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {/* Soft white glow behind the title for readability */}
-            <div className="relative inline-block">
-              <div className="absolute inset-0 -mx-8 -my-4 rounded-3xl bg-white/10 backdrop-blur-sm blur-xl" />
-              <h1 className="relative text-5xl font-black tracking-tight sm:text-7xl lg:text-8xl drop-shadow-[0_2px_16px_rgba(255,255,255,0.25)]">
-                <span className="text-black [text-shadow:0_1px_12px_rgba(255,255,255,0.6)]">Black</span>
-                <span className="text-primary">Love</span>
-                <span className="text-secondary">Link</span>
-              </h1>
-            </div>
+            {/* White glow under 'Black' for readability */}
+            <h1 className="relative text-5xl font-black tracking-tight sm:text-7xl lg:text-8xl">
+              <span className="text-black [text-shadow:0_1px_12px_rgba(255,255,255,0.6)]">Black</span>
+              <span className="text-primary">Love</span>
+              <span className="text-secondary">Link</span>
+            </h1>
 
           </motion.div>
 
