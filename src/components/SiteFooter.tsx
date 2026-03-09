@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Heart, Mail, Phone, MessageCircle, Shield, ArrowUpRight } from "lucide-react";
+import { Heart, Mail, MessageCircle, Shield, ArrowUpRight } from "lucide-react";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 
 const footerLinks = {
@@ -28,7 +28,6 @@ const footerLinks = {
 
 const contactItems = [
   { icon: Mail, label: "support@blacklovelink.com", href: "mailto:support@blacklovelink.com" },
-  { icon: Phone, label: "1-800-LOVE-LINK", href: "tel:18005683465" },
   { icon: MessageCircle, label: "Live Chat", href: "/support" },
 ];
 
