@@ -506,98 +506,129 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ── SOCIAL PROOF STRIP ── */}
-      <section className="relative overflow-hidden bg-background py-24 lg:py-32 px-6">
-        {/* Decorative elements */}
-        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-72 h-72 rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
-        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-72 h-72 rounded-full bg-secondary/5 blur-[100px] pointer-events-none" />
+      {/* ── CINEMATIC SOCIAL PROOF ── */}
+      <section className="relative overflow-hidden">
+        {/* Full-bleed background image */}
+        <img
+          src={coupleHero}
+          alt="Happy couple"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        {/* Rich layered overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-secondary/10" />
 
-        <div className="relative z-10 mx-auto max-w-6xl">
-          {/* Headline */}
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="inline-block mb-4 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
-              The Numbers Don't Lie
-            </span>
-            <h2 className="text-4xl font-black text-foreground sm:text-5xl lg:text-6xl">
-              {t.stats.line1}
-            </h2>
-          </motion.div>
+        <div className="relative z-10 py-28 lg:py-40 px-6">
+          <div className="mx-auto max-w-6xl">
+            {/* Animated headline */}
+            <motion.div
+              className="text-center mb-20"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black text-white leading-[1.1] tracking-tight">
+                {t.stats.line1.split(' ').slice(0, 3).join(' ')}{" "}
+                <span className="text-gradient-brand">{t.stats.line1.split(' ').slice(3).join(' ')}</span>
+              </h2>
+              <p className="mt-6 text-lg text-white/60 max-w-2xl mx-auto">
+                {t.stats.line2} <span className="font-bold text-white">{t.stats.highlight}</span> {t.stats.line3}
+              </p>
+            </motion.div>
 
-          {/* Stats grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-            {[
-              {
-                value: loading ? "—" : formatStat(stats.matchSuccessRate, true),
-                label: t.mission.matchSuccess,
-                icon: "🔥",
-              },
-              {
-                value: loading ? "—" : formatStat(stats.activeUsers),
-                label: t.mission.verifiedProfiles,
-                icon: "✓",
-              },
-              {
-                value: loading ? "—" : formatStat(stats.matchesDaily),
-                label: "Matches Made",
-                icon: "💛",
-              },
-              {
-                value: loading ? "—" : formatStat(stats.satisfactionRate, true),
-                label: "Satisfaction",
-                icon: "⭐",
-              },
-            ].map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="group relative rounded-3xl border border-border bg-card p-6 sm:p-8 text-center hover:border-primary/30 transition-all duration-300"
-              >
-                {/* Hover glow */}
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            {/* Frosted glass stats bar */}
+            <motion.div
+              className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+            >
+              {[
+                {
+                  value: loading ? "—" : formatStat(stats.matchSuccessRate, true),
+                  label: t.mission.matchSuccess,
+                  gradient: "from-primary to-primary/60",
+                },
+                {
+                  value: loading ? "—" : formatStat(stats.activeUsers),
+                  label: t.mission.verifiedProfiles,
+                  gradient: "from-secondary to-secondary/60",
+                },
+                {
+                  value: loading ? "—" : formatStat(stats.matchesDaily),
+                  label: "Matches Made",
+                  gradient: "from-primary to-secondary",
+                },
+                {
+                  value: loading ? "—" : formatStat(stats.satisfactionRate, true),
+                  label: "Satisfaction",
+                  gradient: "from-secondary to-primary",
+                },
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
+                  className="group relative rounded-2xl overflow-hidden"
+                >
+                  {/* Glass background */}
+                  <div className="absolute inset-0 bg-white/[0.07] backdrop-blur-xl border border-white/[0.1]" />
 
-                <div className="relative z-10">
-                  <span className="text-2xl mb-3 block">{stat.icon}</span>
-                  <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-gradient-brand">
-                    {stat.value}
-                  </p>
-                  <p className="mt-2 text-sm text-muted-foreground font-medium">
-                    {stat.label}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                  {/* Hover accent */}
+                  <div className={`absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r ${stat.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
-          {/* Testimonial strip */}
-          <motion.div
-            className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <div className="flex -space-x-3">
-              <img src={profile1} alt="" className="w-11 h-11 rounded-full border-2 border-background object-cover" />
-              <img src={profile2} alt="" className="w-11 h-11 rounded-full border-2 border-background object-cover" />
-              <img src={profile3} alt="" className="w-11 h-11 rounded-full border-2 border-background object-cover" />
-              <div className="w-11 h-11 rounded-full border-2 border-background gradient-brand flex items-center justify-center text-xs font-bold text-primary-foreground">
-                +{loading ? "0" : Math.max(1, Math.floor(stats.activeUsers * 0.1))}
+                  <div className="relative z-10 p-6 sm:p-8 text-center">
+                    <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-white">
+                      {stat.value}
+                    </p>
+                    <p className="mt-2 text-sm text-white/50 font-medium tracking-wide uppercase">
+                      {stat.label}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Avatar strip + social proof text */}
+            <motion.div
+              className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-5"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              <div className="flex -space-x-3">
+                {[profile1, profile2, profile3].map((img, i) => (
+                  <motion.img
+                    key={i}
+                    src={img}
+                    alt=""
+                    className="w-12 h-12 rounded-full border-[3px] border-white/20 object-cover"
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.7 + i * 0.1 }}
+                  />
+                ))}
+                <motion.div
+                  className="w-12 h-12 rounded-full border-[3px] border-white/20 gradient-brand flex items-center justify-center text-xs font-bold text-primary-foreground"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 1 }}
+                >
+                  +{loading ? "0" : Math.max(1, Math.floor(stats.activeUsers * 0.1))}
+                </motion.div>
               </div>
-            </div>
-            <p className="text-muted-foreground text-sm sm:text-base">
-              <span className="font-bold text-foreground">Black professionals</span> are choosing love on BlackLoveLink{" "}
-              <span className="font-bold text-primary">every single day</span>
-            </p>
-          </motion.div>
+              <p className="text-white/60 text-sm sm:text-base text-center sm:text-left">
+                Join <span className="font-bold text-white">Black professionals</span> finding love <span className="font-bold text-primary">every single day</span>
+              </p>
+            </motion.div>
+          </div>
         </div>
       </section>
 
