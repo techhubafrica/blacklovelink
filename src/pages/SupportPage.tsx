@@ -250,14 +250,7 @@ const SupportPage = () => {
                 </div>
             </section>
 
-            {/* Footer */}
-            <footer className="border-t border-border py-12 px-6">
-                <div className="mx-auto max-w-7xl text-center">
-                    <p className="text-muted-foreground">
-                        © 2026 BlackLoveLink. Building authentic connections.
-                    </p>
-                </div>
-            </footer>
+            <SiteFooter />
         </div>
     );
 };
