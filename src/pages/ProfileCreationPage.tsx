@@ -172,23 +172,57 @@ const ProfileCreationPage = () => {
             const m = today.getMonth() - birthDate.getMonth();
             if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) ageCalc--;
 
-            // Upsert profile to the `profiles` table
-            const { error: dbError } = await supabase.from("profiles").upsert({
-                user_id: userId,
-                full_name: fullName.trim(),
-                occupation_title: occupation.title,
-                occupation_company: occupation.company,
-                verified: occupation.verified,
-                dob,
-                age: ageCalc,
-                gender,
-                intent,
-                interests,
-                photos: uploadedUrls,
-                avatar_url: avatarUrl,
-                profile_completed: true,
-                updated_at: new Date().toISOString(),
-            }, { onConflict: "user_id" });
+            // Check if this user already has a profile row
+            const { data: existing } = await supabase
+                .from("profiles")
+                .select("id")
+                .eq("user_id", userId)
+                .maybeSingle();
+
+            let dbError;
+            if (existing) {
+                // Row exists → UPDATE it
+                const { error } = await supabase
+                    .from("profiles")
+                    .update({
+                        full_name: fullName.trim(),
+                        occupation_title: occupation.title,
+                        occupation_company: occupation.company,
+                        verified: occupation.verified,
+                        dob,
+                        age: ageCalc,
+                        gender,
+                        intent,
+                        interests,
+                        photos: uploadedUrls,
+                        avatar_url: avatarUrl,
+                        profile_completed: true,
+                        updated_at: new Date().toISOString(),
+                    })
+                    .eq("user_id", userId);
+                dbError = error;
+            } else {
+                // No row yet → INSERT
+                const { error } = await supabase
+                    .from("profiles")
+                    .insert({
+                        user_id: userId,
+                        full_name: fullName.trim(),
+                        occupation_title: occupation.title,
+                        occupation_company: occupation.company,
+                        verified: occupation.verified,
+                        dob,
+                        age: ageCalc,
+                        gender,
+                        intent,
+                        interests,
+                        photos: uploadedUrls,
+                        avatar_url: avatarUrl,
+                        profile_completed: true,
+                        updated_at: new Date().toISOString(),
+                    });
+                dbError = error;
+            }
 
             if (dbError) throw dbError;
 
