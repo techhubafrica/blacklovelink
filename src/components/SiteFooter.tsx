@@ -28,7 +28,6 @@ const footerLinks = {
 
 const contactItems = [
   { icon: Mail, label: "support@blacklovelink.com", href: "mailto:support@blacklovelink.com" },
-  { icon: Phone, label: "1-800-LOVE-LINK", href: "tel:18005683465" },
   { icon: MessageCircle, label: "Live Chat", href: "/support" },
 ];
 
