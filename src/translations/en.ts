@@ -43,9 +43,9 @@ export const en = {
 
     // Connection Section
     connection: {
-        title: 'Made a great\nconnection.',
-        description: 'Your moment belongs here. Share meaningful and authentic stories that ignite confidence and joy.',
-        cta: 'Share your story',
+        title: 'Where Love\nFinds Its Match',
+        description: 'Real couples. Real stories. Join thousands of Black professionals who stopped searching and started finding.',
+        cta: 'Start Your Story',
     },
 
     // Footer
