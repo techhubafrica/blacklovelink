@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Heart, Mail, Phone, MessageCircle, Shield, ArrowUpRight } from "lucide-react";
+import { Heart, Mail, MessageCircle, Shield, ArrowUpRight } from "lucide-react";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 
 const footerLinks = {
