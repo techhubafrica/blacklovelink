@@ -48,7 +48,7 @@ const SplashScreen = ({ onFinished }: SplashScreenProps) => {
               src={logo}
               alt="BlackLoveLink"
               className="h-28 w-28 object-contain drop-shadow-2xl"
-              animate={{ 
+              animate={{
                 filter: [
                   "drop-shadow(0 0 20px hsla(var(--primary), 0.3))",
                   "drop-shadow(0 0 40px hsla(var(--primary), 0.5))",
@@ -67,7 +67,7 @@ const SplashScreen = ({ onFinished }: SplashScreenProps) => {
             className="relative z-10 mt-6"
           >
             <h1 className="text-3xl font-bold tracking-tight">
-              <span className="text-foreground">Black</span>
+              <span className="text-black [text-shadow:0_1px_12px_rgba(255,255,255,0.6)]">Black</span>
               <span className="text-primary">Love</span>
               <span className="text-accent">Link</span>
             </h1>
