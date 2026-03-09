@@ -11,6 +11,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import SharedNavbar from "@/components/SharedNavbar";
+import SiteFooter from "@/components/SiteFooter";
 
 const categories = [
   {

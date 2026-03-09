@@ -1,6 +1,7 @@
 import React from "react";
 import { Flame, ChevronDown, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
+import SiteFooter from "@/components/SiteFooter";
 import { motion, AnimatePresence } from "framer-motion";
 import heroBg from "@/assets/hero-bg.png";
 import coupleHero from "@/assets/couple-hero.png";

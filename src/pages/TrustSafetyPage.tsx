@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Shield, UserCheck, Lock, Eye, AlertCircle, MessageSquare } from "lucide-react";
 import SharedNavbar from "@/components/SharedNavbar";
+import SiteFooter from "@/components/SiteFooter";
 
 const TrustSafetyPage = () => {
     const features = [
