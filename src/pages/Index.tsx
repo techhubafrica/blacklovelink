@@ -498,41 +498,16 @@ const Index = () => {
               ))}
             </motion.div>
 
-            {/* Avatar strip + social proof text */}
-            <motion.div
-              className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-5"
+            {/* Social proof text */}
+            <motion.p
+              className="mt-14 text-white/60 text-sm sm:text-base text-center"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.6 }}
             >
-              <div className="flex -space-x-3">
-                {[profile1, profile2, profile3].map((img, i) => (
-                  <motion.img
-                    key={i}
-                    src={img}
-                    alt=""
-                    className="w-12 h-12 rounded-full border-[3px] border-white/20 object-cover"
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.7 + i * 0.1 }}
-                  />
-                ))}
-                <motion.div
-                  className="w-12 h-12 rounded-full border-[3px] border-white/20 gradient-brand flex items-center justify-center text-xs font-bold text-primary-foreground"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 1 }}
-                >
-                  +{loading ? "0" : Math.max(1, Math.floor(stats.activeUsers * 0.1))}
-                </motion.div>
-              </div>
-              <p className="text-white/60 text-sm sm:text-base text-center sm:text-left">
-                Join <span className="font-bold text-white">Black professionals</span> finding love <span className="font-bold text-primary">every single day</span>
-              </p>
-            </motion.div>
+              Join <span className="font-bold text-white">Black professionals</span> finding love <span className="font-bold text-primary">every single day</span>
+            </motion.p>
           </div>
         </div>
       </section>
