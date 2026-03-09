@@ -506,27 +506,100 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ── STATS SECTION ── */}
-      <section className="relative">
-        <img
-          src={coupleHero}
-          alt="Happy couple"
-          className="h-[70vh] w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        <div className="absolute inset-x-0 bottom-12 text-center px-4">
-          <h2 className="text-3xl font-light text-primary-foreground sm:text-5xl">
-            {t.stats.line1}<br />{t.stats.line2} <span className="font-bold">{t.stats.highlight}</span> {t.stats.line3}
-          </h2>
+      {/* ── SOCIAL PROOF STRIP ── */}
+      <section className="relative overflow-hidden bg-background py-24 lg:py-32 px-6">
+        {/* Decorative elements */}
+        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-72 h-72 rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
+        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-72 h-72 rounded-full bg-secondary/5 blur-[100px] pointer-events-none" />
+
+        <div className="relative z-10 mx-auto max-w-6xl">
+          {/* Headline */}
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="inline-block mb-4 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
+              The Numbers Don't Lie
+            </span>
+            <h2 className="text-4xl font-black text-foreground sm:text-5xl lg:text-6xl">
+              {t.stats.line1}
+            </h2>
+          </motion.div>
+
+          {/* Stats grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+            {[
+              {
+                value: loading ? "—" : formatStat(stats.matchSuccessRate, true),
+                label: t.mission.matchSuccess,
+                icon: "🔥",
+              },
+              {
+                value: loading ? "—" : formatStat(stats.activeUsers),
+                label: t.mission.verifiedProfiles,
+                icon: "✓",
+              },
+              {
+                value: loading ? "—" : formatStat(stats.matchesDaily),
+                label: "Matches Made",
+                icon: "💛",
+              },
+              {
+                value: loading ? "—" : formatStat(stats.satisfactionRate, true),
+                label: "Satisfaction",
+                icon: "⭐",
+              },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="group relative rounded-3xl border border-border bg-card p-6 sm:p-8 text-center hover:border-primary/30 transition-all duration-300"
+              >
+                {/* Hover glow */}
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                <div className="relative z-10">
+                  <span className="text-2xl mb-3 block">{stat.icon}</span>
+                  <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-gradient-brand">
+                    {stat.value}
+                  </p>
+                  <p className="mt-2 text-sm text-muted-foreground font-medium">
+                    {stat.label}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Testimonial strip */}
+          <motion.div
+            className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <div className="flex -space-x-3">
+              <img src={profile1} alt="" className="w-11 h-11 rounded-full border-2 border-background object-cover" />
+              <img src={profile2} alt="" className="w-11 h-11 rounded-full border-2 border-background object-cover" />
+              <img src={profile3} alt="" className="w-11 h-11 rounded-full border-2 border-background object-cover" />
+              <div className="w-11 h-11 rounded-full border-2 border-background gradient-brand flex items-center justify-center text-xs font-bold text-primary-foreground">
+                +{loading ? "0" : Math.max(1, Math.floor(stats.activeUsers * 0.1))}
+              </div>
+            </div>
+            <p className="text-muted-foreground text-sm sm:text-base">
+              <span className="font-bold text-foreground">Black professionals</span> are choosing love on BlackLoveLink{" "}
+              <span className="font-bold text-primary">every single day</span>
+            </p>
+          </motion.div>
         </div>
       </section>
-
-      {/* ── SUCCESS STORIES BANNER ── */}
-      <div className="gradient-brand py-4 text-center">
-        <span className="text-lg font-bold text-primary-foreground">
-          {t.swipeStories} <ChevronDown className="inline h-5 w-5" />
-        </span>
-      </div>
 
       {/* ── LOVE STORIES SECTION ── */}
       <section className="relative bg-muted/30 px-6 py-28 lg:py-36 overflow-hidden">
