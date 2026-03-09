@@ -66,27 +66,45 @@ export const useProfiles = () => {
         const fetchProfiles = async () => {
             try {
                 const { data: { session } } = await supabase.auth.getSession();
+                if (!session?.user) {
+                    if (isMounted) setLoading(false);
+                    return;
+                }
+
+                // First get current user's profile to know their gender
+                const { data: myProfile } = await supabase
+                    .from("profiles")
+                    .select("gender")
+                    .eq("user_id", session.user.id)
+                    .maybeSingle();
+
+                // Determine opposite gender to show
+                const myGender = myProfile?.gender?.toLowerCase();
+                let targetGender: string | null = null;
+                if (myGender === "male") targetGender = "Female";
+                else if (myGender === "female") targetGender = "Male";
 
                 let query = supabase
                     .from("profiles")
                     .select("*")
                     .eq("profile_completed", true)
+                    .neq("user_id", session.user.id)
                     .order("created_at", { ascending: false });
 
-                // Exclude current user and already-swiped profiles
-                if (session?.user) {
-                    query = query.neq("user_id", session.user.id);
+                // Filter by opposite gender if we know the user's gender
+                if (targetGender) {
+                    query = query.ilike("gender", targetGender);
+                }
 
-                    // Get already swiped user_ids
-                    const { data: swipedData } = await supabase
-                        .from("swipes")
-                        .select("swiped_id")
-                        .eq("swiper_id", session.user.id);
+                // Get already swiped user_ids
+                const { data: swipedData } = await supabase
+                    .from("swipes")
+                    .select("swiped_id")
+                    .eq("swiper_id", session.user.id);
 
-                    if (swipedData && swipedData.length > 0) {
-                        const swipedIds = swipedData.map((s: any) => s.swiped_id);
-                        query = query.not("user_id", "in", `(${swipedIds.join(",")})`);
-                    }
+                if (swipedData && swipedData.length > 0) {
+                    const swipedIds = swipedData.map((s: any) => s.swiped_id);
+                    query = query.not("user_id", "in", `(${swipedIds.join(",")})`);
                 }
 
                 const { data, error } = await query;
