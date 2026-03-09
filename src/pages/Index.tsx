@@ -333,7 +333,7 @@ const Index = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <h1 className="text-5xl font-black tracking-tight sm:text-7xl lg:text-8xl">
-              <span className="text-primary-foreground">Black</span>
+              <span className="text-black">Black</span>
               <span className="text-primary">Love</span>
               <span className="text-secondary">Link</span>
             </h1>
