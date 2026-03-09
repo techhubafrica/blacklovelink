@@ -528,22 +528,37 @@ const Index = () => {
         </span>
       </div>
 
-      {/* ── CONNECTION SECTION (Bumble-inspired) ── */}
-      <section className="bg-muted/30 px-6 py-24 lg:py-32 overflow-hidden">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid items-center gap-12 lg:grid-cols-[1fr_1fr]">
-            {/* Left – large bold text */}
-            <div>
-              <h2 className="text-5xl font-black leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-[4.5rem]">
+      {/* ── LOVE STORIES SECTION ── */}
+      <section className="relative bg-muted/30 px-6 py-28 lg:py-36 overflow-hidden">
+        {/* Background accents */}
+        <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-secondary/5 blur-[120px] pointer-events-none" />
+
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <div className="grid items-center gap-16 lg:grid-cols-[1fr_1.2fr]">
+            {/* Left – Text content */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <span className="inline-block mb-4 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
+                Real Stories
+              </span>
+              <h2 className="text-5xl font-black leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-[4rem]">
                 {t.connection.title.split('\n').map((line, i) => (<span key={i}>{line}{i === 0 && <br />}</span>))}
               </h2>
               <p className="mt-6 max-w-md text-lg text-muted-foreground leading-relaxed">
                 {t.connection.description}
               </p>
-              <button className="mt-10 rounded-full gradient-brand px-10 py-4 text-base font-bold text-white transition-transform hover:scale-105">
+              <Link
+                to="/auth"
+                className="mt-10 inline-block rounded-full gradient-brand px-10 py-4 text-base font-bold text-primary-foreground shadow-button transition-all hover:scale-105"
+              >
                 {t.connection.cta}
-              </button>
-            </div>
+              </Link>
+            </motion.div>
 
             {/* Right – 3D rotating connection cards */}
             <ConnectionCards />
