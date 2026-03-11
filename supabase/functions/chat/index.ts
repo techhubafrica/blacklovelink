@@ -1,4 +1,4 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+// Edge function for chat
 
 const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
 

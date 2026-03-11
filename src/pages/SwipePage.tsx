@@ -6,7 +6,7 @@ import MatchOverlay from "@/components/MatchOverlay";
 import TopNav from "@/components/TopNav";
 import { useProfiles, type UserProfile } from "@/hooks/useProfileData";
 import { useSwipe } from "@/hooks/useSwipe";
-import { SlidersHorizontal, X, RotateCcw } from "lucide-react";
+import { SlidersHorizontal, X, RotateCcw, Loader2, SearchX } from "lucide-react";
 
 const INTENTS = ["All", "Long-term relationship", "Marriage", "Open to explore", "Networking only"];
 const INTERESTS_OPTIONS = ["Travel", "Fitness", "Tech", "Entrepreneurship", "Faith", "Music", "Art", "Reading", "Wellness"];
@@ -18,13 +18,11 @@ const SwipePage = () => {
   const [matchedProfile, setMatchedProfile] = useState<UserProfile | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
 
-  // Filter state
   const [ageRange, setAgeRange] = useState<[number, number]>([18, 45]);
   const [radiusKm, setRadiusKm] = useState(50);
   const [intentFilter, setIntentFilter] = useState("All");
   const [interestFilter, setInterestFilter] = useState<string[]>([]);
 
-  // Apply filters to profiles
   const filteredProfiles = profiles.filter((p) => {
     if (p.age !== null && p.age !== undefined) {
       if (p.age < ageRange[0] || p.age > ageRange[1]) return false;
@@ -36,18 +34,14 @@ const SwipePage = () => {
 
   const visibleList = filteredProfiles.slice(currentIndex, currentIndex + 2);
   const allSwiped = currentIndex >= filteredProfiles.length;
+  const hasActiveFilters = intentFilter !== "All" || interestFilter.length > 0;
 
   const handleSwipe = useCallback(
     async (direction: "left" | "right" | "up") => {
       const current = filteredProfiles[currentIndex];
       if (!current) return;
-
-      // Record swipe to database
       const { matched } = await recordSwipe(current, direction);
-      if (matched) {
-        setMatchedProfile(current);
-      }
-
+      if (matched) setMatchedProfile(current);
       setCurrentIndex((prev) => prev + 1);
     },
     [currentIndex, filteredProfiles, recordSwipe]
@@ -71,45 +65,48 @@ const SwipePage = () => {
     <div className="flex h-[100dvh] flex-col bg-background">
       <TopNav />
 
-      {/* Loading state */}
-      {loading && (
-        <div className="flex flex-1 items-center justify-center">
-          <p className="text-muted-foreground">Finding matches nearby…</p>
-        </div>
-      )}
-
-      {/* Filter drawer button */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border">
-        <p className="text-sm text-muted-foreground">
-          {allSwiped ? "No more profiles" : `${filteredProfiles.length - currentIndex} matches nearby`}
+      {/* Subtle toolbar */}
+      <div className="flex items-center justify-between px-5 py-2.5">
+        <p className="text-sm text-muted-foreground font-medium">
+          {loading ? "Finding profiles…" : allSwiped ? "No more profiles" : `${filteredProfiles.length - currentIndex} nearby`}
         </p>
         <button
           onClick={() => setFilterOpen(true)}
-          className="flex items-center gap-1.5 text-sm font-medium text-foreground bg-card border border-border rounded-full px-3 py-1.5 hover:bg-muted transition"
+          className="flex items-center gap-1.5 text-sm font-semibold text-foreground bg-card border border-border rounded-full px-4 py-2 hover:bg-muted transition-colors active:scale-95"
         >
           <SlidersHorizontal className="w-4 h-4" />
           Filters
-          {(intentFilter !== "All" || interestFilter.length > 0) && (
-            <span className="w-2 h-2 rounded-full bg-primary ml-0.5" />
-          )}
+          {hasActiveFilters && <span className="w-2 h-2 rounded-full bg-primary" />}
         </button>
       </div>
 
       {/* Card area */}
-      <div className="relative flex flex-1 items-center justify-center overflow-hidden px-4 py-2">
-        {!loading && allSwiped ? (
-          <div className="text-center">
-            <p className="text-2xl font-bold text-foreground">You've seen everyone!</p>
-            <p className="mt-2 text-muted-foreground">Adjust your filters or check back later.</p>
+      <div className="relative flex flex-1 items-center justify-center overflow-hidden px-5">
+        {loading ? (
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="w-8 h-8 text-primary animate-spin" />
+            <p className="text-muted-foreground text-sm">Finding matches nearby…</p>
+          </div>
+        ) : allSwiped ? (
+          <motion.div
+            className="text-center px-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+              <SearchX className="w-9 h-9 text-muted-foreground" />
+            </div>
+            <p className="text-xl font-bold text-foreground mb-1">You've seen everyone!</p>
+            <p className="text-muted-foreground text-sm mb-6">Adjust your filters or check back later.</p>
             <button
               onClick={() => setCurrentIndex(0)}
-              className="gradient-brand mt-6 rounded-full px-8 py-3 font-semibold text-primary-foreground shadow-button"
+              className="gradient-brand rounded-full px-8 py-3 font-semibold text-primary-foreground shadow-button active:scale-95 transition-transform"
             >
               Start Over
             </button>
-          </div>
+          </motion.div>
         ) : (
-          <div className="relative h-[62vh] w-full max-w-sm">
+          <div className="relative w-full max-w-[380px] mx-auto" style={{ height: "min(68vh, 540px)" }}>
             <AnimatePresence>
               {visibleList
                 .slice()
@@ -134,7 +131,7 @@ const SwipePage = () => {
           onLike={() => handleSwipe("right")}
           onSuperLike={() => handleSwipe("up")}
           onRewind={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
-          onBoost={() => { }}
+          onBoost={() => {}}
         />
       )}
 
@@ -146,7 +143,7 @@ const SwipePage = () => {
           <>
             <motion.div
               key="backdrop"
-              className="fixed inset-0 z-40 bg-black/50"
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -154,11 +151,16 @@ const SwipePage = () => {
             />
             <motion.div
               key="drawer"
-              className="fixed bottom-0 left-0 right-0 z-50 bg-card rounded-t-3xl border border-border p-6 space-y-6 max-h-[80vh] overflow-y-auto"
+              className="fixed bottom-0 left-0 right-0 z-50 bg-card rounded-t-[28px] border-t border-border p-6 space-y-6 max-h-[80vh] overflow-y-auto"
               initial={{ y: "100%" }}
               animate={{ y: 0, transition: { type: "spring", stiffness: 300, damping: 30 } }}
               exit={{ y: "100%", transition: { duration: 0.2 } }}
             >
+              {/* Handle bar */}
+              <div className="flex justify-center -mt-2 mb-2">
+                <div className="w-10 h-1 rounded-full bg-muted-foreground/30" />
+              </div>
+
               <div className="flex items-center justify-between">
                 <h3 className="font-bold text-foreground text-lg">Filters</h3>
                 <div className="flex items-center gap-3">
@@ -198,7 +200,7 @@ const SwipePage = () => {
                 <input type="range" min={5} max={200} step={5} value={radiusKm} onChange={(e) => setRadiusKm(+e.target.value)} className="w-full h-2 accent-primary" />
               </div>
 
-              {/* Relationship Intent */}
+              {/* Intent */}
               <div className="space-y-3">
                 <label className="text-sm font-semibold text-foreground">Relationship Intent</label>
                 <div className="flex flex-wrap gap-2">
@@ -210,7 +212,7 @@ const SwipePage = () => {
                 </div>
               </div>
 
-              {/* Shared interests */}
+              {/* Interests */}
               <div className="space-y-3">
                 <label className="text-sm font-semibold text-foreground">Shared Interests</label>
                 <div className="flex flex-wrap gap-2">
@@ -222,7 +224,7 @@ const SwipePage = () => {
                 </div>
               </div>
 
-              <button onClick={() => { setCurrentIndex(0); setFilterOpen(false); }} className="w-full py-4 rounded-2xl gradient-brand text-primary-foreground font-bold shadow-button hover:opacity-90 transition">
+              <button onClick={() => { setCurrentIndex(0); setFilterOpen(false); }} className="w-full py-4 rounded-2xl gradient-brand text-primary-foreground font-bold shadow-button hover:opacity-90 transition active:scale-[0.98]">
                 Apply Filters
               </button>
             </motion.div>
