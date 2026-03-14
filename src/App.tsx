@@ -21,6 +21,7 @@ import ConnectionsPage from "./pages/ConnectionsPage";
 import TrustSafetyPage from "./pages/TrustSafetyPage";
 import SupportPage from "./pages/SupportPage";
 import NotFound from "./pages/NotFound";
+import ArticleReaderPage from "./pages/ArticleReaderPage";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,7 @@ const App = () => {
               <Route path="/success-stories" element={<SuccessStoriesPage />} />
               <Route path="/trust-safety" element={<TrustSafetyPage />} />
               <Route path="/support" element={<SupportPage />} />
+              <Route path="/articles/:slug" element={<ArticleReaderPage />} />
 
               {/* Onboarding routes (auth required) */}
               <Route path="/create-profile" element={<ProtectedRoute><ProfileCreationPage /></ProtectedRoute>} />

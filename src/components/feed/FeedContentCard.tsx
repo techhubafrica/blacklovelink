@@ -1,5 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { X, Flame, TrendingUp, Quote, Lightbulb, Heart, ExternalLink, BookOpen } from "lucide-react";
+import { X, Flame, TrendingUp, Quote, Lightbulb, Heart, BookOpen, ArrowRight } from "lucide-react";
 import type { FeedContentItem } from "@/data/feedContent";
 
 interface FeedContentCardProps {
@@ -8,16 +9,25 @@ interface FeedContentCardProps {
 }
 
 const typeConfig = {
-    stat: { icon: TrendingUp, color: "text-muted-foreground" },
-    hottake: { icon: Flame, color: "text-muted-foreground" },
-    quote: { icon: Quote, color: "text-muted-foreground" },
-    tip: { icon: Lightbulb, color: "text-muted-foreground" },
-    story: { icon: Heart, color: "text-muted-foreground" },
-    article: { icon: BookOpen, color: "text-muted-foreground" },
+    stat: { icon: TrendingUp },
+    hottake: { icon: Flame },
+    quote: { icon: Quote },
+    tip: { icon: Lightbulb },
+    story: { icon: Heart },
+    article: { icon: BookOpen },
 };
 
 export default function FeedContentCard({ item, onDismiss }: FeedContentCardProps) {
+    const navigate = useNavigate();
     const { icon: Icon } = typeConfig[item.type];
+
+    const handleCardClick = () => {
+        if (item.type === "article" && item.articleSlug) {
+            navigate(`/articles/${item.articleSlug}`);
+        }
+    };
+
+    const isClickable = item.type === "article" && !!item.articleSlug;
 
     return (
         <motion.div
@@ -25,19 +35,20 @@ export default function FeedContentCard({ item, onDismiss }: FeedContentCardProp
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.18 } }}
-            className={`relative mx-auto w-full max-w-md rounded-3xl border-2 ${item.border} ${item.bg} p-6 shadow-lg overflow-hidden`}
+            onClick={isClickable ? handleCardClick : undefined}
+            className={`relative mx-auto w-full max-w-md rounded-3xl border-2 ${item.border} ${item.bg} p-6 shadow-lg overflow-hidden ${isClickable ? "cursor-pointer active:scale-[0.98] transition-transform" : ""}`}
         >
-            {/* Subtle accent glow */}
+            {/* Accent glow */}
             <div className={`pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full blur-3xl opacity-20 bg-current ${item.accent}`} />
 
-            {/* Top row: tag + dismiss */}
+            {/* Top row */}
             <div className="flex items-center justify-between mb-4">
                 <span className={`flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest ${item.accent}`}>
                     <Icon className="w-3.5 h-3.5" />
                     {item.tag}
                 </span>
                 <button
-                    onClick={() => onDismiss(item.id)}
+                    onClick={(e) => { e.stopPropagation(); onDismiss(item.id); }}
                     className="w-7 h-7 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
                     aria-label="Dismiss"
                 >
@@ -60,29 +71,17 @@ export default function FeedContentCard({ item, onDismiss }: FeedContentCardProp
                 </p>
             )}
 
-            {/* Author (quotes) */}
+            {/* Quote author */}
             {item.type === "quote" && item.author && (
                 <p className={`mt-3 text-xs font-semibold tracking-wide ${item.accent}`}>
                     — {item.author}
                 </p>
             )}
 
-            {/* Article footer */}
-            {item.type === "article" && (
-                <div className="mt-4 flex items-center justify-between">
-                    {item.source && (
-                        <p className="text-xs text-muted-foreground font-medium">{item.source}</p>
-                    )}
-                    {item.url && (
-                        <a
-                            href={item.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`flex items-center gap-1 text-xs font-bold ${item.accent} hover:opacity-80 transition-opacity`}
-                        >
-                            Read <ExternalLink className="w-3 h-3" />
-                        </a>
-                    )}
+            {/* Article CTA */}
+            {item.type === "article" && item.articleSlug && (
+                <div className={`mt-4 flex items-center gap-1 text-xs font-bold ${item.accent}`}>
+                    Read article <ArrowRight className="w-3.5 h-3.5" />
                 </div>
             )}
 
