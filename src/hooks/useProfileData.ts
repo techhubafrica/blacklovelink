@@ -91,7 +91,7 @@ export const useProfiles = () => {
                     .neq("user_id", session.user.id)
                     .order("created_at", { ascending: false });
 
-                // Filter by opposite gender if we know the user's gender
+                // Filter by opposite gender
                 if (targetGender) {
                     query = query.ilike("gender", targetGender);
                 }

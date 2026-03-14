@@ -9,7 +9,8 @@ import { useSwipe } from "@/hooks/useSwipe";
 import { FEED_CONTENT } from "@/data/feedContent";
 import { Loader2, SearchX } from "lucide-react";
 
-// Shuffle array deterministically
+// Interleave profiles and content cards.
+// Pattern: content → profile → profile → content → profile → profile → …
 function interleave(profiles: UserProfile[], content: typeof FEED_CONTENT) {
   const result: Array<
     { kind: "profile"; data: UserProfile; key: string } |
@@ -17,10 +18,17 @@ function interleave(profiles: UserProfile[], content: typeof FEED_CONTENT) {
   > = [];
 
   let ci = 0;
+
+  // Always start with a content card if available
+  if (content.length > 0) {
+    result.push({ kind: "content", data: content[ci], key: content[ci].id });
+    ci++;
+  }
+
   profiles.forEach((p, i) => {
     result.push({ kind: "profile", data: p, key: p.user_id });
-    // Insert a content card every 3 profiles
-    if ((i + 1) % 3 === 0 && ci < content.length) {
+    // Insert a content card every 2 profiles
+    if ((i + 1) % 2 === 0 && ci < content.length) {
       result.push({ kind: "content", data: content[ci], key: content[ci].id });
       ci++;
     }
