@@ -22,6 +22,7 @@ import TrustSafetyPage from "./pages/TrustSafetyPage";
 import SupportPage from "./pages/SupportPage";
 import NotFound from "./pages/NotFound";
 import ArticleReaderPage from "./pages/ArticleReaderPage";
+import CommunityPage from "./pages/CommunityPage";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +66,7 @@ const App = () => {
 
               {/* App routes (auth required) */}
               <Route path="/swipe" element={<ProtectedRoute><SwipePage /></ProtectedRoute>} />
+              <Route path="/community" element={<ProtectedRoute><CommunityPage /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
               <Route path="/messages" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
               <Route path="/connections" element={<ProtectedRoute><ConnectionsPage /></ProtectedRoute>} />

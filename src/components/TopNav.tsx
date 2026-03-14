@@ -1,4 +1,4 @@
-import { User, MessageCircle, Flame } from "lucide-react";
+import { User, MessageCircle, Flame, Users } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 
 const TopNav = () => {
@@ -7,6 +7,7 @@ const TopNav = () => {
   const links = [
     { to: "/profile", icon: User, label: "Profile" },
     { to: "/swipe", icon: Flame, label: "Discover" },
+    { to: "/community", icon: Users, label: "Community" },
     { to: "/messages", icon: MessageCircle, label: "Chat" },
   ];
 
@@ -18,9 +19,8 @@ const TopNav = () => {
           <Link
             key={to}
             to={to}
-            className={`flex flex-col items-center gap-0.5 transition-colors ${
-              active ? "text-primary" : "text-muted-foreground hover:text-foreground"
-            }`}
+            className={`flex flex-col items-center gap-0.5 transition-colors ${active ? "text-primary" : "text-muted-foreground hover:text-foreground"
+              }`}
           >
             <Icon className="h-6 w-6" fill={active && to === "/" ? "currentColor" : "none"} />
             <span className="text-[10px] font-medium">{label}</span>
