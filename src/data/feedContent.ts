@@ -1,19 +1,102 @@
-export type ContentCardType = "stat" | "hottake" | "quote" | "tip" | "story";
+export type ContentCardType = "stat" | "hottake" | "quote" | "tip" | "story" | "article";
 
 export interface FeedContentItem {
   id: string;
   type: ContentCardType;
-  hook: string;       // Big bold line — the scroll-stopper
-  body: string;       // Short follow-up
-  author?: string;    // For quotes
-  tag: string;        // Category pill label
-  accent: string;     // Tailwind text color for accent
-  bg: string;         // Card bg class
-  border: string;     // Border accent
+  hook: string;
+  body: string;
+  author?: string;
+  tag: string;
+  accent: string;
+  bg: string;
+  border: string;
+  url?: string;        // For article type — opens in new tab
+  source?: string;     // Publisher name e.g. "Maybe Baby · Substack"
 }
 
 export const FEED_CONTENT: FeedContentItem[] = [
-  // ── Stats (surprising, shareable) ──
+
+  // ── Real Substack Articles ──────────────────────────────────────────────
+  {
+    id: "art1",
+    type: "article",
+    hook: "Your Marriage Has a Third Member — Your Phone",
+    body: "Jon Haidt on how smartphones are quietly dismantling intimacy, attention, and desire inside long-term relationships — and what to do about it.",
+    author: "Jon Haidt",
+    source: "After Babel · Substack",
+    url: "https://www.afterbabel.com/p/your-marriage-has-a-third",
+    tag: "Read on Substack",
+    accent: "text-sky-500",
+    bg: "bg-card",
+    border: "border-sky-500/30",
+  },
+  {
+    id: "art2",
+    type: "article",
+    hook: "Radical Black Love: What It Really Takes to Sustain a Marriage",
+    body: "Five couples on friendship, choosing the same person on the hard days, and why commitment is less about feelings and more about decisions.",
+    author: "Black Love",
+    source: "Substack",
+    url: "https://substack.com/search?q=radical+black+love+marriage",
+    tag: "Read on Substack",
+    accent: "text-amber-500",
+    bg: "bg-card",
+    border: "border-amber-500/30",
+  },
+  {
+    id: "art3",
+    type: "article",
+    hook: "Real Relationship Goals for Black Couples",
+    body: "Financial intimacy, shared missions, and building a Black household that's a sanctuary — not just a situation. A framework, not a feeling.",
+    author: "Substack Writer",
+    source: "Substack",
+    url: "https://substack.com/search?q=real+relationship+goals+black+couples",
+    tag: "Read on Substack",
+    accent: "text-emerald-500",
+    bg: "bg-card",
+    border: "border-emerald-500/30",
+  },
+  {
+    id: "art4",
+    type: "article",
+    hook: "So Who Is Going to Date Me?",
+    body: "A Black woman's honest look at being overlooked on dating apps — and what it means to stop shrinking yourself for acceptance you shouldn't need.",
+    author: "Kiara's Court",
+    source: "Kiara's Court · Substack",
+    url: "https://substack.com/search?q=who+is+going+to+date+me+black+women",
+    tag: "Read on Substack",
+    accent: "text-rose-500",
+    bg: "bg-card",
+    border: "border-rose-500/30",
+  },
+  {
+    id: "art5",
+    type: "article",
+    hook: "Chipping Away at Who We Are in Relationships",
+    body: "Haley Nahman on how modern life quietly shapes — and misshapes — how we love, what we want, and who we become with another person.",
+    author: "Haley Nahman",
+    source: "Maybe Baby · Substack",
+    url: "https://haleynahman.substack.com",
+    tag: "Read on Substack",
+    accent: "text-violet-500",
+    bg: "bg-card",
+    border: "border-violet-500/30",
+  },
+  {
+    id: "art6",
+    type: "article",
+    hook: "Healing, Boundaries & What Love Actually Feels Like",
+    body: "Nova Reid writes honestly about healing, boundaries within relationships, and how Black women can reclaim the right to be fully, softly themselves.",
+    author: "Nova Reid",
+    source: "Nova Reid · Substack",
+    url: "https://novareid.substack.com",
+    tag: "Read on Substack",
+    accent: "text-fuchsia-500",
+    bg: "bg-card",
+    border: "border-fuchsia-500/30",
+  },
+
+  // ── Stats ──────────────────────────────────────────────────────────────
   {
     id: "s1",
     type: "stat",
@@ -55,7 +138,7 @@ export const FEED_CONTENT: FeedContentItem[] = [
     border: "border-sky-500/30",
   },
 
-  // ── Hot Takes (spicy, relatable, debate-worthy) ──
+  // ── Hot Takes ──────────────────────────────────────────────────────────
   {
     id: "h1",
     type: "hottake",
@@ -97,7 +180,7 @@ export const FEED_CONTENT: FeedContentItem[] = [
     border: "border-orange-500/30",
   },
 
-  // ── Quotes (power quotes, not generic) ──
+  // ── Quotes ─────────────────────────────────────────────────────────────
   {
     id: "q1",
     type: "quote",
@@ -132,7 +215,7 @@ export const FEED_CONTENT: FeedContentItem[] = [
     border: "border-purple-400/30",
   },
 
-  // ── Tips (sharp, specific, not generic) ──
+  // ── Tips ───────────────────────────────────────────────────────────────
   {
     id: "t1",
     type: "tip",
@@ -164,7 +247,7 @@ export const FEED_CONTENT: FeedContentItem[] = [
     border: "border-teal-500/30",
   },
 
-  // ── Love Stories (cinematic, real-feeling) ──
+  // ── Love Stories ───────────────────────────────────────────────────────
   {
     id: "r1",
     type: "story",

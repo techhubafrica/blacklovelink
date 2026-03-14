@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { X, Flame, TrendingUp, Quote, Lightbulb, Heart } from "lucide-react";
+import { X, Flame, TrendingUp, Quote, Lightbulb, Heart, ExternalLink, BookOpen } from "lucide-react";
 import type { FeedContentItem } from "@/data/feedContent";
 
 interface FeedContentCardProps {
@@ -13,6 +13,7 @@ const typeConfig = {
     quote: { icon: Quote, color: "text-muted-foreground" },
     tip: { icon: Lightbulb, color: "text-muted-foreground" },
     story: { icon: Heart, color: "text-muted-foreground" },
+    article: { icon: BookOpen, color: "text-muted-foreground" },
 };
 
 export default function FeedContentCard({ item, onDismiss }: FeedContentCardProps) {
@@ -26,11 +27,11 @@ export default function FeedContentCard({ item, onDismiss }: FeedContentCardProp
             exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.18 } }}
             className={`relative mx-auto w-full max-w-md rounded-3xl border-2 ${item.border} ${item.bg} p-6 shadow-lg overflow-hidden`}
         >
-            {/* Subtle accent glow in top-right corner */}
+            {/* Subtle accent glow */}
             <div className={`pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full blur-3xl opacity-20 bg-current ${item.accent}`} />
 
             {/* Top row: tag + dismiss */}
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center justify-between mb-4">
                 <span className={`flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest ${item.accent}`}>
                     <Icon className="w-3.5 h-3.5" />
                     {item.tag}
@@ -44,7 +45,7 @@ export default function FeedContentCard({ item, onDismiss }: FeedContentCardProp
                 </button>
             </div>
 
-            {/* Hook — the scroll-stopper */}
+            {/* Hook */}
             <p className={`font-black leading-tight mb-3 ${item.type === "stat"
                     ? `text-6xl ${item.accent}`
                     : "text-xl text-foreground"
@@ -59,14 +60,33 @@ export default function FeedContentCard({ item, onDismiss }: FeedContentCardProp
                 </p>
             )}
 
-            {/* Author for quotes */}
-            {item.author && (
+            {/* Author (quotes) */}
+            {item.type === "quote" && item.author && (
                 <p className={`mt-3 text-xs font-semibold tracking-wide ${item.accent}`}>
                     — {item.author}
                 </p>
             )}
 
-            {/* Bottom divider line in accent color */}
+            {/* Article footer */}
+            {item.type === "article" && (
+                <div className="mt-4 flex items-center justify-between">
+                    {item.source && (
+                        <p className="text-xs text-muted-foreground font-medium">{item.source}</p>
+                    )}
+                    {item.url && (
+                        <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`flex items-center gap-1 text-xs font-bold ${item.accent} hover:opacity-80 transition-opacity`}
+                        >
+                            Read <ExternalLink className="w-3 h-3" />
+                        </a>
+                    )}
+                </div>
+            )}
+
+            {/* Bottom accent bar */}
             <div className={`absolute bottom-0 inset-x-0 h-[3px] rounded-b-3xl bg-current opacity-40 ${item.accent}`} />
         </motion.div>
     );
