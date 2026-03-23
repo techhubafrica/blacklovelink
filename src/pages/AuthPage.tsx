@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Heart, Phone, ArrowRight, ChevronLeft, Loader2,
-    Eye, EyeOff, Lock, CheckCircle2,
+    Eye, EyeOff, Lock, CheckCircle2, Mail,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
@@ -11,12 +11,15 @@ import { useToast } from "@/hooks/use-toast";
 import PhoneInput, { COUNTRY_CODES, type CountryCode } from "@/components/PhoneInput";
 
 /* ─── Step types ─────────────────────────────────────────────── */
+/* ─── Step types ─────────────────────────────────────────────── */
 type Step =
-    | "landing"       // Choose Google or Phone
+    | "landing"       // Choose Google, Phone, or Email
     | "phone-signin"  // Existing: phone + password
     | "phone-signup"  // New: phone + password + confirm
     | "otp"           // OTP after phone sign-up
-    | "google-otp";   // Phone collection for brand-new Google users
+    | "google-otp"    // Phone collection for brand-new Google users
+    | "email-signin"  // Email + password
+    | "email-signup"; // Email + password + confirm
 
 /* ─── Password strength ──────────────────────────────────────── */
 function passwordStrength(pw: string): { score: number; label: string; color: string } {
@@ -51,6 +54,7 @@ const AuthPage = () => {
     const [step, setStep] = useState<Step>("landing");
     const [loading, setLoading] = useState<string | null>(null);
     const [phone, setPhone] = useState("");
+    const [email, setEmail] = useState("");
     const [country, setCountry] = useState<CountryCode>(COUNTRY_CODES[0]);
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
@@ -118,6 +122,24 @@ const AuthPage = () => {
         }
     };
 
+    /* ─── Email Sign-In (existing user) ─────────────────────────── */
+    const handleEmailSignIn = async () => {
+        if (!email || !password) return;
+        setLoading("signin");
+        try {
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) throw new Error("No session");
+            const status = await getUserProfileStatus(session.user.id);
+            navigate(status === "complete" ? "/swipe" : "/create-profile");
+        } catch {
+            toast({ title: "Sign in failed", description: "Incorrect email or password.", variant: "destructive" });
+        } finally {
+            setLoading(null);
+        }
+    };
+
     /* ─── Phone Sign-Up (new user) ───────────────────────────────── */
     const handlePhoneSignUp = async () => {
         if (!phone || !password || password !== confirm) return;
@@ -142,6 +164,30 @@ const AuthPage = () => {
             }
             toast({ title: "Code sent! 📲", description: `A verification code was sent to ${fullPhone}.` });
             setStep("otp");
+        } catch (err: unknown) {
+            toast({
+                title: "Sign-up failed",
+                description: err instanceof Error ? err.message : "Could not create account. Please try again.",
+                variant: "destructive",
+            });
+        } finally {
+            setLoading(null);
+        }
+    };
+
+    /* ─── Email Sign-Up (new user) ───────────────────────────────── */
+    const handleEmailSignUp = async () => {
+        if (!email || !password || password !== confirm) return;
+        if (pwStrength.score < 2) {
+            toast({ title: "Weak password", description: "Please use at least 8 characters and a number.", variant: "destructive" });
+            return;
+        }
+        setLoading("signup");
+        try {
+            const { error } = await supabase.auth.signUp({ email, password });
+            if (error) throw error;
+            toast({ title: "Welcome! 🎉", description: "Please check your email to verify (or sign in if already verified)." });
+            setStep("email-signin");
         } catch (err: unknown) {
             toast({
                 title: "Sign-up failed",
@@ -212,6 +258,8 @@ const AuthPage = () => {
         landing: "Sign in to find your authentic connection",
         "phone-signin": "Welcome back — enter your credentials",
         "phone-signup": "Create your account with a phone number",
+        "email-signin": "Welcome back — enter your credentials",
+        "email-signup": "Create your account with an email address",
         otp: "Enter the 6-digit code we sent you",
         "google-otp": "One more step — verify your phone number",
     };
@@ -303,6 +351,16 @@ const AuthPage = () => {
                                 >
                                     <Phone className="w-5 h-5 text-primary" />
                                     Continue with Phone Number
+                                </motion.button>
+
+                                {/* Email */}
+                                <motion.button
+                                    onClick={() => setStep("email-signin")}
+                                    className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-card border border-border text-foreground font-semibold text-base hover:bg-muted transition-all"
+                                    whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
+                                >
+                                    <Mail className="w-5 h-5 text-primary" />
+                                    Continue with Email
                                 </motion.button>
 
                                 <p className="text-center text-xs text-muted-foreground leading-relaxed pt-2">
@@ -449,6 +507,150 @@ const AuthPage = () => {
                                 <p className="text-center text-sm text-muted-foreground">
                                     Already have an account?{" "}
                                     <button onClick={() => setStep("phone-signin")} className="text-primary font-semibold hover:underline">
+                                        Sign in
+                                    </button>
+                                </p>
+                            </motion.div>
+                        )}
+
+                        {/* ── EMAIL SIGN-IN ── */}
+                        {step === "email-signin" && (
+                            <motion.div key="email-signin" {...fadeUp} className="space-y-4">
+                                <div className="rounded-2xl bg-card border border-border p-6 space-y-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-semibold text-foreground">Email Address</label>
+                                        <input
+                                            type="email"
+                                            placeholder="Enter your email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            className={inputCls}
+                                            onKeyDown={(e) => e.key === "Enter" && handleEmailSignIn()}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-semibold text-foreground">Password</label>
+                                        <div className="relative">
+                                            <input
+                                                type={showPw ? "text" : "password"}
+                                                placeholder="Enter your password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                className={`${inputCls} pr-11`}
+                                                onKeyDown={(e) => e.key === "Enter" && handleEmailSignIn()}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowPw(!showPw)}
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                                            >
+                                                {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <motion.button
+                                    onClick={handleEmailSignIn}
+                                    disabled={!!loading || !email || !password}
+                                    className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-2xl gradient-brand text-primary-foreground font-semibold text-base shadow-button hover:opacity-90 transition-all disabled:opacity-40"
+                                    whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
+                                >
+                                    {loading === "signin" ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
+                                    {loading === "signin" ? "Signing in…" : "Sign In"}
+                                </motion.button>
+
+                                <p className="text-center text-sm text-muted-foreground">
+                                    New to BlackLoveLink?{" "}
+                                    <button onClick={() => setStep("email-signup")} className="text-primary font-semibold hover:underline">
+                                        Create account
+                                    </button>
+                                </p>
+                            </motion.div>
+                        )}
+
+                        {/* ── EMAIL SIGN-UP ── */}
+                        {step === "email-signup" && (
+                            <motion.div key="email-signup" {...fadeUp} className="space-y-4">
+                                <div className="rounded-2xl bg-card border border-border p-6 space-y-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-semibold text-foreground">Email Address</label>
+                                        <input
+                                            type="email"
+                                            placeholder="Enter your email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            className={inputCls}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+                                            <Lock className="w-3.5 h-3.5 text-primary" /> Create Password
+                                        </label>
+                                        <div className="relative">
+                                            <input
+                                                type={showPw ? "text" : "password"}
+                                                placeholder="Choose a strong password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                className={`${inputCls} pr-11`}
+                                            />
+                                            <button type="button" onClick={() => setShowPw(!showPw)}
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
+                                                {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                            </button>
+                                        </div>
+                                        {password.length > 0 && (
+                                            <div className="space-y-1">
+                                                <div className="flex gap-1">
+                                                    {[1, 2, 3, 4].map((i) => (
+                                                        <div key={i} className={`h-1.5 flex-1 rounded-full transition-colors ${i <= pwStrength.score ? pwStrength.color : "bg-border"}`} />
+                                                    ))}
+                                                </div>
+                                                <p className={`text-xs font-medium ${pwStrength.score < 2 ? "text-red-500" : pwStrength.score < 4 ? "text-amber-500" : "text-green-500"}`}>
+                                                    {pwStrength.label}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-semibold text-foreground">Confirm Password</label>
+                                        <div className="relative">
+                                            <input
+                                                type={showPw ? "text" : "password"}
+                                                placeholder="Repeat your password"
+                                                value={confirm}
+                                                onChange={(e) => setConfirm(e.target.value)}
+                                                className={`${inputCls} pr-11`}
+                                            />
+                                            {confirm.length > 0 && (
+                                                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                                                    <CheckCircle2 className={`w-4 h-4 ${confirm === password ? "text-green-500" : "text-red-400"}`} />
+                                                </div>
+                                            )}
+                                        </div>
+                                        {confirm.length > 0 && confirm !== password && (
+                                            <p className="text-xs text-red-500">Passwords don't match</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <motion.button
+                                    onClick={handleEmailSignUp}
+                                    disabled={!!loading || !email || !password || password !== confirm}
+                                    className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-2xl gradient-brand text-primary-foreground font-semibold text-base shadow-button hover:opacity-90 transition-all disabled:opacity-40"
+                                    whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
+                                >
+                                    {loading === "signup" ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
+                                    {loading === "signup" ? "Creating account…" : "Create Account"}
+                                </motion.button>
+
+                                <p className="text-center text-sm text-muted-foreground">
+                                    Already have an account?{" "}
+                                    <button onClick={() => setStep("email-signin")} className="text-primary font-semibold hover:underline">
                                         Sign in
                                     </button>
                                 </p>
