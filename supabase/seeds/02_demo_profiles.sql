@@ -6,7 +6,7 @@ VALUES
   -- Amara Osei
   (
     'd0b6e6b4-20d0-4cca-9860-25232a5df977', 'Amara Osei', 28, 'female', 'Marketing Director', 'Accra Tech', true, true,
-    ARRAY['https://hxiycmrlyswwjqlwihdd.supabase.co/storage/v1/object/public/profile-photos/demo/amara-osei/profile.jpg', 'https://hxiycmrlyswwjqlwihdd.supabase.co/storage/v1/object/public/profile-photos/demo/amara-osei/photo-2.jpg', 'https://hxiycmrlyswwjqlwihdd.supabase.co/storage/v1/object/public/profile-photos/demo/amara-osei/photo-3.jpg', 'https://hxiycmrlyswwjqlwihdd.supabase.co/storage/v1/object/public/profile-photos/demo/amara-osei/photo-4.jpg'],
+    ARRAY['https://hxiycmrlyswwjqlwihdd.supabase.co/storage/v1/object/public/profile-photos/demo/amara-osei/profile.jpg?v=2', 'https://hxiycmrlyswwjqlwihdd.supabase.co/storage/v1/object/public/profile-photos/demo/amara-osei/photo-2.jpg?v=2', 'https://hxiycmrlyswwjqlwihdd.supabase.co/storage/v1/object/public/profile-photos/demo/amara-osei/photo-3.jpg?v=2', 'https://hxiycmrlyswwjqlwihdd.supabase.co/storage/v1/object/public/profile-photos/demo/amara-osei/photo-4.jpg?v=2'],
     'dating', ARRAY['Reading', 'Travel', 'Art'], 'I love exploring new cities and reading a good book on a Sunday morning.'
   ),
   -- Zara Mensah
