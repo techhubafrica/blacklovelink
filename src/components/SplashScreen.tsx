@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
+import { motion } from "framer-motion";
 import logo from "@/assets/blacklovelink-logo.png";
 
 interface SplashScreenProps {
@@ -7,97 +7,91 @@ interface SplashScreenProps {
 }
 
 const SplashScreen = ({ onFinished }: SplashScreenProps) => {
-  const [phase, setPhase] = useState<"logo" | "text" | "exit">("logo");
-
+  // Total splash duration: 2.4s visible + 0.5s exit fade = onFinished at 2.9s
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase("text"), 800);
-    const t2 = setTimeout(() => setPhase("exit"), 2200);
-    const t3 = setTimeout(onFinished, 2800);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    const t = setTimeout(onFinished, 2900);
+    return () => clearTimeout(t);
   }, [onFinished]);
 
   return (
-    <AnimatePresence>
-      {phase !== "exit" ? (
+    <motion.div
+      key="splash"
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      // Smooth cinematic exit: fade out + very slight scale up
+      transition={{ duration: 0 }}
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: "hsl(var(--background))" }}
+    >
+      {/* Wrap everything so we can fade the whole scene out at t=2.4s */}
+      <motion.div
+        className="flex flex-col items-center"
+        initial={{ opacity: 1, scale: 1 }}
+        animate={{ opacity: [1, 1, 1, 0], scale: [1, 1, 1, 1.06] }}
+        transition={{
+          duration: 2.9,
+          times: [0, 0.55, 0.75, 1],
+          ease: "easeInOut",
+        }}
+      >
+        {/* Soft ambient glow — pulses gently */}
         <motion.div
-          key="splash"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background"
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: 420,
+            height: 420,
+            background: "radial-gradient(circle, hsl(var(--primary) / 0.22) 0%, transparent 70%)",
+            filter: "blur(40px)",
+          }}
+          animate={{ scale: [1, 1.15, 1], opacity: [0.6, 1, 0.6] }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* Logo — springs in from below */}
+        <motion.img
+          src={logo}
+          alt="BlackLoveLink"
+          className="relative z-10 h-28 w-28 object-contain"
+          initial={{ opacity: 0, y: 28, scale: 0.8 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+        />
+
+        {/* Brand name — fades in after logo lands */}
+        <motion.div
+          className="relative z-10 mt-5 text-center"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.5, ease: "easeOut" }}
         >
-          {/* Ambient glow */}
-          <div className="absolute inset-0 overflow-hidden">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 0.15, scale: 1.2 }}
-              transition={{ duration: 2, ease: "easeOut" }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full"
-              style={{ background: "radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)" }}
-            />
-          </div>
-
-          {/* Logo */}
-          <motion.div
-            initial={{ scale: 0.6, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10"
-          >
-            <motion.img
-              src={logo}
-              alt="BlackLoveLink"
-              className="h-28 w-28 object-contain drop-shadow-2xl"
-              animate={{
-                filter: [
-                  "drop-shadow(0 0 20px hsla(var(--primary), 0.3))",
-                  "drop-shadow(0 0 40px hsla(var(--primary), 0.5))",
-                  "drop-shadow(0 0 20px hsla(var(--primary), 0.3))",
-                ]
-              }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </motion.div>
-
-          {/* Brand name */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={phase === "text" ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="relative z-10 mt-6"
-          >
-            <h1 className="text-3xl font-bold tracking-tight">
-              <span className="text-black [text-shadow:0_1px_12px_rgba(255,255,255,0.6)]">Black</span>
-              <span className="text-primary">Love</span>
-              <span className="text-accent">Link</span>
-            </h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={phase === "text" ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ delay: 0.3, duration: 0.4 }}
-              className="text-center text-sm text-muted-foreground mt-2 tracking-wide"
-            >
-              Where love meets purpose
-            </motion.p>
-          </motion.div>
-
-          {/* Loading bar */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="relative z-10 mt-10 w-48 h-1 rounded-full bg-muted overflow-hidden"
-          >
-            <motion.div
-              initial={{ x: "-100%" }}
-              animate={{ x: "100%" }}
-              transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-0 gradient-brand rounded-full"
-            />
-          </motion.div>
+          <h1 className="text-3xl font-black tracking-tight">
+            <span className="text-foreground">Black</span>
+            <span className="text-primary">Love</span>
+            <span className="text-secondary">Link</span>
+          </h1>
+          <p className="mt-1.5 text-xs font-medium tracking-widest uppercase text-muted-foreground">
+            Where love meets purpose
+          </p>
         </motion.div>
-      ) : null}
-    </AnimatePresence>
+
+        {/* Progress bar — fills linearly from 0 → 100% over 1.8s */}
+        <motion.div
+          className="relative z-10 mt-10 h-[3px] w-44 rounded-full overflow-hidden"
+          style={{ background: "hsl(var(--muted))" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.3 }}
+        >
+          <motion.div
+            className="absolute inset-y-0 left-0 rounded-full gradient-brand"
+            initial={{ width: "0%" }}
+            animate={{ width: "100%" }}
+            transition={{ delay: 0.65, duration: 1.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          />
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
 
