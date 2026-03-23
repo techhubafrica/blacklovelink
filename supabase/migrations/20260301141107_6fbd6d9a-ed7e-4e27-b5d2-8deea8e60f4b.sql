@@ -43,7 +43,7 @@ CREATE TABLE public.swipes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   swiper_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   swiped_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  direction TEXT NOT NULL CHECK (direction IN ('left', 'right', 'up')),
+  direction TEXT NOT NULL CHECK (direction IN ('left', 'right', 'up', 'message')),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE (swiper_id, swiped_id)
 );

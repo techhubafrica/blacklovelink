@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Heart, X, Star, ChevronLeft, ChevronRight,
-    Briefcase, CheckCircle2, MapPin,
+    Briefcase, CheckCircle2, MapPin, MessageCircle
 } from "lucide-react";
 import type { UserProfile } from "@/hooks/useProfileData";
 
@@ -10,7 +10,7 @@ interface FeedProfileCardProps {
     profile: UserProfile;
     onLike: () => void;
     onPass: () => void;
-    onSuperLike: () => void;
+    onMessage: (introText: string) => void;
     onMatch?: () => void;
 }
 
@@ -18,12 +18,14 @@ export default function FeedProfileCard({
     profile,
     onLike,
     onPass,
-    onSuperLike,
+    onMessage,
 }: FeedProfileCardProps) {
     const photos = profile.photos?.length ? profile.photos : ["/placeholder.svg"];
     const [photoIndex, setPhotoIndex] = useState(0);
-    const [reaction, setReaction] = useState<"like" | "pass" | "super" | null>(null);
+    const [reaction, setReaction] = useState<"like" | "pass" | "message" | null>(null);
     const [expanded, setExpanded] = useState(false);
+    const [showMessageModal, setShowMessageModal] = useState(false);
+    const [introText, setIntroText] = useState("");
 
     const nextPhoto = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
@@ -35,13 +37,13 @@ export default function FeedProfileCard({
         setPhotoIndex((i) => (i - 1 + photos.length) % photos.length);
     }, [photos.length]);
 
-    const handleAction = (type: "like" | "pass" | "super") => {
+    const handleAction = (type: "like" | "pass" | "message") => {
         setReaction(type);
         setTimeout(() => {
             setReaction(null);
             if (type === "like") onLike();
             else if (type === "pass") onPass();
-            else onSuperLike();
+            else onMessage(introText);
         }, 400);
     };
 
@@ -108,11 +110,11 @@ export default function FeedProfileCard({
                             className="absolute inset-0 flex items-center justify-center pointer-events-none"
                         >
                             <div className={`rounded-full p-6 ${reaction === "like" ? "bg-green-500/80" :
-                                    reaction === "pass" ? "bg-red-500/80" : "bg-blue-500/80"
+                                    reaction === "pass" ? "bg-red-500/80" : "bg-primary/80"
                                 }`}>
                                 {reaction === "like" && <Heart className="w-14 h-14 text-white" fill="white" />}
                                 {reaction === "pass" && <X className="w-14 h-14 text-white" />}
-                                {reaction === "super" && <Star className="w-14 h-14 text-white" fill="white" />}
+                                {reaction === "message" && <MessageCircle className="w-14 h-14 text-white" fill="currentColor" />}
                             </div>
                         </motion.div>
                     )}
@@ -189,34 +191,88 @@ export default function FeedProfileCard({
             </AnimatePresence>
 
             {/* ── Action buttons ── */}
-            <div className="flex items-center justify-center gap-5 px-6 py-5">
+            <div className="flex items-center justify-center gap-3 px-6 py-5">
                 {/* Pass */}
                 <motion.button
-                    whileTap={{ scale: 0.9 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => handleAction("pass")}
-                    className="w-14 h-14 rounded-full bg-card border-2 border-red-400/40 flex items-center justify-center shadow-lg hover:border-red-400 hover:bg-red-50 dark:hover:bg-red-950 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full bg-card border border-border font-semibold text-muted-foreground hover:bg-red-50 hover:text-red-500 hover:border-red-200 dark:hover:bg-red-950 transition-colors shadow-sm"
                 >
-                    <X className="w-7 h-7 text-red-400" />
-                </motion.button>
-
-                {/* Super Like */}
-                <motion.button
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => handleAction("super")}
-                    className="w-12 h-12 rounded-full bg-card border-2 border-blue-400/40 flex items-center justify-center shadow hover:border-blue-400 transition-colors"
-                >
-                    <Star className="w-5 h-5 text-blue-400" />
+                    <X className="w-5 h-5 text-red-500" />
+                    Pass
                 </motion.button>
 
                 {/* Like */}
                 <motion.button
-                    whileTap={{ scale: 0.9 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => handleAction("like")}
-                    className="w-14 h-14 rounded-full gradient-brand flex items-center justify-center shadow-lg hover:opacity-90 transition-opacity"
+                    className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full bg-card border border-border font-semibold text-muted-foreground hover:bg-rose-50 hover:text-rose-500 hover:border-rose-200 dark:hover:bg-rose-950 transition-colors shadow-sm"
                 >
-                    <Heart className="w-7 h-7 text-white" fill="white" />
+                    <Heart className="w-5 h-5 text-rose-500" />
+                    Like
+                </motion.button>
+
+                {/* Message Request */}
+                <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowMessageModal(true)}
+                    className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full gradient-brand text-primary-foreground font-semibold shadow-button hover:opacity-90 transition-opacity"
+                >
+                    <MessageCircle className="w-5 h-5" />
+                    Message
                 </motion.button>
             </div>
+
+            {/* ── Message Modal Overlay ── */}
+            <AnimatePresence>
+                {showMessageModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 z-50 rounded-3xl bg-black/60 backdrop-blur-sm flex items-center justify-center p-6"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, y: 20 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.9, y: 20 }}
+                            className="bg-card w-full rounded-2xl p-5 shadow-2xl relative"
+                        >
+                            <button
+                                onClick={() => setShowMessageModal(false)}
+                                className="absolute top-3 right-3 text-muted-foreground hover:text-foreground p-1 rounded-full bg-muted/50"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                            <h3 className="text-xl font-bold mb-1 text-foreground">Message {profile.full_name.split(' ')[0]}</h3>
+                            <p className="text-sm text-muted-foreground mb-4">You can only send one message. They must accept before you can chat freely.</p>
+                            
+                            <textarea
+                                value={introText}
+                                onChange={(e) => setIntroText(e.target.value)}
+                                placeholder="Type your message here..."
+                                className="w-full h-24 p-3 rounded-xl bg-muted border border-border resize-none text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
+                                maxLength={200}
+                                autoFocus
+                            />
+                            
+                            <div className="flex items-center justify-between mt-4">
+                                <span className="text-xs text-muted-foreground">{introText.length}/200</span>
+                                <button
+                                    onClick={() => {
+                                        setShowMessageModal(false);
+                                        handleAction("message");
+                                    }}
+                                    disabled={!introText.trim()}
+                                    className="px-6 py-2 rounded-full gradient-brand text-primary-foreground font-semibold text-sm hover:opacity-90 disabled:opacity-50 transition-opacity"
+                                >
+                                    Send Request
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 }

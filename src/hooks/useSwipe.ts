@@ -5,7 +5,8 @@ import type { UserProfile } from "@/hooks/useProfileData";
 export const useSwipe = () => {
     const recordSwipe = useCallback(async (
         swipedProfile: UserProfile,
-        direction: "left" | "right" | "up"
+        direction: "left" | "right" | "up" | "message",
+        introText?: string
     ): Promise<{ matched: boolean }> => {
         try {
             const { data: { session } } = await supabase.auth.getSession();
@@ -16,6 +17,7 @@ export const useSwipe = () => {
                 swiper_id: session.user.id,
                 swiped_id: swipedProfile.user_id,
                 direction,
+                ...(introText ? { intro_text: introText } : {}),
             });
 
             if (error) {
@@ -24,7 +26,7 @@ export const useSwipe = () => {
             }
 
             // Check if a match was created by the DB trigger
-            if (direction === "right" || direction === "up") {
+            if (direction === "right" || direction === "up" || direction === "message") {
                 const userId = session.user.id;
                 const otherId = swipedProfile.user_id;
                 const [a, b] = userId < otherId ? [userId, otherId] : [otherId, userId];

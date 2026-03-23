@@ -38,10 +38,10 @@ const SwipePage = () => {
     await recordSwipe(profile, "left");
   };
 
-  const handleSuperLike = async (profile: UserProfile) => {
+  const handleMessage = async (profile: UserProfile, introText: string) => {
     const next = new Set(likedProfiles).add(profile.user_id);
     setLikedProfiles(next); saveSet(LS_LIKED, next);
-    const { matched } = await recordSwipe(profile, "up");
+    const { matched } = await recordSwipe(profile, "message", introText);
     if (matched) setMatchedProfile(profile);
   };
 
@@ -86,7 +86,7 @@ const SwipePage = () => {
                   profile={profile}
                   onLike={() => handleLike(profile)}
                   onPass={() => handlePass(profile)}
-                  onSuperLike={() => handleSuperLike(profile)}
+                  onMessage={(introText: string) => handleMessage(profile, introText)}
                 />
               ))}
             </AnimatePresence>

@@ -323,8 +323,8 @@ const Index = () => {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.75)_100%)]" />
         {/* Brand color tint — gives it that signature warm-gold/red glow */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/15" />
-        {/* Bottom fade so hero text is always crisp */}
-        <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-background/60 to-transparent" />
+        {/* Bottom fade so hero text is always crisp. We keep it dark in light mode to avoid a milky white wash over the dark image. */}
+        <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-black/80 dark:from-background/80 to-transparent" />
 
         <div className="relative z-10 text-center px-4">
           <motion.div

@@ -1,4 +1,4 @@
-import { User, MessageCircle, Flame, Users } from "lucide-react";
+import { User, MessageCircle, Flame, Users, Heart } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 
 const TopNav = () => {
@@ -7,6 +7,7 @@ const TopNav = () => {
   const links = [
     { to: "/profile", icon: User, label: "Profile" },
     { to: "/swipe", icon: Flame, label: "Discover" },
+    { to: "/likes", icon: Heart, label: "Likes" },
     { to: "/community", icon: Users, label: "Community" },
     { to: "/messages", icon: MessageCircle, label: "Chat" },
   ];
