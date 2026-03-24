@@ -1,15 +1,28 @@
 import { useState, useEffect } from "react";
-import { Settings, Edit2, Shield, Star, Crown, CheckCircle2, Trash2, AlertTriangle, Loader2 } from "lucide-react";
+import { 
+  Shield, 
+  Crown, 
+  CheckCircle2, 
+  Trash2, 
+  LogOut, 
+  ChevronRight, 
+  Bell, 
+  Lock, 
+  AlertTriangle, 
+  Loader2, 
+  Camera,
+  Heart
+} from "lucide-react";
 import TopNav from "@/components/TopNav";
 import { useAuth } from "@/hooks/useAuth";
 import { useCurrentUserProfile } from "@/hooks/useProfileData";
 import { supabase } from "@/integrations/supabase/client";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const { user, signOut } = useAuth();
   const { profile, loading } = useCurrentUserProfile();
-  const [stats, setStats] = useState({ likes: 0, matches: 0, superLikes: 0 });
+  const [stats, setStats] = useState({ likes: 0, matches: 0 });
   const navigate = useNavigate();
 
   // Delete account state
@@ -32,20 +45,23 @@ const ProfilePage = () => {
     }
   };
 
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/auth');
+  };
+
   // Fetch real stats
   useEffect(() => {
     if (!user) return;
     const fetchStats = async () => {
       try {
-        const [likesRes, matchesRes, superRes] = await Promise.all([
+        const [likesRes, matchesRes] = await Promise.all([
           (supabase as any).from("swipes").select("*", { count: "exact", head: true }).eq("swiped_id", user.id).eq("direction", "right"),
-          (supabase as any).from("matches").select("*", { count: "exact", head: true }).or(`user_a.eq.${user.id},user_b.eq.${user.id}`),
-          (supabase as any).from("swipes").select("*", { count: "exact", head: true }).eq("swiped_id", user.id).eq("direction", "up"),
+          (supabase as any).from("matches").select("*", { count: "exact", head: true }).or(`user_a.eq.${user.id},user_b.eq.${user.id}`)
         ]);
         setStats({
           likes: likesRes.count ?? 0,
           matches: matchesRes.count ?? 0,
-          superLikes: superRes.count ?? 0,
         });
       } catch (e) {
         console.error("Stats error:", e);
@@ -54,138 +70,179 @@ const ProfilePage = () => {
     fetchStats();
   }, [user]);
 
-  const displayName = profile?.full_name || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "You";
-  const avatarUrl = profile?.avatar_url || user?.user_metadata?.avatar_url || "/placeholder.svg";
+  const displayName = profile?.full_name?.split(" ")[0] || user?.user_metadata?.full_name?.split(" ")[0] || "You";
+  const avatarUrl = profile?.avatar_url || profile?.photos?.[0] || user?.user_metadata?.avatar_url || "/placeholder.svg";
 
   const fieldsComplete = [
     !!profile?.full_name,
     !!profile?.occupation_title,
     !!profile?.dob,
-    !!profile?.gender,
     !!profile?.intent,
     (profile?.photos?.length ?? 0) >= 2,
   ];
   const completeness = profile ? Math.round((fieldsComplete.filter(Boolean).length / fieldsComplete.length) * 100) : 0;
 
+  // Helper component for Settings Group rows
+  const SettingsRow = ({ icon: Icon, title, value, onClick, isDestructive = false }: any) => (
+    <button 
+      onClick={onClick}
+      className="w-full flex items-center justify-between p-4 bg-card active:bg-muted/50 transition-colors border-b border-border/50 last:border-0 group"
+    >
+      <div className="flex items-center gap-3">
+        <div className={`p-2 rounded-xl flex items-center justify-center ${isDestructive ? 'bg-red-100 text-red-600 dark:bg-red-950/30' : 'bg-primary/10 text-primary'}`}>
+          <Icon className="w-5 h-5" />
+        </div>
+        <span className={`font-semibold text-[15px] ${isDestructive ? 'text-red-500' : 'text-foreground'}`}>
+          {title}
+        </span>
+      </div>
+      <div className="flex items-center gap-2">
+        {value && <span className="text-sm text-muted-foreground">{value}</span>}
+        <ChevronRight className="w-4 h-4 text-muted-foreground/50 group-hover:text-foreground transition-colors" />
+      </div>
+    </button>
+  );
+
   return (
-    <div className="flex h-[100dvh] flex-col bg-background">
+    <div className="flex bg-[#f8f9fc] dark:bg-background min-h-[100dvh] flex-col relative w-full overflow-x-hidden">
       <TopNav />
 
-      <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-sm px-4 py-8">
-          {/* Profile photo */}
+      <main className="flex-1 overflow-y-auto pb-24 touch-pan-y">
+        <div className="mx-auto w-full max-w-md px-4 pt-6">
+          
+          {/* Header Profile Section */}
           <div className="flex flex-col items-center">
-            <div className="relative">
-              <div className="h-28 w-28 overflow-hidden rounded-full border-4 border-primary shadow-glow">
+            <div className="relative group cursor-pointer" onClick={() => navigate('/create-profile')}>
+              <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-background shadow-xl relative z-10 transition-transform active:scale-95 duration-200">
                 {loading ? (
                   <div className="h-full w-full bg-muted animate-pulse" />
                 ) : (
                   <img src={avatarUrl} alt="Your profile" className="h-full w-full object-cover" />
                 )}
-              </div>
-              <Link to="/create-profile" className="absolute bottom-0 right-0 flex h-9 w-9 items-center justify-center rounded-full gradient-brand text-primary-foreground shadow-button">
-                <Edit2 className="h-4 w-4" />
-              </Link>
-            </div>
-            <h2 className="mt-3 text-2xl font-bold text-foreground">{displayName}</h2>
-            {profile?.verified && (
-              <div className="mt-1.5 flex items-center gap-1.5 text-xs font-semibold text-blue-500">
-                <CheckCircle2 className="w-4 h-4" fill="currentColor" />
-                LinkedIn Verified
-              </div>
-            )}
-            {profile?.intent && (
-              <p className="mt-1 text-sm text-muted-foreground">{profile.intent}</p>
-            )}
-          </div>
-
-          {/* Profile completeness */}
-          <div className="mt-6 rounded-2xl bg-card border border-border p-4 space-y-2">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold text-foreground">Profile Completeness</p>
-              <p className="text-sm font-bold text-primary">{completeness}%</p>
-            </div>
-            <div className="w-full h-2.5 rounded-full bg-muted overflow-hidden">
-              <div className="h-full gradient-brand rounded-full transition-all duration-700" style={{ width: `${completeness}%` }} />
-            </div>
-            <p className="text-xs text-muted-foreground">Complete your profile to improve your match quality.</p>
-          </div>
-
-          {/* Stats */}
-          <div className="mt-4 grid grid-cols-3 gap-3">
-            {[
-              { label: "Likes", value: stats.likes },
-              { label: "Matches", value: stats.matches },
-              { label: "Super Likes", value: stats.superLikes },
-            ].map((stat) => (
-              <div key={stat.label} className="rounded-xl bg-card border border-border p-4 text-center">
-                <p className="text-2xl font-bold text-primary">{stat.value}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Actions */}
-          <div className="mt-6 space-y-3">
-            {[
-              { icon: Settings, label: "Account Settings", desc: "Notifications, privacy, account" },
-              { icon: Shield, label: "Safety Center", desc: "Block, report, trust & safety" },
-              { icon: Star, label: "Verification Badges", desc: "Background & professional checks" },
-            ].map(({ icon: Icon, label, desc }) => (
-              <button key={label} className="flex w-full items-center gap-4 rounded-xl bg-card border border-border p-4 text-left hover:bg-muted transition-colors">
-                <Icon className="h-5 w-5 text-primary" />
-                <div>
-                  <p className="font-semibold text-foreground">{label}</p>
-                  <p className="text-xs text-muted-foreground">{desc}</p>
+                {/* Edit Overlay */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <Camera className="w-8 h-8 text-white" />
                 </div>
-              </button>
-            ))}
-
-            <button className="flex w-full items-center gap-4 rounded-xl p-4 text-left gradient-gold text-background hover:opacity-90 transition">
-              <Crown className="h-6 w-6" />
-              <div>
-                <p className="font-bold">Go Premium – BlackLoveLink Gold</p>
-                <p className="text-xs text-background/70">Unlimited likes · See who liked you · Visibility boost</p>
               </div>
-            </button>
+              {profile?.verified && (
+                <div className="absolute bottom-1 right-2 z-20 bg-background rounded-full p-0.5">
+                  <CheckCircle2 className="w-6 h-6 text-blue-500" fill="currentColor" stroke="white" strokeWidth={1.5} />
+                </div>
+              )}
+            </div>
+
+            <h2 className="mt-4 text-2xl font-black text-foreground tracking-tight">
+              {displayName}{profile?.age && <span className="font-medium text-muted-foreground">, {profile.age}</span>}
+            </h2>
 
             <button 
-              onClick={() => setShowDeleteModal(true)}
-              className="flex w-full items-center gap-4 rounded-xl bg-card border border-red-200/50 p-4 text-left hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors mt-8"
+              onClick={() => navigate('/create-profile')}
+              className="mt-3 px-5 py-2 rounded-full bg-white dark:bg-card border border-border shadow-sm text-sm font-semibold text-foreground hover:bg-muted transition-colors active:scale-95"
             >
-              <Trash2 className="h-5 w-5 text-red-500" />
-              <div>
-                <p className="font-semibold text-red-600 dark:text-red-500">Delete Account</p>
-                <p className="text-xs text-red-500/70">Permanently erase your data and profile</p>
-              </div>
+              Edit Profile
             </button>
           </div>
+
+          {/* Completeness Bar */}
+          {completeness < 100 && (
+            <div className="mt-8 rounded-2xl bg-white dark:bg-card shadow-sm border border-border/50 p-5">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-[15px] font-bold text-foreground">Complete your profile</p>
+                <p className="text-sm font-black text-primary">{completeness}%</p>
+              </div>
+              <div className="w-full h-3 rounded-full bg-muted overflow-hidden relative">
+                <div className="absolute top-0 left-0 h-full gradient-brand transition-all duration-1000 ease-out" style={{ width: `${completeness}%` }} />
+              </div>
+              <p className="mt-3 text-[13px] text-muted-foreground leading-snug">
+                Add more photos and fill out your bio to get <span className="font-semibold text-foreground">3x more matches</span>.
+              </p>
+            </div>
+          )}
+
+          {/* Stats Row */}
+          <div className="mt-6 flex justify-between gap-3">
+            <div className="flex-1 rounded-2xl bg-white dark:bg-card shadow-sm border border-border/50 p-4 text-center cursor-pointer hover:bg-muted/30 transition-colors" onClick={() => navigate('/likes')}>
+              <p className="text-2xl font-black text-primary">{stats.likes}</p>
+              <p className="mt-0.5 text-[13px] font-semibold text-muted-foreground">Likes You</p>
+            </div>
+            <div className="flex-1 rounded-2xl bg-white dark:bg-card shadow-sm border border-border/50 p-4 text-center cursor-pointer hover:bg-muted/30 transition-colors" onClick={() => navigate('/connections')}>
+              <p className="text-2xl font-black text-foreground">{stats.matches}</p>
+              <p className="mt-0.5 text-[13px] font-semibold text-muted-foreground">Matches</p>
+            </div>
+          </div>
+
+          {/* Section: Premium */}
+          <div className="mt-8">
+            <p className="px-4 text-[13px] font-bold uppercase tracking-wider text-muted-foreground/70 mb-2">Premium</p>
+            <div className="overflow-hidden rounded-2xl bg-white dark:bg-card shadow-sm border border-border/50">
+              <button className="w-full relative overflow-hidden group p-5 text-left active:scale-[0.98] transition-transform">
+                <div className="absolute inset-0 gradient-gold opacity-10 group-hover:opacity-20 transition-opacity" />
+                <div className="flex items-center gap-4 relative z-10">
+                  <div className="p-3 bg-yellow-400/20 rounded-xl relative">
+                    <Crown className="w-6 h-6 text-yellow-600 dark:text-yellow-500" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-black text-[17px] bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-amber-500">BlackLoveLink Gold</p>
+                    <p className="text-[13px] text-muted-foreground font-medium mt-0.5">See who likes you & more</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-yellow-500/50" />
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Section: Account Settings */}
+          <div className="mt-8">
+            <p className="px-4 text-[13px] font-bold uppercase tracking-wider text-muted-foreground/70 mb-2">Account</p>
+            <div className="overflow-hidden rounded-2xl bg-white dark:bg-card shadow-sm border border-border/50">
+              <SettingsRow icon={Bell} title="Notifications" onClick={() => {}} />
+              <SettingsRow icon={Lock} title="Privacy & Security" value="Public" onClick={() => {}} />
+              <SettingsRow icon={CheckCircle2} title="Verification" value={profile?.verified ? "Verified" : "Pending"} onClick={() => {}} />
+            </div>
+          </div>
+
+          {/* Section: Safety & Support */}
+          <div className="mt-8">
+            <p className="px-4 text-[13px] font-bold uppercase tracking-wider text-muted-foreground/70 mb-2">Support</p>
+            <div className="overflow-hidden rounded-2xl bg-white dark:bg-card shadow-sm border border-border/50">
+              <SettingsRow icon={Shield} title="Safety Center" onClick={() => navigate('/trust-safety')} />
+              <SettingsRow icon={Heart} title="Help & Support" onClick={() => navigate('/support')} />
+            </div>
+          </div>
+
+          {/* Danger Zone */}
+          <div className="mt-8 mb-12">
+            <div className="overflow-hidden rounded-2xl bg-white dark:bg-card shadow-sm border border-border/50">
+              <SettingsRow icon={LogOut} title="Log Out" onClick={handleLogout} />
+              <SettingsRow icon={Trash2} title="Delete Account" onClick={() => setShowDeleteModal(true)} isDestructive />
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm rounded-3xl bg-background p-6 shadow-2xl animate-in zoom-in-95 duration-200">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm sm:p-4">
+          <div className="w-full sm:max-w-sm rounded-t-3xl sm:rounded-3xl bg-background p-6 shadow-2xl animate-in slide-in-from-bottom sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200 border border-border/50">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 mb-5 shadow-inner">
               <AlertTriangle className="h-8 w-8 text-red-600 dark:text-red-500" />
             </div>
-            <h2 className="text-xl font-bold text-center text-foreground mb-2">Delete Account?</h2>
-            <p className="text-sm text-center text-muted-foreground mb-6">
-              This action cannot be undone. All your matches, messages, photos, and personal data will be permanently wiped from our servers.
+            <h2 className="text-2xl font-black text-center text-foreground mb-2">Are you sure?</h2>
+            <p className="text-sm text-center text-muted-foreground mb-8 px-2 font-medium">
+              If you delete your account, you will permanently lose your profile, messages, photos, and matches. This is irreversible.
             </p>
             <div className="space-y-3">
               <button
                 onClick={handleDeleteAccount}
                 disabled={isDeleting}
-                className="w-full flex justify-center items-center py-3.5 rounded-full bg-red-600 hover:bg-red-700 text-white font-bold transition disabled:opacity-50"
+                className="w-full flex justify-center items-center py-4 rounded-[20px] bg-red-500 hover:bg-red-600 text-white font-bold text-[15px] transition-colors shadow-sm disabled:opacity-50"
               >
-                {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Yes, Delete My Account"}
+                {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Delete My Account"}
               </button>
               <button
                 onClick={() => setShowDeleteModal(false)}
                 disabled={isDeleting}
-                className="w-full py-3.5 rounded-full bg-muted text-foreground font-semibold hover:bg-muted/80 transition"
+                className="w-full py-4 rounded-[20px] bg-muted text-foreground font-bold text-[15px] hover:bg-muted/80 transition-colors"
               >
                 Cancel
               </button>
