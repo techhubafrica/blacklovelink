@@ -17,6 +17,9 @@ export interface UserProfile {
     avatar_url: string | null;
     verified: boolean;
     profile_completed: boolean;
+    push_notifications: boolean;
+    email_notifications: boolean;
+    is_public: boolean;
 }
 
 export const useCurrentUserProfile = () => {
@@ -88,6 +91,7 @@ export const useProfiles = () => {
                     .from("profiles")
                     .select("*")
                     .eq("profile_completed", true)
+                    .eq("is_public", true) // Only fetch public profiles
                     .neq("user_id", session.user.id)
                     .order("created_at", { ascending: false });
 
