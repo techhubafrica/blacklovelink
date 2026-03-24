@@ -19,6 +19,7 @@ const SwipePage = () => {
   const [matchedProfile, setMatchedProfile] = useState<UserProfile | null>(null);
   const [likedProfiles, setLikedProfiles] = useState<Set<string>>(() => loadSet(LS_LIKED));
   const [passedProfiles, setPassedProfiles] = useState<Set<string>>(() => loadSet(LS_PASSED));
+  const [isResetting, setIsResetting] = useState(false);
 
   const visibleProfiles = useMemo(
     () => profiles.filter(p => !likedProfiles.has(p.user_id) && !passedProfiles.has(p.user_id)),
@@ -45,6 +46,27 @@ const SwipePage = () => {
     if (matched) setMatchedProfile(profile);
   };
 
+  const handleStartOver = async () => {
+    try {
+      setIsResetting(true);
+      // Backend true reset
+      const { error } = await supabase.rpc('reset_user_swipes');
+      if (error) throw error;
+      
+      // Clear local records
+      setLikedProfiles(new Set()); 
+      setPassedProfiles(new Set()); 
+      saveSet(LS_LIKED, new Set()); 
+      saveSet(LS_PASSED, new Set());
+      
+      // Force reload to cleanly trigger useProfiles fetch
+      window.location.reload();
+    } catch (e) {
+      console.error("Failed to reset swipes:", e);
+      setIsResetting(false);
+    }
+  };
+
   return (
     <div className="flex min-h-[100dvh] flex-col bg-background">
       <TopNav />
@@ -65,10 +87,11 @@ const SwipePage = () => {
               No more new profiles right now. Check back later or explore the Community tab.
             </p>
             <button
-              onClick={() => { setLikedProfiles(new Set()); setPassedProfiles(new Set()); saveSet(LS_LIKED, new Set()); saveSet(LS_PASSED, new Set()); }}
-              className="mt-2 px-8 py-3 rounded-full gradient-brand text-primary-foreground font-bold shadow-button hover:opacity-90 transition"
+              onClick={handleStartOver}
+              disabled={isResetting}
+              className="mt-2 px-8 py-3 flex items-center gap-2 rounded-full gradient-brand text-primary-foreground font-bold shadow-button hover:opacity-90 transition disabled:opacity-50"
             >
-              Start Over
+              {isResetting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Start Over"}
             </button>
           </div>
         ) : (
