@@ -6,6 +6,7 @@ import { useLikes } from "@/hooks/useLikes";
 import type { LikeEntry } from "@/hooks/useLikes";
 import { useSwipe } from "@/hooks/useSwipe";
 import type { UserProfile } from "@/hooks/useProfileData";
+import PublicProfileView from "@/components/profile/PublicProfileView";
 
 const LikesPage = () => {
     const { likes, loading, refetch } = useLikes();
@@ -31,116 +32,32 @@ const LikesPage = () => {
 
     // Profile detail view
     if (selected) {
-        const { liker, intro_text, direction } = selected;
+        const { liker, intro_text } = selected;
         return (
-            <div className="flex h-[100dvh] flex-col bg-background">
-                <div className="flex items-center gap-3 border-b border-border px-4 py-3">
-                    <button onClick={() => setSelected(null)} className="text-muted-foreground hover:text-foreground">
-                        <ArrowLeft className="w-5 h-5" />
-                    </button>
-                    <span className="font-semibold text-foreground">Their Profile</span>
-                </div>
-
-                <div className="flex-1 overflow-y-auto">
-                    {/* Photo */}
-                    <div className="relative h-80">
-                        <img
-                            src={liker.photos?.[0] || liker.avatar_url || "/placeholder.svg"}
-                            alt={liker.full_name}
-                            className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                        <div className="absolute bottom-4 left-4 right-4">
-                            <div className="flex items-center gap-2">
-                                <h2 className="text-2xl font-bold text-white">
-                                    {liker.full_name}{liker.age ? `, ${liker.age}` : ""}
-                                </h2>
-                                {liker.verified && <CheckCircle2 className="w-5 h-5 text-blue-400" fill="currentColor" />}
-                            </div>
-                            {liker.occupation_title && (
-                                <p className="text-white/80 text-sm flex items-center gap-1 mt-0.5">
-                                    <Briefcase className="w-3.5 h-3.5" />
-                                    {liker.occupation_title}{liker.occupation_company && ` · ${liker.occupation_company}`}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* Badge for how they liked */}
-                        <div className="absolute top-4 right-4">
-                            {direction === "message" ? (
-                                <span className="flex items-center gap-1 px-3 py-1.5 bg-primary rounded-full text-xs font-bold text-primary-foreground shadow">
-                                    <MessageCircle className="w-3.5 h-3.5" /> Messaged You
-                                </span>
-                            ) : (
-                                <span className="flex items-center gap-1 px-3 py-1.5 bg-rose-500 rounded-full text-xs font-bold text-white shadow">
-                                    <Heart className="w-3.5 h-3.5" fill="white" /> Liked You
-                                </span>
-                            )}
-                        </div>
+            <PublicProfileView 
+                profile={liker}
+                messageRequestText={intro_text}
+                onClose={() => setSelected(null)}
+                actionButtons={
+                    <div className="flex gap-3 w-full">
+                        <button
+                            onClick={() => handlePass(liker)}
+                            disabled={acting}
+                            className="flex-1 flex items-center justify-center gap-2 h-14 rounded-full bg-background border border-border font-bold text-muted-foreground hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-colors disabled:opacity-50 shadow-xl"
+                        >
+                            <X className="w-6 h-6 text-red-500" /> Pass
+                        </button>
+                        <button
+                            onClick={() => handleLikeBack(liker)}
+                            disabled={acting}
+                            className="flex-1 flex items-center justify-center gap-2 h-14 rounded-full gradient-brand text-primary-foreground font-bold shadow-[0_8px_30px_rgba(0,0,0,0.2)] hover:opacity-90 transition-opacity disabled:opacity-50"
+                        >
+                            {acting ? <Loader2 className="w-6 h-6 animate-spin" /> : <Heart className="w-6 h-6" fill="white" />}
+                            Like Back
+                        </button>
                     </div>
-
-                    <div className="p-4 space-y-4">
-                        {/* Their Message */}
-                        {intro_text && (
-                            <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl">
-                                <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-2 flex items-center gap-1">
-                                    <MessageCircle className="w-3.5 h-3.5" /> Their Message
-                                </p>
-                                <p className="text-foreground text-sm leading-relaxed">"{intro_text}"</p>
-                            </div>
-                        )}
-
-                        {liker.intent && (
-                            <div>
-                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Looking for</p>
-                                <p className="text-foreground flex items-center gap-2">
-                                    <Heart className="w-4 h-4 text-primary" />
-                                    {liker.intent}
-                                </p>
-                            </div>
-                        )}
-
-                        {liker.bio && (
-                            <div>
-                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">About</p>
-                                <p className="text-sm text-foreground/80 leading-relaxed">{liker.bio}</p>
-                            </div>
-                        )}
-
-                        {liker.interests?.length > 0 && (
-                            <div>
-                                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Interests</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {liker.interests.map((interest) => (
-                                        <span key={interest} className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full border border-primary/20">
-                                            {interest}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {/* Actions */}
-                <div className="border-t border-border p-4 flex gap-3">
-                    <button
-                        onClick={() => handlePass(liker)}
-                        disabled={acting}
-                        className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full bg-card border border-border font-semibold text-muted-foreground hover:bg-red-50 hover:text-red-500 hover:border-red-200 dark:hover:bg-red-950 transition-colors disabled:opacity-50"
-                    >
-                        <X className="w-5 h-5 text-red-500" /> Pass
-                    </button>
-                    <button
-                        onClick={() => handleLikeBack(liker)}
-                        disabled={acting}
-                        className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full gradient-brand text-primary-foreground font-semibold shadow-button hover:opacity-90 transition-opacity disabled:opacity-50"
-                    >
-                        {acting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Heart className="w-5 h-5" fill="white" />}
-                        Like Back
-                    </button>
-                </div>
-            </div>
+                }
+            />
         );
     }
 

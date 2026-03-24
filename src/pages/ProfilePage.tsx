@@ -1,15 +1,36 @@
 import { useState, useEffect } from "react";
-import { Settings, Edit2, Shield, Star, Crown, CheckCircle2 } from "lucide-react";
+import { Settings, Edit2, Shield, Star, Crown, CheckCircle2, Trash2, AlertTriangle, Loader2 } from "lucide-react";
 import TopNav from "@/components/TopNav";
 import { useAuth } from "@/hooks/useAuth";
 import { useCurrentUserProfile } from "@/hooks/useProfileData";
 import { supabase } from "@/integrations/supabase/client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { profile, loading } = useCurrentUserProfile();
   const [stats, setStats] = useState({ likes: 0, matches: 0, superLikes: 0 });
+  const navigate = useNavigate();
+
+  // Delete account state
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDeleteAccount = async () => {
+    try {
+      setIsDeleting(true);
+      const { error } = await supabase.rpc('delete_user');
+      if (error) throw error;
+      
+      // Successfully deleted on backend, now sign out frontend
+      await signOut();
+      navigate('/auth');
+    } catch (e) {
+      console.error("Error deleting account:", e);
+      alert("Failed to delete account. Please try again.");
+      setIsDeleting(false);
+    }
+  };
 
   // Fetch real stats
   useEffect(() => {
@@ -127,9 +148,51 @@ const ProfilePage = () => {
                 <p className="text-xs text-background/70">Unlimited likes · See who liked you · Visibility boost</p>
               </div>
             </button>
+
+            <button 
+              onClick={() => setShowDeleteModal(true)}
+              className="flex w-full items-center gap-4 rounded-xl bg-card border border-red-200/50 p-4 text-left hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors mt-8"
+            >
+              <Trash2 className="h-5 w-5 text-red-500" />
+              <div>
+                <p className="font-semibold text-red-600 dark:text-red-500">Delete Account</p>
+                <p className="text-xs text-red-500/70">Permanently erase your data and profile</p>
+              </div>
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-3xl bg-background p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+              <AlertTriangle className="h-8 w-8 text-red-600 dark:text-red-500" />
+            </div>
+            <h2 className="text-xl font-bold text-center text-foreground mb-2">Delete Account?</h2>
+            <p className="text-sm text-center text-muted-foreground mb-6">
+              This action cannot be undone. All your matches, messages, photos, and personal data will be permanently wiped from our servers.
+            </p>
+            <div className="space-y-3">
+              <button
+                onClick={handleDeleteAccount}
+                disabled={isDeleting}
+                className="w-full flex justify-center items-center py-3.5 rounded-full bg-red-600 hover:bg-red-700 text-white font-bold transition disabled:opacity-50"
+              >
+                {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Yes, Delete My Account"}
+              </button>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                disabled={isDeleting}
+                className="w-full py-3.5 rounded-full bg-muted text-foreground font-semibold hover:bg-muted/80 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
