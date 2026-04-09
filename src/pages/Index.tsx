@@ -332,12 +332,17 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {/* White glow under 'Black' for readability */}
-            <h1 className="relative text-5xl font-black tracking-tight sm:text-7xl lg:text-8xl">
-              <span className="text-black [text-shadow:0_1px_12px_rgba(255,255,255,0.6)]">Black</span>
-              <span className="text-primary">Love</span>
-              <span className="text-secondary">Link</span>
+            {/* Hero heading */}
+            <h1 className="relative text-4xl font-black tracking-tight sm:text-6xl lg:text-7xl leading-tight">
+              <span className="block text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.8)]">Welcome to{" "}
+                <span className="text-black [text-shadow:0_1px_12px_rgba(255,255,255,0.6)]">Black</span>
+                <span className="text-primary">Love</span>
+                <span className="text-secondary">Link</span>
+              </span>
             </h1>
+            <p className="mt-4 text-xl sm:text-2xl lg:text-3xl font-semibold text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.7)] tracking-wide">
+              Where Intentional Love Begins
+            </p>
 
           </motion.div>
 

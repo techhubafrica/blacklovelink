@@ -1,34 +1,33 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Heart, Sparkles } from "lucide-react";
-import story1 from "@/assets/story-1.png";
-import story2 from "@/assets/story-2.png";
-import story3 from "@/assets/story-3.png";
+
+const SUPABASE_STORAGE = "https://hxiycmrlyswwjqlwihdd.supabase.co/storage/v1/object/public/profile-photos/demo";
 
 const connections = [
   {
-    image: story1,
-    names: "Amara & Kwame",
+    image: `${SUPABASE_STORAGE}/amara-osei/profile.jpg?v=2`,
+    names: "Amara & Simone",
     location: "Atlanta, GA",
     tag: "Matched 2024",
     story:
-      "They matched over a shared love of Ethiopian cuisine. What started as weekend brunch dates turned into late-night calls, a surprise proposal, and a life built around supporting each other's dreams.",
+      "Two go-getters who almost swiped past each other. Amara's love of travel and Simone's passion for the outdoors turned their first hiking date into a weekly tradition — and eventually, a forever.",
   },
   {
-    image: story2,
-    names: "Zara & Marcus",
+    image: `${SUPABASE_STORAGE}/zara-mensah/profile.jpg`,
+    names: "Zara & Kofi",
     location: "New York, NY",
     tag: "Engaged",
     story:
-      "A first date at a jazz club turned into a tradition. Every anniversary they return to the same spot — now planning their wedding. Proof that the best love stories start with good music.",
+      "An architect and a product manager — both building things for a living. Their first date at a design exhibition turned into late-night coffee runs and a ring. Proof that creativity attracts.",
   },
   {
-    image: story3,
-    names: "Simone & Jamal",
+    image: `${SUPABASE_STORAGE}/leila-kamara/profile.jpg`,
+    names: "Leila & Darius",
     location: "Houston, TX",
     tag: "Married",
     story:
-      "Two busy professionals who thought they didn't have time for love. One coffee date turned into six hours of conversation. Now they're building a life together, one adventure at a time.",
+      "She was a nurse with a warm heart. He was a lawyer who needed to slow down. One shared meal changed everything. They've been cooking together ever since.",
   },
 ];
 
