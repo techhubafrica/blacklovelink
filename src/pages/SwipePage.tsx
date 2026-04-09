@@ -6,6 +6,7 @@ import FeedProfileCard from "@/components/feed/FeedProfileCard";
 import { useProfiles, type UserProfile } from "@/hooks/useProfileData";
 import { useSwipe } from "@/hooks/useSwipe";
 import { Loader2, SearchX } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 // ── LocalStorage helpers ──────────────────────────────────────────────────────
 const LS_PASSED = "bll_passed_profiles";
