@@ -50,9 +50,9 @@ const SwipePage = () => {
   const handleStartOver = async () => {
     try {
       setIsResetting(true);
-      // Backend true reset
-      const { error } = await supabase.rpc('reset_user_swipes');
-      if (error) throw error;
+      // Temporarily bypass backend reset, just reset local state to show all profiles again
+      // const { error } = await supabase.rpc('reset_user_swipes');
+      // if (error) throw error;
       
       // Clear local records
       setLikedProfiles(new Set()); 
@@ -60,8 +60,8 @@ const SwipePage = () => {
       saveSet(LS_LIKED, new Set()); 
       saveSet(LS_PASSED, new Set());
       
-      // Force reload to cleanly trigger useProfiles fetch
-      window.location.reload();
+      // Let the react state update visibleProfiles instantly
+      setIsResetting(false);
     } catch (e) {
       console.error("Failed to reset swipes:", e);
       setIsResetting(false);

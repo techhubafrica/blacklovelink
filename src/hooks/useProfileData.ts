@@ -100,16 +100,16 @@ export const useProfiles = () => {
                     query = query.ilike("gender", targetGender);
                 }
 
-                // Get already swiped user_ids
-                const { data: swipedData } = await supabase
-                    .from("swipes")
-                    .select("swiped_id")
-                    .eq("swiper_id", session.user.id);
-
-                if (swipedData && swipedData.length > 0) {
-                    const swipedIds = swipedData.map((s: any) => s.swiped_id);
-                    query = query.not("user_id", "in", `(${swipedIds.join(",")})`);
-                }
+                // --- Temporarily Disabled: Get already swiped user_ids ---
+                // const { data: swipedData } = await supabase
+                //     .from("swipes")
+                //     .select("swiped_id")
+                //     .eq("swiper_id", session.user.id);
+                //
+                // if (swipedData && swipedData.length > 0) {
+                //     const swipedIds = swipedData.map((s: any) => s.swiped_id);
+                //     query = query.not("user_id", "in", `(${swipedIds.join(",")})`);
+                // }
 
                 const { data, error } = await query;
                 if (error) throw error;
