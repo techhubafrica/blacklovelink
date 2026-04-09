@@ -87,29 +87,16 @@ export const useProfiles = () => {
                 if (myGender === "male") targetGender = "Female";
                 else if (myGender === "female") targetGender = "Male";
 
+                // Fetch absolutely all profiles except current user (temporary mode per request)
                 let query = supabase
                     .from("profiles")
                     .select("*")
-                    .eq("profile_completed", true)
-                    .eq("is_public", true) // Only fetch public profiles
                     .neq("user_id", session.user.id)
                     .order("created_at", { ascending: false });
 
-                // Filter by opposite gender
-                if (targetGender) {
-                    query = query.ilike("gender", targetGender);
-                }
-
-                // --- Temporarily Disabled: Get already swiped user_ids ---
-                // const { data: swipedData } = await supabase
-                //     .from("swipes")
-                //     .select("swiped_id")
-                //     .eq("swiper_id", session.user.id);
-                //
-                // if (swipedData && swipedData.length > 0) {
-                //     const swipedIds = swipedData.map((s: any) => s.swiped_id);
-                //     query = query.not("user_id", "in", `(${swipedIds.join(",")})`);
-                // }
+                // --- Temporarily Disabled: Gender & Swipes ---
+                // if (targetGender) { ... }
+                // if (swipedData) { ... }
 
                 const { data, error } = await query;
                 if (error) throw error;

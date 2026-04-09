@@ -18,8 +18,8 @@ const SwipePage = () => {
   const { profiles, loading } = useProfiles();
   const { recordSwipe } = useSwipe();
   const [matchedProfile, setMatchedProfile] = useState<UserProfile | null>(null);
-  const [likedProfiles, setLikedProfiles] = useState<Set<string>>(() => loadSet(LS_LIKED));
-  const [passedProfiles, setPassedProfiles] = useState<Set<string>>(() => loadSet(LS_PASSED));
+  const [likedProfiles, setLikedProfiles] = useState<Set<string>>(new Set());
+  const [passedProfiles, setPassedProfiles] = useState<Set<string>>(new Set());
   const [isResetting, setIsResetting] = useState(false);
 
   const visibleProfiles = useMemo(
