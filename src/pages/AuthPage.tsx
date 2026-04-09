@@ -69,17 +69,32 @@ const AuthPage = () => {
 
     const pwStrength = passwordStrength(password);
 
-    // On mount: check for existing session (Google OAuth redirect)
+    // Handle Google OAuth redirect + existing sessions.
+    // getSession() alone races with Supabase's async token exchange from the URL hash,
+    // so we ALSO listen to onAuthStateChange which fires reliably after OAuth completes.
     useEffect(() => {
-        supabase.auth.getSession().then(async ({ data: { session } }) => {
-            if (!session) return;
-            const status = await getUserProfileStatus(session.user.id);
-            if (status === "complete") {
-                navigate("/swipe");
-            } else {
-                navigate("/create-profile");
+        let navigated = false;
+
+        const redirect = async (userId: string) => {
+            if (navigated) return;
+            navigated = true;
+            const status = await getUserProfileStatus(userId);
+            navigate(status === "complete" ? "/swipe" : "/create-profile", { replace: true });
+        };
+
+        // 1. Check for an already-active session (e.g. page refresh while logged in)
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session?.user) redirect(session.user.id);
+        });
+
+        // 2. Listen for SIGNED_IN — fires after Google OAuth token exchange completes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+            if (event === "SIGNED_IN" && session?.user) {
+                redirect(session.user.id);
             }
         });
+
+        return () => subscription.unsubscribe();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
