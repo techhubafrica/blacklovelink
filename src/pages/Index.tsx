@@ -333,8 +333,11 @@ const Index = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             {/* Hero heading */}
-            <h1 className="relative text-4xl font-black tracking-tight sm:text-6xl lg:text-7xl leading-tight">
-              <span className="block text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.8)]">Welcome to{" "}
+            <h1 className="relative leading-tight">
+              <span className="block text-2xl sm:text-3xl lg:text-4xl font-semibold text-white/90 [text-shadow:0_2px_12px_rgba(0,0,0,0.8)] tracking-widest uppercase mb-2">
+                Welcome to
+              </span>
+              <span className="block text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.5)]">
                 <span className="text-black [text-shadow:0_1px_12px_rgba(255,255,255,0.6)]">Black</span>
                 <span className="text-primary">Love</span>
                 <span className="text-secondary">Link</span>
