@@ -1,12 +1,12 @@
 import { useState, useMemo } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useNavigate, Link } from "react-router-dom";
 import TopNav from "@/components/TopNav";
 import MatchOverlay from "@/components/MatchOverlay";
 import FeedProfileCard from "@/components/feed/FeedProfileCard";
 import { useProfiles, type UserProfile } from "@/hooks/useProfileData";
 import { useSwipe } from "@/hooks/useSwipe";
-import { Loader2, SearchX } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { Loader2, SearchX, ArrowLeft, Home, Sparkles } from "lucide-react";
 
 // ── LocalStorage helpers ──────────────────────────────────────────────────────
 const LS_PASSED = "bll_passed_profiles";
@@ -15,6 +15,7 @@ const loadSet = (key: string): Set<string> => new Set(JSON.parse(localStorage.ge
 const saveSet = (key: string, set: Set<string>) => localStorage.setItem(key, JSON.stringify([...set]));
 
 const SwipePage = () => {
+  const navigate = useNavigate();
   const { profiles, loading } = useProfiles();
   const { recordSwipe } = useSwipe();
   const [matchedProfile, setMatchedProfile] = useState<UserProfile | null>(null);
@@ -69,21 +70,76 @@ const SwipePage = () => {
   };
 
   return (
-    <div className="flex min-h-[100dvh] flex-col bg-background">
+    <div className="flex min-h-[100dvh] flex-col bg-gradient-to-b from-background via-background to-primary/5">
       <TopNav />
+
+      {/* Vibrant gradient hero header with navigation */}
+      <header className="relative overflow-hidden gradient-brand">
+        <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <div className="absolute -top-10 -left-10 w-40 h-40 rounded-full bg-white/30 blur-3xl" />
+          <div className="absolute -bottom-10 -right-10 w-40 h-40 rounded-full bg-white/20 blur-3xl" />
+        </div>
+        <div className="relative max-w-md mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-3">
+            <button
+              onClick={() => navigate(-1)}
+              aria-label="Go back"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-primary-foreground text-sm font-semibold hover:bg-white/30 transition"
+            >
+              <ArrowLeft className="w-4 h-4" /> Back
+            </button>
+            <Link
+              to="/"
+              aria-label="Go home"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-primary-foreground text-sm font-semibold hover:bg-white/30 transition"
+            >
+              <Home className="w-4 h-4" /> Home
+            </Link>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-end justify-between"
+          >
+            <div>
+              <div className="flex items-center gap-2 text-primary-foreground/80 text-xs font-medium uppercase tracking-widest">
+                <Sparkles className="w-3.5 h-3.5" /> Today's Picks
+              </div>
+              <h1 className="text-3xl font-black text-primary-foreground leading-tight mt-1">
+                Discover Love
+              </h1>
+            </div>
+            {!loading && visibleProfiles.length > 0 && (
+              <span className="text-xs text-primary-foreground bg-white/25 backdrop-blur-sm px-3 py-1.5 rounded-full font-bold">
+                {visibleProfiles.length} nearby
+              </span>
+            )}
+          </motion.div>
+        </div>
+      </header>
 
       <main className="flex-1 overflow-y-auto pb-10">
         {loading ? (
           <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            <p className="text-muted-foreground text-sm">Finding your matches…</p>
+            <div className="relative">
+              <div className="absolute inset-0 rounded-full bg-primary/30 blur-2xl animate-pulse" />
+              <Loader2 className="relative w-10 h-10 animate-spin text-primary" />
+            </div>
+            <p className="text-muted-foreground text-sm font-medium">Finding your matches…</p>
           </div>
         ) : visibleProfiles.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-[60vh] gap-4 px-6 text-center">
-            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-              <SearchX className="w-10 h-10 text-primary" />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center justify-center h-[60vh] gap-4 px-6 text-center"
+          >
+            <div className="relative">
+              <div className="absolute inset-0 rounded-full bg-primary/20 blur-2xl" />
+              <div className="relative w-24 h-24 rounded-full gradient-brand flex items-center justify-center shadow-xl">
+                <SearchX className="w-12 h-12 text-primary-foreground" />
+              </div>
             </div>
-            <h2 className="text-xl font-bold text-foreground">You've seen everyone!</h2>
+            <h2 className="text-2xl font-black text-foreground">You've seen everyone!</h2>
             <p className="text-muted-foreground text-sm max-w-xs">
               No more new profiles right now. Check back later or explore the Community tab.
             </p>
@@ -94,15 +150,15 @@ const SwipePage = () => {
             >
               {isResetting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Start Over"}
             </button>
-          </div>
+            <Link
+              to="/"
+              className="mt-1 text-sm text-muted-foreground hover:text-primary transition font-medium underline-offset-4 hover:underline"
+            >
+              Back to homepage
+            </Link>
+          </motion.div>
         ) : (
-          <div className="flex flex-col gap-5 px-4 pt-4 max-w-md mx-auto">
-            <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-black text-foreground">Discover</h1>
-              <span className="text-xs text-muted-foreground bg-muted px-3 py-1.5 rounded-full font-medium">
-                {visibleProfiles.length} nearby
-              </span>
-            </div>
+          <div className="flex flex-col gap-5 px-4 pt-5 max-w-md mx-auto">
             <AnimatePresence mode="popLayout">
               {visibleProfiles.map(profile => (
                 <FeedProfileCard
