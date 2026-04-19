@@ -44,19 +44,19 @@ export default function CommunityPage() {
 
     const fetchPosts = async () => {
         setLoading(true);
-        const { data } = await supabase
+        const { data } = await (supabase as any)
             .from("community_posts")
             .select("*")
             .eq("hidden", false)
             .order("created_at", { ascending: false });
 
-        const raw = (data ?? []) as CommunityPost[];
+        const raw = (data ?? []) as unknown as CommunityPost[];
 
         // Fetch heart status + comment counts
         if (raw.length > 0 && currentUserId) {
             const [{ data: hearts }, { data: commentCounts }] = await Promise.all([
-                supabase.from("post_hearts").select("post_id").eq("user_id", currentUserId).in("post_id", raw.map(p => p.id)),
-                supabase.from("community_comments").select("post_id").in("post_id", raw.map(p => p.id)).eq("hidden", false),
+                (supabase as any).from("post_hearts").select("post_id").eq("user_id", currentUserId).in("post_id", raw.map(p => p.id)),
+                (supabase as any).from("community_comments").select("post_id").in("post_id", raw.map(p => p.id)).eq("hidden", false),
             ]);
             const heartedSet = new Set((hearts ?? []).map((h: any) => h.post_id));
             const commentMap: Record<string, number> = {};

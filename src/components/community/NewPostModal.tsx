@@ -35,7 +35,7 @@ export default function NewPostModal({ open, onClose, onPosted, userFullName }: 
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) { toast.error("You must be logged in."); return; }
 
-            const { error } = await supabase.from("community_posts").insert({
+            const { error } = await (supabase as any).from("community_posts").insert({
                 user_id: session.user.id,
                 is_anonymous: isAnonymous,
                 display_name: isAnonymous ? null : userFullName,
