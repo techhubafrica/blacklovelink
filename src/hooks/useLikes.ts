@@ -51,7 +51,7 @@ export const useLikes = () => {
                         direction: s.direction,
                         intro_text: s.intro_text,
                         created_at: s.created_at,
-                        liker: liker as UserProfile,
+                        liker: liker as unknown as UserProfile,
                     };
                 })
                 .filter(Boolean) as LikeEntry[];
