@@ -164,7 +164,6 @@ export type Database = {
           id: string
           swiped_id: string
           swiper_id: string
-          intro_text: string | null
         }
         Insert: {
           created_at?: string
@@ -172,7 +171,6 @@ export type Database = {
           id?: string
           swiped_id: string
           swiper_id: string
-          intro_text?: string | null
         }
         Update: {
           created_at?: string
@@ -180,7 +178,6 @@ export type Database = {
           id?: string
           swiped_id?: string
           swiper_id?: string
-          intro_text?: string | null
         }
         Relationships: []
       }
