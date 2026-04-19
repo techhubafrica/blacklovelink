@@ -45,24 +45,24 @@ export default function PostCard({ post, currentUserId, onCommentsClick, onDelet
 
     const toggleHeart = async () => {
         if (hearted) {
-            await supabase.from("post_hearts").delete().eq("post_id", post.id).eq("user_id", currentUserId);
+            await (supabase as any).from("post_hearts").delete().eq("post_id", post.id).eq("user_id", currentUserId);
             setHearts(h => h - 1);
         } else {
-            await supabase.from("post_hearts").insert({ post_id: post.id, user_id: currentUserId });
+            await (supabase as any).from("post_hearts").insert({ post_id: post.id, user_id: currentUserId });
             setHearts(h => h + 1);
         }
         setHearted(v => !v);
     };
 
     const reportPost = async (reason: string) => {
-        await supabase.from("post_reports").insert({ post_id: post.id, reporter_id: currentUserId, reason });
+        await (supabase as any).from("post_reports").insert({ post_id: post.id, reporter_id: currentUserId, reason });
         setReported(true);
         setReporting(false);
         setMenuOpen(false);
     };
 
     const deletePost = async () => {
-        await supabase.from("community_posts").delete().eq("id", post.id);
+        await (supabase as any).from("community_posts").delete().eq("id", post.id);
         onDeleted(post.id);
     };
 

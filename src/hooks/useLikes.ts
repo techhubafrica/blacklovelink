@@ -21,7 +21,7 @@ export const useLikes = () => {
             if (!session?.user) { setLoading(false); return; }
 
             // Get all right/up/message swipes where current user is the target
-            const { data: swipes, error } = await supabase
+            const { data: swipes, error } = await (supabase as any)
                 .from("swipes")
                 .select("id, direction, intro_text, created_at, swiper_id")
                 .eq("swiped_id", session.user.id)
@@ -32,7 +32,7 @@ export const useLikes = () => {
             if (!swipes || swipes.length === 0) { setLikes([]); setLoading(false); return; }
 
             // Fetch profiles of each liker
-            const swiperIds = swipes.map(s => s.swiper_id);
+            const swiperIds = swipes.map((s: any) => s.swiper_id);
             const { data: profiles } = await supabase
                 .from("profiles")
                 .select("*")
@@ -43,7 +43,7 @@ export const useLikes = () => {
             const profileMap = new Map(profiles.map(p => [p.user_id, p]));
 
             const entries: LikeEntry[] = swipes
-                .map(s => {
+                .map((s: any) => {
                     const liker = profileMap.get(s.swiper_id);
                     if (!liker) return null;
                     return {
