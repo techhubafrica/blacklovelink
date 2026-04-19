@@ -44,7 +44,7 @@ export const useCurrentUserProfile = () => {
                     .maybeSingle();
 
                 if (error) throw error;
-                if (isMounted) setProfile(data as UserProfile | null);
+                if (isMounted) setProfile(data as unknown as UserProfile | null);
             } catch (e) {
                 console.error("Error fetching current user profile:", e);
             } finally {
@@ -100,7 +100,7 @@ export const useProfiles = () => {
 
                 const { data, error } = await query;
                 if (error) throw error;
-                if (isMounted) setProfiles((data ?? []) as UserProfile[]);
+                if (isMounted) setProfiles((data ?? []) as unknown as UserProfile[]);
             } catch (e) {
                 console.error("Error fetching profiles:", e);
             } finally {

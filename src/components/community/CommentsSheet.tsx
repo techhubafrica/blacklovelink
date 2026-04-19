@@ -38,16 +38,16 @@ export default function CommentsSheet({ post, currentUserId, userFullName, onClo
     useEffect(() => {
         if (!post) return;
         setLoading(true);
-        supabase
+        (supabase as any)
             .from("community_comments")
             .select("*")
             .eq("post_id", post.id)
             .eq("hidden", false)
             .order("created_at", { ascending: true })
-            .then(async ({ data }) => {
+            .then(async ({ data }: any) => {
                 const raw = (data ?? []) as Comment[];
                 // Check which ones current user has hearted
-                const { data: hearted } = await supabase
+                const { data: hearted } = await (supabase as any)
                     .from("comment_hearts")
                     .select("comment_id")
                     .eq("user_id", currentUserId)
@@ -62,7 +62,7 @@ export default function CommentsSheet({ post, currentUserId, userFullName, onClo
         if (!body.trim() || !post) return;
         setSubmitting(true);
         try {
-            const { data, error } = await supabase
+            const { data, error } = await (supabase as any)
                 .from("community_comments")
                 .insert({
                     post_id: post.id,
@@ -85,9 +85,9 @@ export default function CommentsSheet({ post, currentUserId, userFullName, onClo
 
     const toggleCommentHeart = async (comment: Comment) => {
         if (comment.has_hearted) {
-            await supabase.from("comment_hearts").delete().eq("comment_id", comment.id).eq("user_id", currentUserId);
+            await (supabase as any).from("comment_hearts").delete().eq("comment_id", comment.id).eq("user_id", currentUserId);
         } else {
-            await supabase.from("comment_hearts").insert({ comment_id: comment.id, user_id: currentUserId });
+            await (supabase as any).from("comment_hearts").insert({ comment_id: comment.id, user_id: currentUserId });
         }
         setComments(prev => prev.map(c => c.id === comment.id
             ? { ...c, heart_count: c.heart_count + (c.has_hearted ? -1 : 1), has_hearted: !c.has_hearted }
@@ -96,14 +96,14 @@ export default function CommentsSheet({ post, currentUserId, userFullName, onClo
     };
 
     const reportComment = async (commentId: string, reason: string) => {
-        await supabase.from("comment_reports").insert({ comment_id: commentId, reporter_id: currentUserId, reason });
+        await (supabase as any).from("comment_reports").insert({ comment_id: commentId, reporter_id: currentUserId, reason });
         setReportedIds(prev => new Set(prev).add(commentId));
         setReportingId(null);
         toast.success("Comment reported.");
     };
 
     const deleteComment = async (commentId: string) => {
-        await supabase.from("community_comments").delete().eq("id", commentId);
+        await (supabase as any).from("community_comments").delete().eq("id", commentId);
         setComments(prev => prev.filter(c => c.id !== commentId));
     };
 
