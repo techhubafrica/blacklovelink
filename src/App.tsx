@@ -9,6 +9,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import SplashScreen from "@/components/SplashScreen";
 import Index from "./pages/Index";
 import AuthPage from "./pages/AuthPage";
+import AuthCallbackPage from "./pages/AuthCallbackPage";
 import ProfileCreationPage from "./pages/ProfileCreationPage";
 import PermissionsPage from "./pages/PermissionsPage";
 import SwipePage from "./pages/SwipePage";
@@ -54,6 +55,7 @@ const App = () => {
               {/* Public routes */}
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthPage />} />
+              <Route path="/auth/callback" element={<AuthCallbackPage />} />
               <Route path="/education" element={<EducationPage />} />
               <Route path="/how-it-works" element={<HowItWorksPage />} />
               <Route path="/success-stories" element={<SuccessStoriesPage />} />

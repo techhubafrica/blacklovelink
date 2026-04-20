@@ -69,37 +69,16 @@ const AuthPage = () => {
 
     const pwStrength = passwordStrength(password);
 
-    // Handle Google OAuth redirect + existing sessions.
-    // IMPORTANT: Register the auth state listener FIRST, before getSession(),
-    // so we never miss the INITIAL_SESSION event that Supabase fires when it
-    // auto-exchanges the OAuth token from the URL hash after a Google redirect.
+    // Only handle already-active sessions (e.g. page refresh while logged in).
+    // OAuth redirect processing is handled entirely by /auth/callback.
     useEffect(() => {
-        let navigated = false;
-
-        const redirect = async (userId: string) => {
-            if (navigated) return;
-            navigated = true;
-            const status = await getUserProfileStatus(userId);
-            navigate(status === "complete" ? "/swipe" : "/create-profile", { replace: true });
-        };
-
-        // 1. Set up listener FIRST — catches INITIAL_SESSION (OAuth redirect token exchange)
-        //    AND SIGNED_IN (email/phone sign-in).
-        //    INITIAL_SESSION fires on every mount with the current session (including
-        //    the freshly-exchanged Google token when returning from OAuth).
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-            if ((event === "INITIAL_SESSION" || event === "SIGNED_IN") && session?.user) {
-                redirect(session.user.id);
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session?.user) {
+                getUserProfileStatus(session.user.id).then((status) => {
+                    navigate(status === "complete" ? "/swipe" : "/create-profile", { replace: true });
+                });
             }
         });
-
-        // 2. getSession() as a fallback for already-authenticated page refreshes
-        //    where INITIAL_SESSION may have fired before this component mounted.
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session?.user) redirect(session.user.id);
-        });
-
-        return () => subscription.unsubscribe();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -115,11 +94,11 @@ const AuthPage = () => {
         try {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: "google",
-                // Redirect to /auth so our INITIAL_SESSION listener can catch the token
-                options: { redirectTo: `${window.location.origin}/auth` },
+                // Redirect to the dedicated callback handler — not back to /auth
+                options: { redirectTo: `${window.location.origin}/auth/callback` },
             });
             if (error) throw error;
-            // browser will be redirected — loading state persists until redirect
+            // browser navigates away — loading state persists until redirect
         } catch {
             toast({ title: "Sign in failed", description: "Something went wrong. Please try again.", variant: "destructive" });
             setLoading(null);
