@@ -10,6 +10,7 @@ import profile2 from "@/assets/profile-2.png";
 import profile3 from "@/assets/profile-3.png";
 import ConnectionCards from "@/components/ConnectionCards";
 import HeroChatbot from "@/components/HeroChatbot";
+import PricingSection from "@/components/PricingSection";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import { useTranslation } from "@/hooks/useTranslation";
 import { usePlatformStats } from "@/hooks/usePlatformStats";
@@ -573,6 +574,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* ── PRICING SECTION ── */}
+      <PricingSection />
 
       <SiteFooter />
     </div>
