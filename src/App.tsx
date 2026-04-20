@@ -23,6 +23,7 @@ import SuccessStoriesPage from "./pages/SuccessStoriesPage";
 import ConnectionsPage from "./pages/ConnectionsPage";
 import TrustSafetyPage from "./pages/TrustSafetyPage";
 import SupportPage from "./pages/SupportPage";
+import ContactPage from "./pages/ContactPage";
 import NotFound from "./pages/NotFound";
 import ArticleReaderPage from "./pages/ArticleReaderPage";
 import CommunityPage from "./pages/CommunityPage";
@@ -64,6 +65,7 @@ const App = () => {
               <Route path="/success-stories" element={<SuccessStoriesPage />} />
               <Route path="/trust-safety" element={<TrustSafetyPage />} />
               <Route path="/support" element={<SupportPage />} />
+              <Route path="/contact" element={<ContactPage />} />
               <Route path="/articles/:slug" element={<ArticleReaderPage />} />
 
               {/* Onboarding routes (auth required) */}

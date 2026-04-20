@@ -170,6 +170,25 @@ const Index = () => {
                 />
               </Link>
             </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.5 }}
+            >
+              <Link
+                to="/contact"
+                className="group relative px-4 py-2.5 text-sm font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground"
+              >
+                <span className="relative z-10">Contact</span>
+                <motion.span
+                  className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileHover={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </Link>
+            </motion.div>
           </div>
 
           {/* Right Side - Language & CTA */}
@@ -302,6 +321,18 @@ const Index = () => {
                     className="block px-4 py-3 text-sm font-medium text-primary-foreground/90 rounded-xl hover:bg-white/5 transition-colors"
                   >
                     Education
+                  </Link>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.35 }}
+                >
+                  <Link
+                    to="/contact"
+                    className="block px-4 py-3 text-sm font-medium text-primary-foreground/90 rounded-xl hover:bg-white/5 transition-colors"
+                  >
+                    Contact
                   </Link>
                 </motion.div>
               </div>
