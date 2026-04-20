@@ -258,6 +258,67 @@ You deserve to know the answer. And so does whoever you're about to bring into i
 
 **Love is not a cure for loneliness. But it is one of life's greatest gifts — when you enter it from a place of wholeness.**`,
   },
+  // ─── ARTICLE 6 ──────────────────────────────────────────────────────────────
+  {
+    id: "art006",
+    slug: "how-to-actually-enjoy-the-dating-process",
+    title: "How to Actually Enjoy the Dating Process",
+    subtitle: "A framework for approaching dating with clarity, authenticity, and emotional resilience.",
+    category: "Mindset",
+    emoji: "🧘🏾‍♀️",
+    readTime: "7 min read",
+    publishedAt: "April 20, 2026",
+    excerpt: "Dating doesn’t have to feel like a means to an end: It can literally become an art form when you leave old beliefs behind.",
+    content: `*By Marie Thouin, Ph.D. (Guest Contributor)*
+
+I’m one of those freaks who genuinely enjoys dating. Not because I typically get what I want (believe me, I don’t), but because I see dating as a transformative and educational process—one that has the power to lead us into greater authenticity and intimacy with ourselves and others.
+
+The realization that dating can be a valuable activity in and of itself, rather than a zero-sum game where a “bad” date means a waste of time, led me to become a dating coach. Not one who says, “let’s figure out how to manipulate someone into wanting you,” but rather someone who cheers you into viewing every single dating interaction as an opportunity for empowerment.
+
+But in a world where humans often treat each other as objects of entertainment, disposable ego-boosts, or “needs-fulfilling machines,” what does it actually look like to date with integrity and meaning? 
+
+Enter my framework: **The six pillars of mindful dating.**
+
+In this context, mindful refers to one’s commitment to awareness and integrity, versus the outdated rulebooks, automatic responses, and bad behaviors that often prevail in the dating sphere. Practicing mindful dating is about letting go of old scripts around love, seduction, and roles, and instead, using the entire process of dating as a playground for developing authentic presence.
+
+## Deep visioning: owning your WHY
+
+Owning our truest WHY for dating is the first step in creating an aligned dating life. If you are dating on auto-pilot and feeling disappointing results, ask yourself: Why am I dating? What does love and intimacy really mean to me in the spectrum of my life’s purpose? What am I hoping to experience? What are my socially conditioned values, versus my chosen values? 
+
+There are no right or wrong answers here, but a sincere inquiry into these questions leads to deeper intentionality with dating, and more aligned results.
+
+## Cultivating an empowered self-concept
+
+A big part of dating is deciding how to communicate about oneself. Research shows that how we conceptualize ourselves directly impacts our chances of selecting a compatible mate.
+
+Learning to embrace and express an empowered self-concept is not arrogance. It’s about leading with your gifts. Core gifts are those precious parts of us that we often learn to repress during childhood to make people around us comfortable—for example, our thirst for love, our sensitivity, our empathy, or our exuberance—but these are the parts that constitute our deepest spark. 
+
+Sharing one’s gifts in dating can be vulnerable, but it can be a definitive movement away from old patterns of self-repression, and towards a commitment to authenticity.
+
+## Practicing mindful swiping
+
+I get it: Online dating can feel soul-sucking and dehumanizing. Algorithms gamify dating and make us feel as if we are products on a shelf. But it doesn't have to be this way.
+
+Mindful Swiping is a framework to help us use online dating as a mindfulness practice:
+*   **Ritualize your use of the apps.** Stop swiping “mindlessly” and establish a ritual. Every time you use the apps, breathe deeply and reconnect with your intentions.
+*   **Create an authentic profile.** Pick photos that feel like the real you. In the writeup, communicate unique qualities, interests, and values that convey the breadth of who you are.
+*   **Practice discernment.** When swiping, use your rational mind AND your embodied intuition.
+*   **Practice loving-kindness.** Remember there is a three-dimensional human on the other side of the app—a soul, a heart, a body that’s longing to be loved, just like you.
+
+## Communicating to connect
+
+Communication in early dating can be tricky. When a connection is new, it is naturally precarious, and ripe for misunderstandings. 
+
+Before you can communicate truthfully, you have to discern what it is you really feel, want, and need—not imagining and complying with what other people expect you to say. Once you identify your needs and feelings, you must gather the courage to express them directly (and kindly). Stating your real desires means you might hear “no” for an answer, which can be terrifying. But hearing “yes” might be just as terrifying—because that means actual intimacy and being seen in your truth is within reach.
+
+## Navigating challenging emotions and integrating learning
+
+Dating has a way of bringing up challenging emotions: Rejection, comparison, loneliness, shame, disappointment, envy, jealousy, judgment, anger, hopelessness. There is no way to completely avoid them while keeping one’s heart open.
+
+However, we can change our relationship to those feelings. We can learn to embrace these emotions, and utilize them to grow, learn, and transform, rather than hide away and judge ourselves. I invite you to practice positive defiance. That means choosing to keep an open heart and to practice love, kindness, and self-compassion in the face of emotional challenges and negative self-talk.
+
+In sum, dating doesn’t have to feel like a means to an end: It can literally become an art form when you leave the old beliefs and patterns behind, and learn to act from a deeper source of self-expression, authenticity, and self-love.`,
+  },
 ];
 
 // Helper to find an article by slug
