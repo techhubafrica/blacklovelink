@@ -319,6 +319,72 @@ However, we can change our relationship to those feelings. We can learn to embra
 
 In sum, dating doesn’t have to feel like a means to an end: It can literally become an art form when you leave the old beliefs and patterns behind, and learn to act from a deeper source of self-expression, authenticity, and self-love.`,
   },
+  // ─── ARTICLE 7 ──────────────────────────────────────────────────────────────
+  {
+    id: "art007",
+    slug: "healthy-relationship-tips",
+    title: "Healthy Relationship Tips",
+    subtitle: "How to make a relationship work and stay connected.",
+    category: "Relationships",
+    emoji: "💡",
+    readTime: "6 min read",
+    publishedAt: "Recent",
+    excerpt: "Whether you're looking to keep a new romantic relationship strong or repair a relationship that's on the rocks, these healthy relationship tips can help.",
+    content: `*Adapted from HelpGuide.org*
+
+Whether you're looking to keep a new romantic relationship strong or repair a relationship that's on the rocks, these healthy relationship tips can help you feel loved and connected to your partner.
+
+## What is a healthy relationship?
+
+Every relationship is unique, and people come together for many different reasons. Part of what defines a healthy relationship is sharing a common goal for exactly what you want the relationship to be and where you want it to go. And that’s something you’ll only know by talking deeply and honestly with your partner. However, there are also some characteristics that most healthy relationships have in common:
+*   **You maintain a meaningful emotional connection with each other.** You each make the other feel loved and emotionally fulfilled.
+*   **You’re not afraid of (respectful) disagreement.** You need to feel safe to express things that bother you without fear of retaliation, and be able to resolve conflict without humiliation or degradation.
+*   **You keep outside relationships and interests alive.** It’s important to sustain your own identity outside of the relationship.
+*   **You communicate openly and honestly.** Good communication is a key part of any relationship.
+
+## Falling in love vs. building a relationship
+
+Falling in love usually seems to just happen, but staying in love requires commitment and work. Romantic relationships require ongoing attention for love to flourish. Identifying and fixing small problems now can prevent them from growing into much larger ones down the road.
+
+## What does an unhealthy relationship look like?
+
+Some signs of an unhealthy relationship include:
+*   **Deceitfulness and dishonesty:** Keeping secrets or lying about big things.
+*   **Controlling behavior:** Trying to exercise control over the other person.
+*   **Disrespect:** Being dismissive of opinions or minimizing feelings.
+
+## Tip 1: Stay connected through communication
+
+*   **Tell your partner what you need, don’t make them guess.** Providing comfort and understanding to someone you love is a pleasure, not a burden.
+*   **Take note of your partner’s nonverbal cues.** Eye contact, tone of voice, and posture can say more than words ever can.
+*   **Be a good listener.** Listening in a way that makes another person feel understood and safe builds a deeper connection.
+*   **Manage stress.** When you’re stressed, you’re more likely to misread your partner or send off-putting nonverbal signals.
+
+## Tip 2: Spend quality time face to face
+
+You fall in love looking at and listening to each other. If you continue to look and listen in the same attentive ways, you can sustain the falling in love experience over the long term.
+
+## Tip 3: Keep physical intimacy alive
+
+Touch is a fundamental part of human existence. Frequent, affectionate touch—holding hands, hugging, or kissing—is equally important to physical intimacy.
+
+## Tip 4: Learn to give and take
+
+Healthy relationships are built on compromise. 
+*   **Recognize what’s important to your partner.** Knowing what’s truly important to them builds goodwill.
+*   **Don’t make “winning” your goal.** If you approach your partner with the attitude that things have to be your way, it will be difficult to reach a compromise.
+*   **Learn how to respectfully resolve conflict.** Focus on the here-and-now, use "I" statements, and be willing to forgive.
+
+## Tip 5: Be prepared for ups and downs
+
+Every relationship has its challenges. Life events like job loss or health problems can stress both partners.
+*   **Don't take your frustrations out on your partner.** Avoid snapping at them even if you feel "safe" doing so.
+*   **Try to be flexible.** Change is inevitable; flexibility allows you to grow together through both good and bad times.
+
+## When is it time to hire a relationship expert?
+
+Consider seeking professional help if you are constantly fighting, dealing with overwhelming issues like infidelity or substance abuse, or simply feeling unfulfilled and unsure how to change the dynamic.`,
+  },
 ];
 
 // Helper to find an article by slug
