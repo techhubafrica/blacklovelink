@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { 
-  Shield, Crown, CheckCircle2, Trash2, LogOut, ChevronRight, 
-  Bell, Lock, AlertTriangle, Loader2, Camera, Heart, ChevronLeft, ArrowRight
+  Settings, Crown, CheckCircle2, ChevronRight, 
+  Bell, Lock, Loader2, Camera, Heart, ChevronLeft, ArrowRight
 } from "lucide-react";
 import TopNav from "@/components/TopNav";
 import { useAuth } from "@/hooks/useAuth";
@@ -39,29 +39,6 @@ const ProfilePage = () => {
     }
   }, [profile]);
 
-  // Delete account state
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const handleDeleteAccount = async () => {
-    try {
-      setIsDeleting(true);
-      // Backend RPC not available — just sign out for now
-      const { error } = await (supabase as any).rpc('delete_user');
-      if (error) throw error;
-      await signOut();
-      navigate('/auth');
-    } catch (e) {
-      console.error("Error deleting account:", e);
-      toast.error("Failed to delete account. Please try again.");
-      setIsDeleting(false);
-    }
-  };
-
-  const handleLogout = async () => {
-    await signOut();
-    navigate('/auth');
-  };
 
   const handleTogglePref = async (key: keyof typeof prefs) => {
     const newValue = !prefs[key];
@@ -266,24 +243,11 @@ const ProfilePage = () => {
                     <SettingsRow icon={Bell} title="Notifications" onClick={() => setActiveView('notifications')} />
                     <SettingsRow icon={Lock} title="Privacy & Security" value={prefs.is_public ? "Public" : "Hidden"} onClick={() => setActiveView('privacy')} />
                     <SettingsRow icon={CheckCircle2} title="Verification" value={profile?.verified ? "Verified" : "Pending"} onClick={() => setActiveView('verification')} />
+                    <SettingsRow icon={Settings} title="Settings" value="Safety, support & more" onClick={() => navigate('/settings')} />
                   </div>
                 </div>
 
-                {/* Section: Safety & Support */}
-                <div className="mt-8">
-                  <div className="overflow-hidden rounded-2xl bg-white dark:bg-card shadow-sm border border-border/50">
-                    <SettingsRow icon={Shield} title="Safety Center" onClick={() => navigate('/trust-safety')} />
-                    <SettingsRow icon={Heart} title="Help & Support" onClick={() => navigate('/support')} />
-                  </div>
-                </div>
-
-                {/* Danger Zone */}
-                <div className="mt-8 mb-12">
-                  <div className="overflow-hidden rounded-2xl bg-white dark:bg-card shadow-sm border border-border/50">
-                    <SettingsRow icon={LogOut} title="Log Out" onClick={handleLogout} />
-                    <SettingsRow icon={Trash2} title="Delete Account" onClick={() => setShowDeleteModal(true)} isDestructive />
-                  </div>
-                </div>
+                <div className="mb-12" />
               </div>
             </motion.div>
           )}
@@ -392,36 +356,6 @@ const ProfilePage = () => {
         </AnimatePresence>
       </main>
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteModal && (
-        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm sm:p-4">
-          <div className="w-full sm:max-w-sm rounded-t-3xl sm:rounded-3xl bg-background p-6 shadow-2xl animate-in slide-in-from-bottom sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200 border border-border/50">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 mb-5 shadow-inner">
-              <AlertTriangle className="h-8 w-8 text-red-600 dark:text-red-500" />
-            </div>
-            <h2 className="text-2xl font-black text-center text-foreground mb-2">Are you sure?</h2>
-            <p className="text-sm text-center text-muted-foreground mb-8 px-2 font-medium">
-              If you delete your account, you will permanently lose your profile, messages, photos, and matches. This is irreversible.
-            </p>
-            <div className="space-y-3">
-              <button
-                onClick={handleDeleteAccount}
-                disabled={isDeleting}
-                className="w-full flex justify-center items-center py-4 rounded-[20px] bg-red-500 hover:bg-red-600 text-white font-bold text-[15px] transition-colors shadow-sm disabled:opacity-50"
-              >
-                {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Delete My Account"}
-              </button>
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                disabled={isDeleting}
-                className="w-full py-4 rounded-[20px] bg-muted text-foreground font-bold text-[15px] hover:bg-muted/80 transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

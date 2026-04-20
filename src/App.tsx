@@ -14,6 +14,7 @@ import ProfileCreationPage from "./pages/ProfileCreationPage";
 import PermissionsPage from "./pages/PermissionsPage";
 import SwipePage from "./pages/SwipePage";
 import ProfilePage from "./pages/ProfilePage";
+import SettingsPage from "./pages/SettingsPage";
 import MessagesPage from "./pages/MessagesPage";
 import EducationPage from "./pages/EducationPage";
 import HowItWorksPage from "./pages/HowItWorksPage";
@@ -72,6 +73,7 @@ const App = () => {
               <Route path="/likes" element={<ProtectedRoute><LikesPage /></ProtectedRoute>} />
               <Route path="/community" element={<ProtectedRoute><CommunityPage /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
               <Route path="/messages" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
               <Route path="/connections" element={<ProtectedRoute><ConnectionsPage /></ProtectedRoute>} />
 
