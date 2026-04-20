@@ -15,6 +15,8 @@ import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import { useTranslation } from "@/hooks/useTranslation";
 import { usePlatformStats } from "@/hooks/usePlatformStats";
 import { Language, languageNames } from "@/contexts/LanguageContext";
+import { usePWAInstall } from "@/hooks/usePWAInstall";
+import InstallPrompt from "@/components/InstallPrompt";
 
 
 const Index = () => {
@@ -22,6 +24,17 @@ const Index = () => {
   const { stats, loading, formatStat } = usePlatformStats();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
+  
+  const { isInstallable, isIOS, isStandalone, promptInstall } = usePWAInstall();
+  const [showIOSPrompt, setShowIOSPrompt] = React.useState(false);
+  
+  const handleInstallClick = () => {
+    if (isIOS) {
+      setShowIOSPrompt(true);
+    } else {
+      promptInstall();
+    }
+  };
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -406,6 +419,15 @@ const Index = () => {
             >
               {t.hero.learnMore}
             </a>
+            {/* PWA download button — hidden once installed */}
+            {!isStandalone && (
+              <button
+                onClick={handleInstallClick}
+                className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-md border border-white/30 px-8 py-4 text-lg font-bold text-white shadow-lg transition-all hover:bg-white/20 hover:scale-105"
+              >
+                📲 Download App
+              </button>
+            )}
           </motion.div>
         </div>
       </section>
@@ -610,6 +632,9 @@ const Index = () => {
       <PricingSection />
 
       <SiteFooter />
+
+      {/* iOS PWA install instructions modal */}
+      <InstallPrompt isOpen={showIOSPrompt} onClose={() => setShowIOSPrompt(false)} />
     </div>
   );
 };
