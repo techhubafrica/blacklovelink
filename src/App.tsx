@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import SplashScreen from "@/components/SplashScreen";
+import { GlobalSwipeNavigation } from "@/components/GlobalSwipeNavigation";
 import Index from "./pages/Index";
 import AuthPage from "./pages/AuthPage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
@@ -52,7 +53,8 @@ const App = () => {
           <Sonner />
           {showSplash && <SplashScreen onFinished={handleSplashFinished} />}
           <BrowserRouter>
-            <Routes>
+            <GlobalSwipeNavigation>
+              <Routes>
               {/* Public routes */}
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthPage />} />
@@ -78,7 +80,8 @@ const App = () => {
               <Route path="/connections" element={<ProtectedRoute><ConnectionsPage /></ProtectedRoute>} />
 
               <Route path="*" element={<NotFound />} />
-            </Routes>
+              </Routes>
+            </GlobalSwipeNavigation>
           </BrowserRouter>
         </TooltipProvider>
       </LanguageProvider>
