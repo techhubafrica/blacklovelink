@@ -70,8 +70,9 @@ const AuthPage = () => {
     const pwStrength = passwordStrength(password);
 
     // Handle Google OAuth redirect + existing sessions.
-    // getSession() alone races with Supabase's async token exchange from the URL hash,
-    // so we ALSO listen to onAuthStateChange which fires reliably after OAuth completes.
+    // IMPORTANT: Register the auth state listener FIRST, before getSession(),
+    // so we never miss the INITIAL_SESSION event that Supabase fires when it
+    // auto-exchanges the OAuth token from the URL hash after a Google redirect.
     useEffect(() => {
         let navigated = false;
 
@@ -82,16 +83,20 @@ const AuthPage = () => {
             navigate(status === "complete" ? "/swipe" : "/create-profile", { replace: true });
         };
 
-        // 1. Check for an already-active session (e.g. page refresh while logged in)
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session?.user) redirect(session.user.id);
-        });
-
-        // 2. Listen for SIGNED_IN — fires after Google OAuth token exchange completes
+        // 1. Set up listener FIRST — catches INITIAL_SESSION (OAuth redirect token exchange)
+        //    AND SIGNED_IN (email/phone sign-in).
+        //    INITIAL_SESSION fires on every mount with the current session (including
+        //    the freshly-exchanged Google token when returning from OAuth).
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-            if (event === "SIGNED_IN" && session?.user) {
+            if ((event === "INITIAL_SESSION" || event === "SIGNED_IN") && session?.user) {
                 redirect(session.user.id);
             }
+        });
+
+        // 2. getSession() as a fallback for already-authenticated page refreshes
+        //    where INITIAL_SESSION may have fired before this component mounted.
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session?.user) redirect(session.user.id);
         });
 
         return () => subscription.unsubscribe();
@@ -110,28 +115,39 @@ const AuthPage = () => {
         try {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: "google",
+                // Redirect to /auth so our INITIAL_SESSION listener can catch the token
                 options: { redirectTo: `${window.location.origin}/auth` },
             });
             if (error) throw error;
+            // browser will be redirected — loading state persists until redirect
         } catch {
             toast({ title: "Sign in failed", description: "Something went wrong. Please try again.", variant: "destructive" });
             setLoading(null);
         }
     };
 
-    /* ─── Phone Sign-In (existing user) ─────────────────────────── */
+    /* ─── Phone Sign-In: send OTP ────────────────────────────────── */
+    // Supabase phone auth uses OTP (not phone+password). We send a code
+    // and verify it — same flow for both new and returning users.
     const handlePhoneSignIn = async () => {
-        if (!phone || !password) return;
+        if (!phone || phone.length < 4) return;
         setLoading("signin");
         try {
-            const { error } = await supabase.auth.signInWithPassword({ phone: fullPhone, password });
+            const { error } = await supabase.auth.signInWithOtp({ phone: fullPhone });
             if (error) throw error;
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) throw new Error("No session");
-            const status = await getUserProfileStatus(session.user.id);
-            navigate(status === "complete" ? "/swipe" : "/create-profile");
-        } catch {
-            toast({ title: "Sign in failed", description: "Incorrect phone number or password.", variant: "destructive" });
+            toast({ title: "Code sent! 📲", description: `A verification code was sent to ${fullPhone}.` });
+            setStep("otp");
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : "";
+            if (msg.toLowerCase().includes("sms") || msg.toLowerCase().includes("phone") || msg.toLowerCase().includes("provider")) {
+                toast({
+                    title: "SMS not configured",
+                    description: "Phone sign-in requires SMS to be enabled in Supabase. Please use Google or Email instead.",
+                    variant: "destructive",
+                });
+            } else {
+                toast({ title: "Failed to send code", description: msg || "Please check your number and try again.", variant: "destructive" });
+            }
         } finally {
             setLoading(null);
         }
@@ -386,10 +402,19 @@ const AuthPage = () => {
                             </motion.div>
                         )}
 
-                        {/* ── PHONE SIGN-IN ── */}
+                        {/* ── PHONE SIGN-IN (OTP) ── */}
                         {step === "phone-signin" && (
                             <motion.div key="phone-signin" {...fadeUp} className="space-y-4">
                                 <div className="rounded-2xl bg-card border border-border p-6 space-y-4">
+                                    <div className="flex items-center gap-3 pb-1">
+                                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                            <Phone className="w-5 h-5 text-primary" />
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-foreground text-sm">Sign in with your phone</p>
+                                            <p className="text-xs text-muted-foreground">We'll send a one-time verification code</p>
+                                        </div>
+                                    </div>
                                     <div className="space-y-1.5">
                                         <label className="text-sm font-semibold text-foreground">Phone Number</label>
                                         <PhoneInput
@@ -400,37 +425,16 @@ const AuthPage = () => {
                                             onKeyDown={(e) => e.key === "Enter" && handlePhoneSignIn()}
                                         />
                                     </div>
-
-                                    <div className="space-y-1.5">
-                                        <label className="text-sm font-semibold text-foreground">Password</label>
-                                        <div className="relative">
-                                            <input
-                                                type={showPw ? "text" : "password"}
-                                                placeholder="Enter your password"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                                className={`${inputCls} pr-11`}
-                                                onKeyDown={(e) => e.key === "Enter" && handlePhoneSignIn()}
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => setShowPw(!showPw)}
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                                            >
-                                                {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <motion.button
                                     onClick={handlePhoneSignIn}
-                                    disabled={!!loading || !phone || !password}
+                                    disabled={!!loading || phone.length < 4}
                                     className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-2xl gradient-brand text-primary-foreground font-semibold text-base shadow-button hover:opacity-90 transition-all disabled:opacity-40"
                                     whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
                                 >
                                     {loading === "signin" ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
-                                    {loading === "signin" ? "Signing in…" : "Sign In"}
+                                    {loading === "signin" ? "Sending code…" : "Send Verification Code"}
                                 </motion.button>
 
                                 <p className="text-center text-sm text-muted-foreground">

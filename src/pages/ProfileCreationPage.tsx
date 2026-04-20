@@ -3,7 +3,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
     CheckCircle2,
-    Linkedin,
     Upload,
     X,
     Camera,
@@ -15,7 +14,6 @@ import {
     Loader2,
     Star,
 } from "lucide-react";
-import LinkedInVerifyModal from "@/components/LinkedInVerifyModal";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -56,7 +54,8 @@ const ProfileCreationPage = () => {
 
     // Form state
     const [fullName, setFullName] = useState("");
-    const [occupation, setOccupation] = useState({ title: "", company: "", verified: false });
+    const [occTitle, setOccTitle] = useState("");
+    const [occCompany, setOccCompany] = useState("");
     const [dob, setDob] = useState("");
     const [gender, setGender] = useState("");
     const [intent, setIntent] = useState("");
@@ -64,8 +63,10 @@ const ProfileCreationPage = () => {
     const [photos, setPhotos] = useState<PhotoSlot[]>(
         Array(5).fill(null).map(() => ({ file: null, preview: null }))
     );
-    const [linkedInOpen, setLinkedInOpen] = useState(false);
     const [saving, setSaving] = useState(false);
+
+    // Occupation is "verified" (complete) once both fields are filled
+    const occVerified = occTitle.trim().length > 0 && occCompany.trim().length > 0;
 
     // Computed
     const age = calculateAge(dob);
@@ -73,7 +74,7 @@ const ProfileCreationPage = () => {
     const photoCount = photos.filter((p) => p.preview !== null).length;
     const canContinue =
         fullName.trim().length > 0 &&
-        occupation.verified &&
+        occVerified &&
         dob !== "" &&
         ageValid &&
         gender !== "" &&
@@ -83,7 +84,7 @@ const ProfileCreationPage = () => {
     // Completion percentage for the visual bar
     const steps = [
         !!fullName.trim(),
-        occupation.verified,
+        occVerified,
         dob !== "" && ageValid,
         gender !== "",
         intent !== "",
@@ -127,11 +128,6 @@ const ProfileCreationPage = () => {
         );
     };
 
-    /* ─── LinkedIn verified callback ─── */
-    const handleLinkedInVerified = (title: string, company: string) => {
-        setOccupation({ title, company, verified: true });
-        toast({ title: "Occupation verified ✓", description: `${title} at ${company}` });
-    };
 
     /* ─── Continue ─── */
     const handleContinue = async () => {
@@ -186,9 +182,9 @@ const ProfileCreationPage = () => {
                     .from("profiles")
                     .update({
                         full_name: fullName.trim(),
-                        occupation_title: occupation.title,
-                        occupation_company: occupation.company,
-                        verified: occupation.verified,
+                        occupation_title: occTitle.trim(),
+                        occupation_company: occCompany.trim(),
+                        verified: true,
                         dob,
                         age: ageCalc,
                         gender,
@@ -208,9 +204,9 @@ const ProfileCreationPage = () => {
                     .insert({
                         user_id: userId,
                         full_name: fullName.trim(),
-                        occupation_title: occupation.title,
-                        occupation_company: occupation.company,
-                        verified: occupation.verified,
+                        occupation_title: occTitle.trim(),
+                        occupation_company: occCompany.trim(),
+                        verified: true,
                         dob,
                         age: ageCalc,
                         gender,
@@ -312,49 +308,41 @@ const ProfileCreationPage = () => {
                                 )}
                             </div>
 
-                            {/* Occupation / LinkedIn */}
+                            {/* Occupation */}
                             <div className="rounded-2xl bg-card border border-border p-6 space-y-3">
                                 <h2 className="flex items-center gap-2 font-semibold text-foreground text-base">
                                     <Briefcase className="w-4 h-4 text-primary" /> Occupation
                                     <span className="text-destructive ml-0.5">*</span>
                                 </h2>
-                                {occupation.verified ? (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 8 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className="flex items-center gap-3 p-4 rounded-xl bg-green-500/5 border border-green-500/20"
-                                    >
-                                        <div className="w-10 h-10 rounded-full bg-[#0077B5]/10 flex items-center justify-center flex-shrink-0">
-                                            <Linkedin className="w-5 h-5 text-[#0077B5]" />
-                                        </div>
-                                        <div className="min-w-0">
-                                            <p className="font-semibold text-foreground truncate">{occupation.title}</p>
-                                            <p className="text-sm text-muted-foreground truncate">{occupation.company}</p>
-                                        </div>
-                                        <div className="ml-auto flex items-center gap-1.5 bg-green-500/10 text-green-600 text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0">
-                                            <CheckCircle2 className="w-3 h-3" /> Verified
-                                        </div>
-                                        <button
-                                            onClick={() => setOccupation({ title: "", company: "", verified: false })}
-                                            className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0"
-                                        >
-                                            <X className="w-4 h-4" />
-                                        </button>
-                                    </motion.div>
-                                ) : (
-                                    <div className="space-y-3">
-                                        <p className="text-sm text-muted-foreground">
-                                            Verify your occupation via LinkedIn to build trust with other members.
-                                        </p>
-                                        <button
-                                            onClick={() => setLinkedInOpen(true)}
-                                            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#0077B5] text-white font-semibold text-sm hover:bg-[#005f8d] transition"
-                                        >
-                                            <Linkedin className="w-4 h-4" />
-                                            Verify with LinkedIn
-                                        </button>
+                                <div className="space-y-3">
+                                    <div className="space-y-1.5">
+                                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Job Title</label>
+                                        <input
+                                            type="text"
+                                            id="occTitle"
+                                            placeholder="e.g. Software Engineer"
+                                            value={occTitle}
+                                            onChange={(e) => setOccTitle(e.target.value)}
+                                            className={inputClass}
+                                        />
                                     </div>
-                                )}
+                                    <div className="space-y-1.5">
+                                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Company / Organisation</label>
+                                        <input
+                                            type="text"
+                                            id="occCompany"
+                                            placeholder="e.g. Google"
+                                            value={occCompany}
+                                            onChange={(e) => setOccCompany(e.target.value)}
+                                            className={inputClass}
+                                        />
+                                    </div>
+                                    {occVerified && (
+                                        <p className="text-xs text-green-500 flex items-center gap-1">
+                                            <CheckCircle2 className="w-3 h-3" /> Occupation added
+                                        </p>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Date of Birth */}
@@ -575,12 +563,7 @@ const ProfileCreationPage = () => {
                 </div>
             </main>
 
-            {/* LinkedIn Modal */}
-            <LinkedInVerifyModal
-                isOpen={linkedInOpen}
-                onClose={() => setLinkedInOpen(false)}
-                onVerified={handleLinkedInVerified}
-            />
+
         </div>
     );
 };
