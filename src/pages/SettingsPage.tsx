@@ -210,25 +210,19 @@ const SettingsPage = () => {
                                     </div>
                                 </section>
 
-                                {/* Danger zone */}
+                                {/* Account Management */}
                                 <section className="mb-12">
-                                    <p className="px-1 text-[13px] font-bold uppercase tracking-wider text-red-400/80 mb-2">
-                                        Danger Zone
+                                    <p className="px-1 text-[13px] font-bold uppercase tracking-wider text-muted-foreground/70 mb-2">
+                                        Account Management
                                     </p>
-                                    <div className="overflow-hidden rounded-2xl bg-white dark:bg-card shadow-sm border border-red-200/50 dark:border-red-900/30">
+                                    <div className="overflow-hidden rounded-2xl bg-white dark:bg-card shadow-sm border border-border/50">
                                         <Row
                                             icon={PauseCircle}
                                             title="Deactivate or Delete Account"
-                                            subtitle="Takes a 30-day grace period before deletion"
                                             onClick={() => { setView("leave-flow"); setStep("why"); }}
                                             danger
                                         />
                                     </div>
-
-                                    <p className="mt-3 px-2 text-xs text-muted-foreground leading-relaxed">
-                                        Deactivating hides your profile for up to 30 days — you can come back anytime.
-                                        Deletion permanently removes everything after 30 days.
-                                    </p>
                                 </section>
                             </div>
                         </motion.div>
