@@ -80,22 +80,7 @@ const SwipePage = () => {
           <div className="absolute -bottom-10 -right-10 w-40 h-40 rounded-full bg-white/20 blur-3xl" />
         </div>
         <div className="relative max-w-md mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-3">
-            <button
-              onClick={() => navigate(-1)}
-              aria-label="Go back"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-primary-foreground text-sm font-semibold hover:bg-white/30 transition"
-            >
-              <ArrowLeft className="w-4 h-4" /> Back
-            </button>
-            <Link
-              to="/"
-              aria-label="Go home"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-primary-foreground text-sm font-semibold hover:bg-white/30 transition"
-            >
-              <Home className="w-4 h-4" /> Home
-            </Link>
-          </div>
+
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
