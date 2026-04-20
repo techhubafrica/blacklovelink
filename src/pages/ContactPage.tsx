@@ -88,7 +88,7 @@ const ContactPage = () => {
                     </div>
                     <div>
                       <p className="font-semibold text-foreground">Phone</p>
-                      <p className="text-muted-foreground mt-1">+1 (800) 123-4567</p>
+                      <p className="text-muted-foreground mt-1">+233 550425321</p>
                       <p className="text-sm text-foreground/50 mt-0.5">Mon-Fri from 8am to 5pm</p>
                     </div>
                   </div>
@@ -98,10 +98,10 @@ const ContactPage = () => {
                       <MapPin className="w-6 h-6 text-foreground" />
                     </div>
                     <div>
-                      <p className="font-semibold text-foreground">Office</p>
-                      <p className="text-muted-foreground mt-1">123 Romance Blvd</p>
-                      <p className="text-muted-foreground">Suite 400</p>
-                      <p className="text-muted-foreground">Atlanta, GA 30303</p>
+                      <p className="font-semibold text-foreground">Head Office Annex</p>
+                      <p className="text-muted-foreground mt-1">48 IPS Road – East Legon</p>
+                      <p className="text-muted-foreground">Accra, Ghana</p>
+                      <p className="text-muted-foreground">West Africa</p>
                     </div>
                   </div>
                 </div>
