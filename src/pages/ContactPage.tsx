@@ -7,20 +7,41 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import SiteFooter from "@/components/SiteFooter";
+import { supabase } from "@/integrations/supabase/client";
 
 const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      toast.success("Message sent successfully! We will get back to you soon.");
-      setIsSubmitting(false);
-      (e.target as HTMLFormElement).reset();
-    }, 1500);
+    const form = e.target as HTMLFormElement;
+    const firstName = (form.querySelector('#firstName') as HTMLInputElement).value;
+    const lastName = (form.querySelector('#lastName') as HTMLInputElement).value;
+    const email = (form.querySelector('#email') as HTMLInputElement).value;
+    const subject = (form.querySelector('#subject') as HTMLInputElement).value;
+    const message = (form.querySelector('#message') as HTMLTextAreaElement).value;
+
+    try {
+        const { error } = await supabase.from('support_tickets').insert({
+            sender_name: `${firstName} ${lastName}`,
+            sender_email: email,
+            subject,
+            message,
+            status: 'open'
+        });
+
+        if (error) throw error;
+
+        toast.success("Message sent successfully! We will get back to you soon.");
+        form.reset();
+    } catch (err) {
+        console.error("Error submitting ticket:", err);
+        toast.error("Failed to send message. Please try again.");
+    } finally {
+        setIsSubmitting(false);
+    }
   };
 
   return (

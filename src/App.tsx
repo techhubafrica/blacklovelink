@@ -34,6 +34,13 @@ import CookiePolicyPage from "./pages/CookiePolicyPage";
 import IntellectualPropertyPage from "./pages/IntellectualPropertyPage";
 import AccessibilityPage from "./pages/AccessibilityPage";
 
+// Admin
+import AdminRoute from "./components/AdminRoute";
+import AdminLayout from "./pages/admin/AdminLayout";
+import DashboardPage from "./pages/admin/DashboardPage";
+import AdminMessagesPage from "./pages/admin/MessagesPage";
+import AdminUsersPage from "./pages/admin/UsersPage";
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -92,6 +99,15 @@ const App = () => {
               <Route path="/connections" element={<ProtectedRoute><ConnectionsPage /></ProtectedRoute>} />
 
               <Route path="*" element={<NotFound />} />
+
+              {/* Admin lines */}
+              <Route path="/admin" element={<AdminRoute />}>
+                <Route element={<AdminLayout />}>
+                  <Route index element={<DashboardPage />} />
+                  <Route path="messages" element={<AdminMessagesPage />} />
+                  <Route path="users" element={<AdminUsersPage />} />
+                </Route>
+              </Route>
               </Routes>
             </GlobalSwipeNavigation>
           </BrowserRouter>

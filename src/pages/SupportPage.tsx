@@ -5,6 +5,8 @@ import { Mail, Phone, MessageCircle, HelpCircle, Send } from "lucide-react";
 import SharedNavbar from "@/components/SharedNavbar";
 import SiteFooter from "@/components/SiteFooter";
 import HeroChatbot from "@/components/HeroChatbot";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const SupportPage = () => {
     const [formData, setFormData] = useState({
@@ -69,9 +71,26 @@ const SupportPage = () => {
         }
     ];
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Form submitted:", formData);
+        
+        try {
+            const { error } = await supabase.from('support_tickets').insert({
+                sender_name: formData.name,
+                sender_email: formData.email,
+                subject: formData.subject,
+                message: formData.message,
+                status: 'open'
+            });
+
+            if (error) throw error;
+            
+            toast.success("Message sent successfully! We will get back to you soon.");
+            setFormData({ name: "", email: "", subject: "", message: "" });
+        } catch (err) {
+            console.error("Error submitting ticket:", err);
+            toast.error("Failed to send message. Please try again.");
+        }
     };
 
     return (
