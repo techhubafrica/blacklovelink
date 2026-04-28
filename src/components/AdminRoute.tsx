@@ -5,11 +5,13 @@ import { Lock } from "lucide-react";
 
 const AdminRoute = () => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [isUnlocked, setIsUnlocked] = useState<boolean>(
     sessionStorage.getItem("admin_unlocked") === "true"
   );
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // You can change this password or move it to a .env variable later
   const ADMIN_PASSWORD = "BlackLoveAdmin2026!";
@@ -21,6 +23,7 @@ const AdminRoute = () => {
         setIsAdmin(false);
         return;
       }
+      setUserId(user.id);
 
       const { data: profile } = await supabase
         .from('profiles')
@@ -34,11 +37,19 @@ const AdminRoute = () => {
     checkAdmin();
   }, []);
 
-  const handleUnlock = (e: React.FormEvent) => {
+  const handleUnlock = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password === ADMIN_PASSWORD) {
       sessionStorage.setItem("admin_unlocked", "true");
       setIsUnlocked(true);
+      
+      // Auto-upgrade user to admin in DB if they aren't already
+      if (!isAdmin && userId) {
+        setIsUpdating(true);
+        await supabase.from('profiles').update({ is_admin: true }).eq('id', userId);
+        setIsAdmin(true);
+        setIsUpdating(false);
+      }
     } else {
       setError(true);
       setPassword("");
@@ -53,11 +64,9 @@ const AdminRoute = () => {
     );
   }
 
-  if (!isAdmin) {
-    return <Navigate to="/" replace />;
+  if (!userId) {
+    return <Navigate to="/auth" replace />;
   }
-
-  if (!isUnlocked) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6">
         <form onSubmit={handleUnlock} className="w-full max-w-sm bg-card border border-border p-8 rounded-3xl shadow-xl text-center">
@@ -79,12 +88,21 @@ const AdminRoute = () => {
           />
           {error && <p className="text-destructive text-sm font-bold mb-4">Incorrect password</p>}
           
-          <button type="submit" className="w-full py-3 rounded-xl gradient-brand text-primary-foreground font-bold shadow-button hover:opacity-90 transition-opacity">
-            Unlock Dashboard
+          <button 
+            type="submit" 
+            disabled={isUpdating}
+            className="w-full h-12 flex items-center justify-center rounded-xl gradient-brand text-primary-foreground font-bold shadow-button hover:opacity-90 transition-opacity disabled:opacity-50"
+          >
+            {isUpdating ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : "Unlock Dashboard"}
           </button>
         </form>
       </div>
     );
+  }
+
+  // Now, if they are unlocked but somehow the DB update failed, protect the outlet natively
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
   }
 
   return <Outlet />;
