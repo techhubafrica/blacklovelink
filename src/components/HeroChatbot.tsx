@@ -18,6 +18,12 @@ const HeroChatbot = () => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener("open-chatbot", handleOpen);
+    return () => window.removeEventListener("open-chatbot", handleOpen);
+  }, []);
+
   const send = async () => {
     const text = input.trim();
     if (!text || isLoading) return;

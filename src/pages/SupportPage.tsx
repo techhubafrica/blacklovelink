@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Mail, Phone, MessageCircle, HelpCircle, Send } from "lucide-react";
 import SharedNavbar from "@/components/SharedNavbar";
 import SiteFooter from "@/components/SiteFooter";
+import HeroChatbot from "@/components/HeroChatbot";
 
 const SupportPage = () => {
     const [formData, setFormData] = useState({
@@ -47,21 +48,24 @@ const SupportPage = () => {
             title: "Email Us",
             description: "Get a response within 24 hours",
             action: "support@blacklovelink.com",
-            color: "from-primary to-secondary"
+            color: "from-primary to-secondary",
+            href: "mailto:support@blacklovelink.com"
         },
         {
             icon: MessageCircle,
             title: "Live Chat",
             description: "Available Mon-Fri, 9AM-6PM ET",
             action: "Start Chat",
-            color: "from-secondary to-primary"
+            color: "from-secondary to-primary",
+            onClick: () => window.dispatchEvent(new CustomEvent("open-chatbot"))
         },
         {
             icon: Phone,
             title: "Call Us",
             description: "Speak with our team directly",
             action: "+233 550 425 321",
-            color: "from-primary to-secondary"
+            color: "from-primary to-secondary",
+            href: "tel:+233550425321"
         }
     ];
 
@@ -101,29 +105,47 @@ const SupportPage = () => {
             <section className="py-20 px-6">
                 <div className="mx-auto max-w-6xl">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {contactMethods.map((method, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                className="p-8 rounded-3xl bg-card border border-border hover:bg-muted transition-all text-center group"
-                            >
-                                <div className={`w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br ${method.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                                    <method.icon className="w-8 h-8 text-primary-foreground" />
-                                </div>
-                                <h3 className="text-2xl font-black text-foreground mb-2">
-                                    {method.title}
-                                </h3>
-                                <p className="text-muted-foreground mb-6">
-                                    {method.description}
-                                </p>
-                                <div className="text-primary font-bold text-lg">
-                                    {method.action}
-                                </div>
-                            </motion.div>
-                        ))}
+                        {contactMethods.map((method, index) => {
+                            const CardContent = (
+                                <>
+                                    <div className={`w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br ${method.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                                        <method.icon className="w-8 h-8 text-primary-foreground" />
+                                    </div>
+                                    <h3 className="text-2xl font-black text-foreground mb-2">
+                                        {method.title}
+                                    </h3>
+                                    <p className="text-muted-foreground mb-6">
+                                        {method.description}
+                                    </p>
+                                    <div className="text-primary font-bold text-lg">
+                                        {method.action}
+                                    </div>
+                                </>
+                            );
+
+                            return (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1 }}
+                                    className={`p-8 rounded-3xl bg-card border border-border transition-all text-center group ${method.onClick || method.href ? 'cursor-pointer hover:bg-muted' : 'hover:bg-muted'}`}
+                                >
+                                    {method.href ? (
+                                        <a href={method.href} className="block w-full h-full">
+                                            {CardContent}
+                                        </a>
+                                    ) : method.onClick ? (
+                                        <div onClick={method.onClick} className="block w-full h-full">
+                                            {CardContent}
+                                        </div>
+                                    ) : (
+                                        CardContent
+                                    )}
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
@@ -251,6 +273,9 @@ const SupportPage = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Chatbot Bubble overlay for this page */}
+            <HeroChatbot />
 
             <SiteFooter />
         </div>
