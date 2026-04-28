@@ -16,16 +16,23 @@ const saveSet = (key: string, set: Set<string>) => localStorage.setItem(key, JSO
 
 const SwipePage = () => {
   const navigate = useNavigate();
-  const { profiles, loading } = useProfiles();
+  const { profiles, likedIds, loading } = useProfiles();
   const { recordSwipe } = useSwipe();
   const [matchedProfile, setMatchedProfile] = useState<UserProfile | null>(null);
   const [likedProfiles, setLikedProfiles] = useState<Set<string>>(new Set());
   const [passedProfiles, setPassedProfiles] = useState<Set<string>>(new Set());
   const [isResetting, setIsResetting] = useState(false);
 
+  // Initialize likedProfiles with data from server ONCE when it loads
+  useMemo(() => {
+    if (likedIds && likedIds.length > 0) {
+      setLikedProfiles(prev => new Set([...prev, ...likedIds]));
+    }
+  }, [likedIds]);
+
   const visibleProfiles = useMemo(
-    () => profiles.filter(p => !likedProfiles.has(p.user_id) && !passedProfiles.has(p.user_id)),
-    [profiles, likedProfiles, passedProfiles]
+    () => profiles.filter(p => !passedProfiles.has(p.user_id)),
+    [profiles, passedProfiles]
   );
 
   const handleLike = async (profile: UserProfile) => {
@@ -149,6 +156,7 @@ const SwipePage = () => {
                 <FeedProfileCard
                   key={profile.user_id}
                   profile={profile}
+                  isLiked={likedProfiles.has(profile.user_id)}
                   onLike={() => handleLike(profile)}
                   onPass={() => handlePass(profile)}
                   onMessage={(introText: string) => handleMessage(profile, introText)}

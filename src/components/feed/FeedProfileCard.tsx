@@ -8,6 +8,7 @@ import type { UserProfile } from "@/hooks/useProfileData";
 
 interface FeedProfileCardProps {
     profile: UserProfile;
+    isLiked?: boolean;
     onLike: () => void;
     onPass: () => void;
     onMessage: (introText: string) => void;
@@ -16,6 +17,7 @@ interface FeedProfileCardProps {
 
 export default function FeedProfileCard({
     profile,
+    isLiked = false,
     onLike,
     onPass,
     onMessage,
@@ -38,6 +40,7 @@ export default function FeedProfileCard({
     }, [photos.length]);
 
     const handleAction = (type: "like" | "pass" | "message") => {
+        if (isLiked) return; // Prevent spamming actions once liked
         setReaction(type);
         setTimeout(() => {
             setReaction(null);
@@ -194,9 +197,14 @@ export default function FeedProfileCard({
             <div className="flex items-center justify-center gap-3 px-6 py-5">
                 {/* Pass */}
                 <motion.button
-                    whileTap={{ scale: 0.95 }}
+                    whileTap={isLiked ? {} : { scale: 0.95 }}
                     onClick={() => handleAction("pass")}
-                    className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full bg-card border border-border font-semibold text-muted-foreground hover:bg-red-50 hover:text-red-500 hover:border-red-200 dark:hover:bg-red-950 transition-colors shadow-sm"
+                    disabled={isLiked}
+                    className={`flex-1 flex items-center justify-center gap-2 h-12 rounded-full border bg-card font-semibold shadow-sm transition-colors ${
+                        isLiked 
+                          ? "opacity-50 cursor-not-allowed border-border text-muted-foreground" 
+                          : "border-border text-muted-foreground hover:bg-red-50 hover:text-red-500 hover:border-red-200 dark:hover:bg-red-950"
+                    }`}
                 >
                     <X className="w-5 h-5 text-red-500" />
                     Pass
@@ -204,19 +212,29 @@ export default function FeedProfileCard({
 
                 {/* Like */}
                 <motion.button
-                    whileTap={{ scale: 0.95 }}
+                    whileTap={isLiked ? {} : { scale: 0.95 }}
                     onClick={() => handleAction("like")}
-                    className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full bg-card border border-border font-semibold text-muted-foreground hover:bg-rose-50 hover:text-rose-500 hover:border-rose-200 dark:hover:bg-rose-950 transition-colors shadow-sm"
+                    disabled={isLiked}
+                    className={`flex-1 flex items-center justify-center gap-2 h-12 rounded-full font-semibold shadow-sm transition-all ${
+                        isLiked 
+                          ? "bg-rose-500 text-white border-transparent cursor-not-allowed" 
+                          : "bg-card border border-border text-muted-foreground hover:bg-rose-50 hover:text-rose-500 hover:border-rose-200 dark:hover:bg-rose-950"
+                    }`}
                 >
-                    <Heart className="w-5 h-5 text-rose-500" />
-                    Like
+                    <Heart className={`w-5 h-5 ${isLiked ? "text-white" : "text-rose-500"}`} fill={isLiked ? "currentColor" : "none"} />
+                    {isLiked ? "Liked" : "Like"}
                 </motion.button>
 
                 {/* Message Request */}
                 <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setShowMessageModal(true)}
-                    className="flex-1 flex items-center justify-center gap-2 h-12 rounded-full gradient-brand text-primary-foreground font-semibold shadow-button hover:opacity-90 transition-opacity"
+                    whileTap={isLiked ? {} : { scale: 0.95 }}
+                    onClick={() => { if (!isLiked) setShowMessageModal(true); }}
+                    disabled={isLiked}
+                    className={`flex-1 flex items-center justify-center gap-2 h-12 rounded-full transition-opacity font-semibold ${
+                        isLiked 
+                          ? "opacity-50 cursor-not-allowed gradient-brand shadow-button text-primary-foreground" 
+                          : "gradient-brand shadow-button text-primary-foreground hover:opacity-90"
+                    }`}
                 >
                     <MessageCircle className="w-5 h-5" />
                     Message

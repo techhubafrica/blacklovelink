@@ -105,6 +105,7 @@ const computeScore = (
 
 export const useProfiles = () => {
     const [profiles, setProfiles] = useState<UserProfile[]>([]);
+    const [likedIds, setLikedIds] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -130,15 +131,21 @@ export const useProfiles = () => {
                 if (myGender === "male") targetGender = "Female";
                 else if (myGender === "female") targetGender = "Male";
 
-                // 2. Get already-swiped user_ids to exclude them server-side
+                // 2. Get existing swipes to handle server-side filtering and liking state
                 const { data: existingSwipes } = await (supabase as any)
                     .from("swipes")
-                    .select("swiped_id")
+                    .select("swiped_id, direction")
                     .eq("swiper_id", session.user.id);
 
-                const swipedIds = new Set(
-                    (existingSwipes ?? []).map((s: any) => s.swiped_id)
+                const passedSwipeIds = new Set(
+                    (existingSwipes ?? [])
+                        .filter((s: any) => s.direction === "left")
+                        .map((s: any) => s.swiped_id)
                 );
+
+                const serverLikedSwipeIds = (existingSwipes ?? [])
+                    .filter((s: any) => s.direction === "right" || s.direction === "message")
+                    .map((s: any) => s.swiped_id);
 
                 // 3. Fetch candidate profiles
                 let query = supabase
@@ -158,9 +165,9 @@ export const useProfiles = () => {
 
                 let candidates = (data ?? []) as unknown as UserProfile[];
 
-                // 4. Filter out already-swiped profiles
-                if (swipedIds.size > 0) {
-                    candidates = candidates.filter(p => !swipedIds.has(p.user_id));
+                // 4. Filter out ONLY already passed (swiped left) profiles
+                if (passedSwipeIds.size > 0) {
+                    candidates = candidates.filter(p => !passedSwipeIds.has(p.user_id));
                 }
 
                 // 5. Score and sort by compatibility
@@ -181,7 +188,10 @@ export const useProfiles = () => {
                     candidates = scored.map(s => s.profile);
                 }
 
-                if (isMounted) setProfiles(candidates);
+                if (isMounted) {
+                    setProfiles(candidates);
+                    setLikedIds(serverLikedSwipeIds);
+                }
             } catch (e) {
                 console.error("Error fetching profiles:", e);
             } finally {
@@ -193,5 +203,5 @@ export const useProfiles = () => {
         return () => { isMounted = false; };
     }, []);
 
-    return { profiles, loading };
+    return { profiles, likedIds, loading };
 };
