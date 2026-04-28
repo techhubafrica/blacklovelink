@@ -98,8 +98,6 @@ const App = () => {
               <Route path="/messages" element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
               <Route path="/connections" element={<ProtectedRoute><ConnectionsPage /></ProtectedRoute>} />
 
-              <Route path="*" element={<NotFound />} />
-
               {/* Admin lines */}
               <Route path="/admin" element={<AdminRoute />}>
                 <Route element={<AdminLayout />}>
@@ -108,6 +106,8 @@ const App = () => {
                   <Route path="users" element={<AdminUsersPage />} />
                 </Route>
               </Route>
+
+              <Route path="*" element={<NotFound />} />
               </Routes>
             </GlobalSwipeNavigation>
           </BrowserRouter>
