@@ -8,6 +8,10 @@ import story1 from "@/assets/story-1.png";
 import story2 from "@/assets/story-2.png";
 import story3 from "@/assets/story-3.png";
 import story4 from "@/assets/story-4.png";
+import story5 from "@/assets/story-5.png";
+import story6 from "@/assets/story-6.png";
+import story7 from "@/assets/story-7.png";
+import story8 from "@/assets/story-8.png";
 import { usePlatformStats } from "@/hooks/usePlatformStats";
 
 const SuccessStoriesPage = () => {
@@ -16,7 +20,7 @@ const SuccessStoriesPage = () => {
         {
             image: story1,
             names: "Amara & Kwame",
-            location: "Atlanta, GA",
+            location: "Nairobi, Kenya",
             date: "Met in January 2026",
             story: "We matched on BlackLoveLink during a cold January evening. What started as a conversation about our shared love for Ethiopian cuisine turned into late-night calls, weekend adventures, and eventually, us moving in together. We're both entrepreneurs, and having someone who understands the hustle while keeping me grounded has been a blessing.",
             quote: "I never thought I'd find someone who gets both my ambition and my need for balance. Kwame is my partner in every sense."
@@ -24,26 +28,58 @@ const SuccessStoriesPage = () => {
         {
             image: story2,
             names: "Marcus & Zara",
-            location: "New York, NY",
+            location: "Mombasa, Kenya",
             date: "Met in March 2023",
             story: "After years of disappointing dates on other apps, I almost gave up. Then I found BlackLoveLink and matched with Marcus within my first week. We bonded over our love of jazz, Black literature, and Sunday brunch. A year later, we're planning our wedding in Martha's Vineyard.",
             quote: "Marcus showed me that the right person is worth the wait. Our connection is authentic, deep, and everything I dreamed of."
         },
         {
+            image: story5,
+            names: "Nia & David",
+            location: "London, United Kingdom",
+            date: "Met in November 2025",
+            story: "We were both living in London but worlds apart — I'm a barrister in the City, he's a music producer in Brixton. BlackLoveLink bridged that gap. Our first date was a walk along the Thames that turned into dinner, then dessert, then a promise to do it again. Six months later, we moved in together in Peckham.",
+            quote: "David showed me that love doesn't have to be complicated. Sometimes the right person just fits — naturally, effortlessly."
+        },
+        {
+            image: story7,
+            names: "Abena & Kofi",
+            location: "Accra, Ghana",
+            date: "Met in April 2025",
+            story: "I'd just moved back to Accra after years abroad and didn't know anyone in the dating scene. A friend recommended BlackLoveLink, and Kofi was my very first match. He took me to Labadi Beach on our first date, and I knew right then — this was home. Not just Ghana, but him.",
+            quote: "Coming home was the best decision I ever made. Finding Kofi made it perfect."
+        },
+        {
             image: story3,
             names: "Simone & Jamal",
-            location: "Houston, TX",
+            location: "Kisumu, Kenya",
             date: "Met in August 2023",
             story: "I'm a doctor, he's a software engineer. We're both workaholics who thought we didn't have time for dating. BlackLoveLink's verification process gave me confidence to open up, and Jamal's profile made me laugh out loud. Our first date was supposed to be coffee – it turned into a 6-hour conversation. Now we're engaged.",
             quote: "Jamal gets my crazy schedule and still makes me feel like a priority. That's love."
         },
         {
+            image: story6,
+            names: "Tanya & Christopher",
+            location: "Toronto, Canada",
+            date: "Met in September 2025",
+            story: "We both swiped right on a rainy September night in Toronto. Chris is a financial analyst, I'm a physiotherapist — on paper, nothing in common. But our first video call lasted four hours. He flew from downtown to Scarborough in a snowstorm for our first real date. That's when I knew he was serious about us.",
+            quote: "Chris proves every single day that real love is intentional. He chose me, and I chose him right back."
+        },
+        {
             image: story4,
             names: "Destiny & Andre",
-            location: "Los Angeles, CA",
+            location: "Nakuru, Kenya",
             date: "Met in June 2026",
             story: "As a creative director, I was skeptical about dating apps. Andre's profile stood out – he was genuine, ambitious, and had this infectious energy. We took things slow, built a real friendship first. Three months in, I knew he was different.",
             quote: "Andre is my best friend, my creative partner, and my love. I couldn't ask for more."
+        },
+        {
+            image: story8,
+            names: "Chioma & Emeka",
+            location: "Lagos, Nigeria",
+            date: "Met in February 2026",
+            story: "Lagos is fast, loud, and beautiful — just like our love story. Emeka and I matched during a power outage. We spent the whole night chatting by phone light. He's a tech founder, I run a fashion brand. We understand each other's grind. Our first date was at a rooftop in Victoria Island, and we've been inseparable since.",
+            quote: "Emeka doesn't just support my dreams — he fuels them. That's the kind of love every woman deserves."
         }
     ];
 

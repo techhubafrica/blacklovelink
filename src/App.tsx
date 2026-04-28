@@ -28,6 +28,11 @@ import NotFound from "./pages/NotFound";
 import ArticleReaderPage from "./pages/ArticleReaderPage";
 import CommunityPage from "./pages/CommunityPage";
 import LikesPage from "./pages/LikesPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsOfServicePage from "./pages/TermsOfServicePage";
+import CookiePolicyPage from "./pages/CookiePolicyPage";
+import IntellectualPropertyPage from "./pages/IntellectualPropertyPage";
+import AccessibilityPage from "./pages/AccessibilityPage";
 
 const queryClient = new QueryClient();
 
@@ -67,6 +72,11 @@ const App = () => {
               <Route path="/support" element={<SupportPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/articles/:slug" element={<ArticleReaderPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+              <Route path="/cookie-policy" element={<CookiePolicyPage />} />
+              <Route path="/intellectual-property" element={<IntellectualPropertyPage />} />
+              <Route path="/accessibility" element={<AccessibilityPage />} />
 
               {/* Onboarding routes (auth required) */}
               <Route path="/create-profile" element={<ProtectedRoute><ProfileCreationPage /></ProtectedRoute>} />

@@ -38,7 +38,24 @@ export const useSwipe = () => {
                     .eq("user_b", b)
                     .maybeSingle();
 
-                return { matched: !!matchData };
+                if (matchData) {
+                    // If this was a message request and we have intro text,
+                    // insert the intro text as the first message in the conversation
+                    if (direction === "message" && introText?.trim()) {
+                        await supabase.from("messages").insert({
+                            match_id: matchData.id,
+                            sender_id: session.user.id,
+                            content: introText.trim(),
+                        });
+                    }
+
+                    return { matched: true };
+                }
+
+                // No match yet — but if this was a message direction with intro text,
+                // we still want to track the intro for when a match IS created later.
+                // The intro_text is already stored on the swipe row, so we don't need
+                // to do anything extra here. The frontend will show it from the swipe data.
             }
 
             return { matched: false };

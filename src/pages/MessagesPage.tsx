@@ -1,8 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import TopNav from "@/components/TopNav";
-import { Search, Send, ArrowLeft, Heart, MessageCircle, Clock, CheckCircle, X, User, Wifi, WifiOff } from "lucide-react";
+import {
+  Search, Send, ArrowLeft, Heart, MessageCircle, Clock, CheckCircle,
+  X, User, Wifi, WifiOff, Reply, Pencil, Trash2, Copy, Check, MoreVertical
+} from "lucide-react";
 import { useMatches, getProfilePhoto } from "@/hooks/useMatches";
-import { useMessages } from "@/hooks/useMessages";
+import { useMessages, type Message } from "@/hooks/useMessages";
 import { useAuth } from "@/hooks/useAuth";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +13,130 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 type TabType = "chats" | "requests";
+
+// ── Time helpers ──
+const formatTime = (iso: string) =>
+  new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+const formatDate = (iso: string) => {
+  const d = new Date(iso);
+  const now = new Date();
+  const diffDays = Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Yesterday";
+  return d.toLocaleDateString([], { weekday: "long", month: "short", day: "numeric" });
+};
+
+const shouldShowDateSeparator = (prev: Message | null, curr: Message): boolean => {
+  if (!prev) return true;
+  const prevDate = new Date(prev.created_at).toDateString();
+  const currDate = new Date(curr.created_at).toDateString();
+  return prevDate !== currDate;
+};
+
+// ── Context Menu Component ──
+interface ContextMenuProps {
+  x: number;
+  y: number;
+  isOwn: boolean;
+  message: Message;
+  onReply: () => void;
+  onEdit: () => void;
+  onUnsend: () => void;
+  onCopy: () => void;
+  onClose: () => void;
+}
+
+const MessageContextMenu = ({ x, y, isOwn, message, onReply, onEdit, onUnsend, onCopy, onClose }: ContextMenuProps) => {
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent | TouchEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) onClose();
+    };
+    document.addEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
+    };
+  }, [onClose]);
+
+  // Ensure menu stays within viewport
+  const adjustedY = Math.min(y, window.innerHeight - 220);
+  const adjustedX = isOwn ? Math.max(x - 180, 8) : Math.min(x, window.innerWidth - 188);
+
+  if (message.deleted_at) return null;
+
+  return (
+    <motion.div
+      ref={menuRef}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.12 }}
+      className="fixed z-[100] w-44 rounded-2xl bg-card border border-border shadow-2xl overflow-hidden"
+      style={{ top: adjustedY, left: adjustedX }}
+    >
+      <button
+        onClick={onReply}
+        className="flex w-full items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-muted transition-colors"
+      >
+        <Reply className="w-4 h-4 text-primary" /> Reply
+      </button>
+      <button
+        onClick={onCopy}
+        className="flex w-full items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-muted transition-colors"
+      >
+        <Copy className="w-4 h-4 text-muted-foreground" /> Copy
+      </button>
+      {isOwn && (
+        <>
+          <button
+            onClick={onEdit}
+            className="flex w-full items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-muted transition-colors"
+          >
+            <Pencil className="w-4 h-4 text-blue-500" /> Edit
+          </button>
+          <button
+            onClick={onUnsend}
+            className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-950 transition-colors"
+          >
+            <Trash2 className="w-4 h-4" /> Unsend
+          </button>
+        </>
+      )}
+    </motion.div>
+  );
+};
+
+// ── Unsend Confirmation Dialog ──
+const UnsendDialog = ({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    className="fixed inset-0 z-[110] flex items-center justify-center bg-black/50 backdrop-blur-sm px-6"
+    onClick={onCancel}
+  >
+    <motion.div
+      initial={{ scale: 0.9, y: 20 }}
+      animate={{ scale: 1, y: 0 }}
+      exit={{ scale: 0.9, y: 20 }}
+      className="bg-card rounded-2xl p-6 max-w-xs w-full shadow-2xl border border-border"
+      onClick={e => e.stopPropagation()}
+    >
+      <h3 className="text-lg font-bold text-foreground mb-2">Unsend Message?</h3>
+      <p className="text-sm text-muted-foreground mb-5">
+        This will remove the message for everyone in the chat.
+      </p>
+      <div className="flex gap-3">
+        <Button variant="outline" className="flex-1" onClick={onCancel}>Cancel</Button>
+        <Button className="flex-1 bg-red-500 hover:bg-red-600 text-white" onClick={onConfirm}>Unsend</Button>
+      </div>
+    </motion.div>
+  </motion.div>
+);
 
 const MessagesPage = () => {
   const { matches, loading, refetch } = useMatches();
@@ -22,10 +149,23 @@ const MessagesPage = () => {
   const [viewingProfile, setViewingProfile] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { messages, sendMessage, connected } = useMessages(selectedMatchId);
+  // Context menu state
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; message: Message } | null>(null);
+  // Reply state
+  const [replyTo, setReplyTo] = useState<Message | null>(null);
+  // Edit state
+  const [editingMessage, setEditingMessage] = useState<Message | null>(null);
+  const [editText, setEditText] = useState("");
+  // Unsend dialog
+  const [unsendTarget, setUnsendTarget] = useState<Message | null>(null);
+  // Copied feedback
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const { messages, sendMessage, editMessage, unsendMessage, connected } = useMessages(selectedMatchId);
 
   const selectedMatch = matches.find((m) => m.id === selectedMatchId);
   const viewingMatch = matches.find((m) => m.id === viewingProfile);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Categorize matches
   const acceptedChats = matches.filter(m => m.status === "accepted");
@@ -41,11 +181,27 @@ const MessagesPage = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Focus input when entering edit mode
+  useEffect(() => {
+    if (editingMessage) inputRef.current?.focus();
+  }, [editingMessage]);
+
   const handleSend = async () => {
+    if (editingMessage) {
+      // We are editing
+      if (editText.trim() && editText.trim() !== editingMessage.content) {
+        await editMessage(editingMessage.id, editText.trim());
+      }
+      setEditingMessage(null);
+      setEditText("");
+      setNewMessage("");
+      return;
+    }
+
     if (!newMessage.trim()) return;
-    await sendMessage(newMessage.trim());
+    await sendMessage(newMessage.trim(), replyTo?.id);
     setNewMessage("");
-    // Small delay then refetch to update status in list
+    setReplyTo(null);
     setTimeout(() => refetch(), 600);
   };
 
@@ -53,6 +209,70 @@ const MessagesPage = () => {
     setSelectedMatchId(matchId);
     setViewingProfile(null);
   };
+
+  // Context menu handlers
+  const handleContextMenu = useCallback((e: React.MouseEvent | React.TouchEvent, msg: Message) => {
+    e.preventDefault();
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    const x = "clientX" in e ? e.clientX : rect.left;
+    const y = "clientY" in e ? e.clientY : rect.top;
+    setContextMenu({ x, y, message: msg });
+  }, []);
+
+  const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const handleTouchStart = useCallback((msg: Message) => (e: React.TouchEvent) => {
+    longPressRef.current = setTimeout(() => {
+      const touch = e.touches[0];
+      setContextMenu({ x: touch.clientX, y: touch.clientY, message: msg });
+    }, 500);
+  }, []);
+  const handleTouchEnd = useCallback(() => {
+    if (longPressRef.current) clearTimeout(longPressRef.current);
+  }, []);
+
+  const handleReply = () => {
+    if (contextMenu) setReplyTo(contextMenu.message);
+    setContextMenu(null);
+    inputRef.current?.focus();
+  };
+
+  const handleStartEdit = () => {
+    if (contextMenu) {
+      setEditingMessage(contextMenu.message);
+      setEditText(contextMenu.message.content);
+      setNewMessage(contextMenu.message.content);
+    }
+    setContextMenu(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingMessage(null);
+    setEditText("");
+    setNewMessage("");
+  };
+
+  const handleStartUnsend = () => {
+    if (contextMenu) setUnsendTarget(contextMenu.message);
+    setContextMenu(null);
+  };
+
+  const handleConfirmUnsend = async () => {
+    if (unsendTarget) await unsendMessage(unsendTarget.id);
+    setUnsendTarget(null);
+  };
+
+  const handleCopy = () => {
+    if (contextMenu) {
+      navigator.clipboard.writeText(contextMenu.message.content);
+      setCopiedId(contextMenu.message.id);
+      setTimeout(() => setCopiedId(null), 1500);
+    }
+    setContextMenu(null);
+  };
+
+  // Find the reply-to message for a given message
+  const getReplyMessage = (msg: Message): Message | undefined =>
+    msg.reply_to ? messages.find(m => m.id === msg.reply_to) : undefined;
 
   const filteredAccepted = acceptedChats.filter((m) =>
     m.matchedProfile.full_name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -104,14 +324,12 @@ const MessagesPage = () => {
                 <p className="text-foreground">{profile.intent}</p>
               </div>
             )}
-
             {profile.bio && (
               <div>
                 <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">About</h4>
                 <p className="text-foreground text-sm">{profile.bio}</p>
               </div>
             )}
-
             {profile.interests && profile.interests.length > 0 && (
               <div>
                 <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Interests</h4>
@@ -124,7 +342,6 @@ const MessagesPage = () => {
                 </div>
               </div>
             )}
-
             {viewingMatch.lastMessage && (
               <div className="mt-6 p-4 bg-card rounded-xl border border-border">
                 <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Their Message</h4>
@@ -135,20 +352,14 @@ const MessagesPage = () => {
         </div>
 
         <div className="border-t border-border p-4 flex gap-3">
-          <Button
-            variant="outline"
-            className="flex-1"
-            onClick={() => setViewingProfile(null)}
-          >
-            <X className="w-4 h-4 mr-2" />
-            Decline
+          <Button variant="outline" className="flex-1" onClick={() => setViewingProfile(null)}>
+            <X className="w-4 h-4 mr-2" /> Decline
           </Button>
           <Button
             className="flex-1 gradient-brand text-primary-foreground"
             onClick={() => handleAcceptRequest(viewingProfile)}
           >
-            <MessageCircle className="w-4 h-4 mr-2" />
-            Accept & Reply
+            <MessageCircle className="w-4 h-4 mr-2" /> Accept & Reply
           </Button>
         </div>
       </div>
@@ -158,13 +369,22 @@ const MessagesPage = () => {
   // ── Chat view ────────────────────────────────────────────────────────
   if (selectedMatchId && selectedMatch) {
     const profilePhoto = getProfilePhoto(selectedMatch.matchedProfile);
+    const otherName = selectedMatch.matchedProfile.full_name.split(" ")[0];
+
+    // Find the last read message index for "Seen" indicator
+    const lastSeenIdx = (() => {
+      for (let i = messages.length - 1; i >= 0; i--) {
+        if (messages[i].sender_id === user?.id && messages[i].read) return i;
+      }
+      return -1;
+    })();
 
     return (
       <div className="flex h-[100dvh] flex-col bg-background">
         {/* Chat header */}
         <div className="flex items-center gap-3 border-b border-border px-4 py-3">
           <button
-            onClick={() => { setSelectedMatchId(null); refetch(); }}
+            onClick={() => { setSelectedMatchId(null); setReplyTo(null); setEditingMessage(null); refetch(); }}
             className="text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -176,7 +396,6 @@ const MessagesPage = () => {
               alt={selectedMatch.matchedProfile.full_name}
               className="h-10 w-10 rounded-full object-cover border-2 border-primary"
             />
-            {/* Online / live indicator */}
             <span
               className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-background transition-colors duration-500 ${connected ? "bg-green-500" : "bg-muted-foreground/40"}`}
             />
@@ -209,7 +428,7 @@ const MessagesPage = () => {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
           {selectedMatch.status === "no_messages" && messages.length === 0 && (
             <div className="text-center text-muted-foreground text-sm mt-12">
               <div className="mx-auto w-16 h-16 rounded-full gradient-brand flex items-center justify-center mb-3">
@@ -222,69 +441,212 @@ const MessagesPage = () => {
           {selectedMatch.status === "pending_them" && messages.length > 0 && (
             <div className="text-center mb-4">
               <span className="text-xs bg-amber-500/20 text-amber-600 px-3 py-1 rounded-full">
-                Waiting for {selectedMatch.matchedProfile.full_name.split(" ")[0]} to accept
+                Waiting for {otherName} to accept
               </span>
             </div>
           )}
 
           <AnimatePresence initial={false}>
-            {messages.map((msg) => {
+            {messages.map((msg, idx) => {
               const isMe = msg.sender_id === user?.id;
+              const isUnsent = !!msg.deleted_at;
+              const isEdited = !!msg.edited_at && !isUnsent;
+              const replyMsg = getReplyMessage(msg);
+              const prevMsg = idx > 0 ? messages[idx - 1] : null;
+              const showDate = shouldShowDateSeparator(prevMsg, msg);
+              // Show "Seen" under the last message from me that was read
+              const showSeen = isMe && idx === lastSeenIdx && idx === messages.length - 1;
+
               return (
-                <motion.div
-                  key={msg.id}
-                  initial={{ opacity: 0, y: 10, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.18 }}
-                  className={`flex ${isMe ? "justify-end" : "justify-start"}`}
-                >
-                  {/* Avatar for their messages */}
-                  {!isMe && (
-                    <img
-                      src={profilePhoto}
-                      alt=""
-                      className="w-6 h-6 rounded-full object-cover mr-2 self-end flex-shrink-0"
-                    />
-                  )}
-                  <div
-                    className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm ${
-                      isMe
-                        ? "gradient-brand text-primary-foreground rounded-br-md"
-                        : "bg-card border border-border text-foreground rounded-bl-md"
-                    }`}
-                  >
-                    {msg.content}
-                    <div className={`text-xs mt-1 ${isMe ? "text-primary-foreground/60" : "text-muted-foreground"}`}>
-                      {new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                <div key={msg.id}>
+                  {/* Date separator */}
+                  {showDate && (
+                    <div className="flex items-center justify-center my-4">
+                      <span className="text-xs text-muted-foreground/60 bg-muted px-3 py-1 rounded-full">
+                        {formatDate(msg.created_at)}
+                      </span>
                     </div>
-                  </div>
-                </motion.div>
+                  )}
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.15 }}
+                    className={`flex ${isMe ? "justify-end" : "justify-start"} mb-1 group relative`}
+                    onContextMenu={(e) => handleContextMenu(e, msg)}
+                    onTouchStart={handleTouchStart(msg)}
+                    onTouchEnd={handleTouchEnd}
+                    onTouchMove={handleTouchEnd}
+                  >
+                    {/* Avatar for their messages */}
+                    {!isMe && (
+                      <img
+                        src={profilePhoto}
+                        alt=""
+                        className="w-6 h-6 rounded-full object-cover mr-2 self-end flex-shrink-0"
+                      />
+                    )}
+
+                    <div className="max-w-[75%]">
+                      {/* Reply preview */}
+                      {replyMsg && !isUnsent && (
+                        <div className={`text-xs px-3 py-1.5 rounded-t-xl ${isMe ? "bg-primary/20 text-primary-foreground/70 ml-auto" : "bg-muted text-muted-foreground"} border-l-2 border-primary/50 mb-0.5 max-w-full`}>
+                          <span className="font-semibold text-[10px] uppercase tracking-wide block">
+                            {replyMsg.sender_id === user?.id ? "You" : otherName}
+                          </span>
+                          <span className="line-clamp-1">
+                            {replyMsg.deleted_at ? "Message was unsent" : replyMsg.content}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Message bubble */}
+                      <div
+                        className={`rounded-2xl px-4 py-2.5 text-sm relative ${
+                          isUnsent
+                            ? "bg-muted/50 border border-dashed border-border text-muted-foreground/60 italic"
+                            : isMe
+                              ? "gradient-brand text-primary-foreground rounded-br-md"
+                              : "bg-card border border-border text-foreground rounded-bl-md"
+                        } ${copiedId === msg.id ? "ring-2 ring-primary/40" : ""}`}
+                      >
+                        {isUnsent ? (
+                          <span className="flex items-center gap-1.5">
+                            <Trash2 className="w-3 h-3" />
+                            {isMe ? "You unsent a message" : `${otherName} unsent a message`}
+                          </span>
+                        ) : (
+                          <>
+                            {msg.content}
+                            <div className={`flex items-center gap-1.5 mt-1 ${isMe ? "text-primary-foreground/50" : "text-muted-foreground"}`}>
+                              <span className="text-[10px]">{formatTime(msg.created_at)}</span>
+                              {isEdited && <span className="text-[10px] italic">edited</span>}
+                            </div>
+                          </>
+                        )}
+                      </div>
+
+                      {/* Seen indicator */}
+                      {showSeen && (
+                        <div className="text-[10px] text-muted-foreground text-right mt-0.5 flex items-center justify-end gap-1">
+                          <Check className="w-3 h-3" /><Check className="w-3 h-3 -ml-2" /> Seen
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Three-dot menu for desktop hover */}
+                    {!isUnsent && (
+                      <button
+                        onClick={(e) => handleContextMenu(e, msg)}
+                        className={`self-center opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-full hover:bg-muted ${isMe ? "order-first mr-1" : "ml-1"}`}
+                      >
+                        <MoreVertical className="w-3.5 h-3.5 text-muted-foreground" />
+                      </button>
+                    )}
+                  </motion.div>
+                </div>
               );
             })}
           </AnimatePresence>
           <div ref={messagesEndRef} />
         </div>
 
+        {/* Context menu */}
+        <AnimatePresence>
+          {contextMenu && (
+            <MessageContextMenu
+              x={contextMenu.x}
+              y={contextMenu.y}
+              isOwn={contextMenu.message.sender_id === user?.id}
+              message={contextMenu.message}
+              onReply={handleReply}
+              onEdit={handleStartEdit}
+              onUnsend={handleStartUnsend}
+              onCopy={handleCopy}
+              onClose={() => setContextMenu(null)}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Unsend confirmation dialog */}
+        <AnimatePresence>
+          {unsendTarget && (
+            <UnsendDialog
+              onConfirm={handleConfirmUnsend}
+              onCancel={() => setUnsendTarget(null)}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Reply bar */}
+        <AnimatePresence>
+          {replyTo && !editingMessage && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="border-t border-border bg-muted/50 px-4 py-2 flex items-center gap-3 overflow-hidden"
+            >
+              <Reply className="w-4 h-4 text-primary flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] font-semibold text-primary">
+                  Replying to {replyTo.sender_id === user?.id ? "yourself" : otherName}
+                </p>
+                <p className="text-xs text-muted-foreground truncate">{replyTo.content}</p>
+              </div>
+              <button onClick={() => setReplyTo(null)} className="text-muted-foreground hover:text-foreground p-1">
+                <X className="w-4 h-4" />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Edit bar */}
+        <AnimatePresence>
+          {editingMessage && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="border-t border-border bg-blue-50 dark:bg-blue-950/30 px-4 py-2 flex items-center gap-3 overflow-hidden"
+            >
+              <Pencil className="w-4 h-4 text-blue-500 flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] font-semibold text-blue-500">Editing message</p>
+                <p className="text-xs text-muted-foreground truncate">{editingMessage.content}</p>
+              </div>
+              <button onClick={handleCancelEdit} className="text-muted-foreground hover:text-foreground p-1">
+                <X className="w-4 h-4" />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Input */}
         <div className="border-t border-border px-4 py-3">
           <div className="flex items-center gap-2">
             <input
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
+              ref={inputRef}
+              value={editingMessage ? editText : newMessage}
+              onChange={(e) => editingMessage ? setEditText(e.target.value) : setNewMessage(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
               placeholder={
-                selectedMatch.status === "no_messages"
-                  ? "Say hello to start…"
-                  : "Type a message…"
+                editingMessage
+                  ? "Edit your message…"
+                  : selectedMatch.status === "no_messages"
+                    ? "Say hello to start…"
+                    : "Type a message…"
               }
               className="flex-1 rounded-full bg-card border border-border px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary transition-shadow"
             />
             <button
               onClick={handleSend}
-              disabled={!newMessage.trim()}
-              className="flex h-11 w-11 items-center justify-center rounded-full gradient-brand text-primary-foreground disabled:opacity-40 transition-opacity hover:opacity-90 active:scale-95"
+              disabled={editingMessage ? !editText.trim() : !newMessage.trim()}
+              className={`flex h-11 w-11 items-center justify-center rounded-full text-primary-foreground disabled:opacity-40 transition-all hover:opacity-90 active:scale-95 ${
+                editingMessage ? "bg-blue-500" : "gradient-brand"
+              }`}
             >
-              <Send className="w-4 h-4" />
+              {editingMessage ? <Check className="w-4 h-4" /> : <Send className="w-4 h-4" />}
             </button>
           </div>
         </div>
@@ -452,7 +814,6 @@ const MessagesPage = () => {
                             alt={m.matchedProfile.full_name}
                             className="h-14 w-14 rounded-full object-cover"
                           />
-                          {/* Unread dot */}
                           {m.hasUnread && (
                             <span className="absolute bottom-0 right-0 w-4 h-4 bg-primary rounded-full border-2 border-background animate-pulse" />
                           )}

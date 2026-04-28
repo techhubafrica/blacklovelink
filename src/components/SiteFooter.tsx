@@ -14,15 +14,15 @@ const footerLinks = {
   support: [
     { label: "Help Center", to: "/support" },
     { label: "Trust & Safety", to: "/trust-safety" },
-    { label: "Report a Concern", to: "/support" },
-    { label: "Contact Us", to: "/support" },
+    { label: "Report a Concern", to: "/contact" },
+    { label: "Contact Us", to: "/contact" },
   ],
   legal: [
-    { label: "Privacy Policy", to: "#" },
-    { label: "Terms of Service", to: "#" },
-    { label: "Cookie Policy", to: "#" },
-    { label: "Intellectual Property", to: "#" },
-    { label: "Accessibility", to: "#" },
+    { label: "Privacy Policy", to: "/privacy-policy" },
+    { label: "Terms of Service", to: "/terms-of-service" },
+    { label: "Cookie Policy", to: "/cookie-policy" },
+    { label: "Intellectual Property", to: "/intellectual-property" },
+    { label: "Accessibility", to: "/accessibility" },
   ],
 };
 

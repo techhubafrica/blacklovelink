@@ -8,7 +8,7 @@ const connections = [
   {
     image: `${SUPABASE_STORAGE}/amara-osei/profile.jpg?v=2`,
     names: "Amara & Simone",
-    location: "Atlanta, GA",
+    location: "Nairobi, Kenya",
     tag: "Matched 2024",
     story:
       "Two go-getters who almost swiped past each other. Amara's love of travel and Simone's passion for the outdoors turned their first hiking date into a weekly tradition — and eventually, a forever.",
@@ -16,7 +16,7 @@ const connections = [
   {
     image: `${SUPABASE_STORAGE}/zara-mensah/profile.jpg`,
     names: "Zara & Kofi",
-    location: "New York, NY",
+    location: "Mombasa, Kenya",
     tag: "Engaged",
     story:
       "An architect and a product manager — both building things for a living. Their first date at a design exhibition turned into late-night coffee runs and a ring. Proof that creativity attracts.",
@@ -24,7 +24,7 @@ const connections = [
   {
     image: `${SUPABASE_STORAGE}/leila-kamara/profile.jpg`,
     names: "Leila & Darius",
-    location: "Houston, TX",
+    location: "Kisumu, Kenya",
     tag: "Married",
     story:
       "She was a nurse with a warm heart. He was a lawyer who needed to slow down. One shared meal changed everything. They've been cooking together ever since.",

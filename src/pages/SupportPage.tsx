@@ -32,8 +32,12 @@ const SupportPage = () => {
             answer: "Tap the three dots on any profile or conversation and select 'Report.' Our safety team reviews all reports within 24 hours. You can also block users directly."
         },
         {
+            question: "How do I suspend my account?",
+            answer: "Go to Settings > Account > Suspend Account. Your profile will be hidden from other users and your matches will be preserved. You can reactivate your account at any time simply by logging back in. Suspending is ideal if you're taking a break but plan to return."
+        },
+        {
             question: "How do I delete my account?",
-            answer: "Go to Settings > Account > Delete Account. Please note this action is permanent and cannot be undone. Your data will be deleted according to our privacy policy."
+            answer: "Go to Settings > Account > Delete Account. Please note this action is permanent and cannot be undone. Your data will be deleted according to our privacy policy. We recommend placing your account in suspend status instead of deleting it, in case you want to come back. Suspending preserves your profile, matches, and conversations so you can pick up right where you left off."
         }
     ];
 
@@ -56,7 +60,7 @@ const SupportPage = () => {
             icon: Phone,
             title: "Call Us",
             description: "Speak with our team directly",
-            action: "1-800-LOVE-LINK",
+            action: "+233 550 425 321",
             color: "from-primary to-secondary"
         }
     ];
