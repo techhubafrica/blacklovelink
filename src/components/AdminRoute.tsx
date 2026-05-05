@@ -67,6 +67,7 @@ const AdminRoute = () => {
   if (!userId) {
     return <Navigate to="/auth" replace />;
   }
+  if (!isUnlocked) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6">
         <form onSubmit={handleUnlock} className="w-full max-w-sm bg-card border border-border p-8 rounded-3xl shadow-xl text-center">

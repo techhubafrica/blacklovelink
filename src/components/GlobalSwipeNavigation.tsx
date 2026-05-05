@@ -4,34 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 // The sequence of the main discovery ring. It avoids /messages purposefully.
 const TAB_SEQUENCE = ['/profile', '/swipe', '/likes', '/community'];
 
-// Helper to find if the element is at the very bottom of its scrollable parent
-const isAtBottom = (el: HTMLElement | null): boolean => {
-  let current: HTMLElement | null = el;
-  while (current && current !== document.body && current !== document.documentElement) {
-    // If it has overflow-y auto/scroll, check its boundaries
-    const style = window.getComputedStyle(current);
-    if (style.overflowY === 'auto' || style.overflowY === 'scroll' || style.overflowY === 'overlay') {
-      return current.scrollTop + current.clientHeight >= current.scrollHeight - 30;
-    }
-    current = current.parentElement;
-  }
-  // Fallback to window scroll check
-  return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 30;
-};
-
-// Helper for top
-const isAtTop = (el: HTMLElement | null): boolean => {
-  let current: HTMLElement | null = el;
-  while (current && current !== document.body && current !== document.documentElement) {
-    const style = window.getComputedStyle(current);
-    if (style.overflowY === 'auto' || style.overflowY === 'scroll' || style.overflowY === 'overlay') {
-      return current.scrollTop <= 30;
-    }
-    current = current.parentElement;
-  }
-  return window.scrollY <= 30;
-};
-
 export const GlobalSwipeNavigation: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -105,20 +77,7 @@ export const GlobalSwipeNavigation: React.FC<{ children: React.ReactNode }> = ({
         }
       }
 
-      // Check vertical pull up/down at boundaries
-      if (Math.abs(deltaY) > 80 && Math.abs(deltaY) > Math.abs(deltaX)) {
-        if (deltaY < 0) {
-          // Swiped UP (pulled bottom to see more) = go next
-          if (isAtBottom(e.target as HTMLElement)) {
-            goNext();
-          }
-        } else {
-          // Swiped DOWN (pulled top to go back) = go prev
-          if (isAtTop(e.target as HTMLElement)) {
-             goPrev();
-          }
-        }
-      }
+      // Vertical scrolling is left to native behavior — no page navigation on vertical swipe.
     };
 
     document.addEventListener('touchstart', handleTouchStart, { passive: true });
