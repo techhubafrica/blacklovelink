@@ -8,6 +8,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import SplashScreen from "@/components/SplashScreen";
 import { GlobalSwipeNavigation } from "@/components/GlobalSwipeNavigation";
+import IOSInstallBanner from "@/components/IOSInstallBanner";
 import Index from "./pages/Index";
 import AuthPage from "./pages/AuthPage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
@@ -110,6 +111,7 @@ const App = () => {
               <Route path="*" element={<NotFound />} />
               </Routes>
             </GlobalSwipeNavigation>
+          <IOSInstallBanner />
           </BrowserRouter>
         </TooltipProvider>
       </LanguageProvider>

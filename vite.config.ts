@@ -19,26 +19,75 @@ export default defineConfig(({ mode }) => ({
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'script-defer',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      includeAssets: ['favicon.ico', 'blacklovelink-logo.png'],
       manifest: {
         name: 'BlackLoveLink',
-        short_name: 'BLL',
-        description: 'Where Intentional Love Begins',
-        theme_color: '#ffffff',
-        background_color: '#ffffff',
+        short_name: 'BlackLoveLink',
+        description: 'Where Intentional Black Love Begins — meet verified Black professionals',
+        theme_color: '#141720',
+        background_color: '#141720',
         display: 'standalone',
+        orientation: 'portrait',
         start_url: '/swipe',
+        scope: '/',
+        lang: 'en',
+        id: 'com.blacklovelink.app',
+        categories: ['lifestyle', 'social'],
         icons: [
           {
             src: 'blacklovelink-logo.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
+            purpose: 'any'
           },
           {
             src: 'blacklovelink-logo.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
+          },
+          {
+            src: 'blacklovelink-logo.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
+          }
+        ],
+        shortcuts: [
+          {
+            name: 'Discover',
+            short_name: 'Discover',
+            description: 'Browse your matches',
+            url: '/swipe',
+            icons: [{ src: 'blacklovelink-logo.png', sizes: '192x192' }]
+          },
+          {
+            name: 'Messages',
+            short_name: 'Messages',
+            description: 'Open your messages',
+            url: '/messages',
+            icons: [{ src: 'blacklovelink-logo.png', sizes: '192x192' }]
+          }
+        ]
+      },
+      workbox: {
+        // Cache strategies for offline support
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-cache',
+              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 }
+            }
+          },
+          {
+            urlPattern: /^https:\/\/.*\.supabase\.co\/storage\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'supabase-storage-cache',
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 }
+            }
           }
         ]
       }
