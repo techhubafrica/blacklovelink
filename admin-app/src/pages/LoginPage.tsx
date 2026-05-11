@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, Eye, EyeOff, Shield } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD ?? 'BlackLoveAdmin2026!';
 
@@ -24,27 +23,11 @@ export default function LoginPage() {
     }
 
     setLoading(true);
-
-    try {
-      // Verify the current user is logged in via Supabase
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        setError('You must be signed into BlackLoveLink first.');
-        setLoading(false);
-        return;
-      }
-
-      // Mark as admin in DB
-      await supabase.from('profiles').update({ is_admin: true }).eq('user_id', user.id);
-
-      // Unlock session
-      sessionStorage.setItem('bll_admin_unlocked', 'true');
-      navigate('/', { replace: true });
-    } catch {
-      setError('Something went wrong. Try again.');
-    } finally {
-      setLoading(false);
-    }
+    // Password is correct — unlock immediately. No session check needed
+    // since this is a standalone app on its own domain.
+    sessionStorage.setItem('bll_admin_unlocked', 'true');
+    navigate('/', { replace: true });
+    setLoading(false);
   };
 
   return (
