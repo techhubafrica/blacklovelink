@@ -22,8 +22,13 @@ export default function FeedProfileCard({
     onPass,
     onMessage,
 }: FeedProfileCardProps) {
-    const photos = profile.photos?.length ? profile.photos : ["/placeholder.svg"];
+    const photos = profile.photos?.filter(Boolean).length
+        ? profile.photos.filter(Boolean)
+        : profile.avatar_url
+        ? [profile.avatar_url]
+        : ["/placeholder.svg"];
     const [photoIndex, setPhotoIndex] = useState(0);
+    const [imgLoaded, setImgLoaded] = useState(false);
     const [reaction, setReaction] = useState<"like" | "pass" | "message" | null>(null);
     const [expanded, setExpanded] = useState(false);
     const [showMessageModal, setShowMessageModal] = useState(false);
@@ -31,11 +36,13 @@ export default function FeedProfileCard({
 
     const nextPhoto = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
+        setImgLoaded(false);
         setPhotoIndex((i) => (i + 1) % photos.length);
     }, [photos.length]);
 
     const prevPhoto = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
+        setImgLoaded(false);
         setPhotoIndex((i) => (i - 1 + photos.length) % photos.length);
     }, [photos.length]);
 
@@ -59,16 +66,25 @@ export default function FeedProfileCard({
         >
             {/* ── Photo area ── */}
             <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
+                {/* Skeleton shimmer — visible while image loads */}
+                <div
+                    className={`absolute inset-0 bg-gradient-to-br from-muted via-muted/60 to-muted animate-pulse transition-opacity duration-300 ${imgLoaded ? 'opacity-0' : 'opacity-100'}`}
+                    aria-hidden
+                />
+
                 <AnimatePresence mode="wait">
                     <motion.img
-                        key={photoIndex}
+                        key={photos[photoIndex]}
                         src={photos[photoIndex]}
                         alt={profile.full_name}
                         className="absolute inset-0 h-full w-full object-cover"
+                        loading="eager"
+                        decoding="async"
+                        onLoad={() => setImgLoaded(true)}
                         initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
+                        animate={{ opacity: imgLoaded ? 1 : 0 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.25 }}
+                        transition={{ duration: 0.2 }}
                     />
                 </AnimatePresence>
 

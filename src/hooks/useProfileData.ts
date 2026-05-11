@@ -119,23 +119,19 @@ export const useProfiles = () => {
                     return;
                 }
 
-                // 1. Get current user's full profile for scoring
-                const { data: myProfile } = await supabase
-                    .from("profiles")
-                    .select("*")
-                    .eq("user_id", session.user.id)
-                    .maybeSingle();
+                // 1. Parallelise: fetch own profile + existing swipes at the same time
+                const [myProfileResult, existingSwipesResult] = await Promise.all([
+                    supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle(),
+                    (supabase as any).from("swipes").select("swiped_id, direction").eq("swiper_id", session.user.id),
+                ]);
+
+                const myProfile = myProfileResult.data;
+                const existingSwipes = existingSwipesResult.data;
 
                 const myGender = myProfile?.gender?.toLowerCase();
                 let targetGender: string | null = null;
                 if (myGender === "male") targetGender = "Female";
                 else if (myGender === "female") targetGender = "Male";
-
-                // 2. Get existing swipes to handle server-side filtering and liking state
-                const { data: existingSwipes } = await (supabase as any)
-                    .from("swipes")
-                    .select("swiped_id, direction")
-                    .eq("swiper_id", session.user.id);
 
                 const passedSwipeIds = new Set(
                     (existingSwipes ?? [])
@@ -147,7 +143,7 @@ export const useProfiles = () => {
                     .filter((s: any) => s.direction === "right" || s.direction === "message")
                     .map((s: any) => s.swiped_id);
 
-                // 3. Fetch candidate profiles
+                // 2. Fetch candidate profiles
                 let query = supabase
                     .from("profiles")
                     .select("*")
@@ -191,6 +187,22 @@ export const useProfiles = () => {
                 if (isMounted) {
                     setProfiles(candidates);
                     setLikedIds(serverLikedSwipeIds);
+
+                    // 3. Eagerly preload images — browser fetches them before cards render
+                    //    Preload first 2 photos of every candidate, prioritising the top 5
+                    candidates.forEach((candidate, index) => {
+                        const photos = [
+                            ...(candidate.photos?.filter(Boolean) ?? []),
+                            ...(candidate.avatar_url ? [candidate.avatar_url] : []),
+                        ].slice(0, index < 5 ? 2 : 1); // More aggressive for top cards
+                        photos.forEach(url => {
+                            if (!url) return;
+                            const img = new window.Image();
+                            // High priority for the first 2 cards, low for the rest
+                            img.fetchPriority = index < 2 ? 'high' : 'low';
+                            img.src = url;
+                        });
+                    });
                 }
             } catch (e) {
                 console.error("Error fetching profiles:", e);
