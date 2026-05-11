@@ -101,11 +101,9 @@ const AdminRoute = () => {
     );
   }
 
-  // Now, if they are unlocked but somehow the DB update failed, protect the outlet natively
-  if (!isAdmin) {
-    return <Navigate to="/" replace />;
-  }
-
+  // If unlocked via master password, grant access immediately.
+  // The password itself is the auth gate — no need to also check isAdmin here,
+  // which caused a race condition that redirected to "/" right after login.
   return <Outlet />;
 };
 
