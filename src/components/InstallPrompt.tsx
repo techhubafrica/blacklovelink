@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Share, PlusSquare, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import BrandName from "@/components/BrandName";
 
 interface InstallPromptProps {
   isOpen: boolean;
@@ -33,7 +34,7 @@ const InstallPrompt: React.FC<InstallPromptProps> = ({ isOpen, onClose }) => {
               <span className="text-white font-black text-2xl tracking-tight">BLL</span>
             </div>
             
-            <h3 className="text-2xl font-bold mb-2">Install BlackLoveLink</h3>
+            <h3 className="text-2xl font-bold mb-2">Install <BrandName /></h3>
             <p className="text-muted-foreground mb-8">
               Install our app on your iPhone for the best, fastest, and most immersive experience.
             </p>

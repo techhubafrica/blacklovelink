@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Share, X, Plus } from "lucide-react";
+import BrandName from "@/components/BrandName";
 
 const DISMISSED_KEY = "bll_ios_banner_dismissed";
 
@@ -67,7 +68,7 @@ const IOSInstallBanner = () => {
                 <span className="text-2xl">❤️</span>
               </div>
               <div>
-                <h3 className="font-black text-foreground text-lg leading-tight">Add BlackLoveLink to your Home Screen</h3>
+                <h3 className="font-black text-foreground text-lg leading-tight">Add <BrandName /> to your Home Screen</h3>
                 <p className="text-sm text-muted-foreground mt-1">Install the app for the full experience — faster, full-screen, and always ready.</p>
               </div>
             </div>

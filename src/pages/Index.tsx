@@ -12,6 +12,7 @@ import ConnectionCards from "@/components/ConnectionCards";
 import HeroChatbot from "@/components/HeroChatbot";
 import PricingSection from "@/components/PricingSection";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
+import BrandName from "@/components/BrandName";
 import { useTranslation } from "@/hooks/useTranslation";
 import { usePlatformStats } from "@/hooks/usePlatformStats";
 import { Language, languageNames } from "@/contexts/LanguageContext";
@@ -388,11 +389,9 @@ const Index = () => {
                 <span className="flex-1 h-px bg-gradient-to-l from-transparent via-white/50 to-white/50 max-w-[80px] sm:max-w-[120px]" />
               </span>
 
-              {/* BlackLoveLink — full hero size */}
-              <span className="block text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.5)]">
-                <span className="text-black [text-shadow:0_1px_12px_rgba(255,255,255,0.6)]">Black</span>
-                <span className="text-primary">Love</span>
-                <span className="text-secondary">Link</span>
+              {/* BlackLoveLink — full hero size, matching logo letter colors */}
+              <span className="block text-5xl sm:text-7xl lg:text-8xl tracking-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.5)]">
+                <BrandName dark />
               </span>
             </h1>
             <p className="mt-5 text-xl sm:text-2xl lg:text-3xl font-semibold text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.7)] tracking-wide">

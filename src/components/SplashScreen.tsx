@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import logo from "@/assets/blacklovelink-logo.png";
+import BrandName from "@/components/BrandName";
 
 interface SplashScreenProps {
   onFinished: () => void;
@@ -65,10 +66,8 @@ const SplashScreen = ({ onFinished }: SplashScreenProps) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.5, ease: "easeOut" }}
         >
-          <h1 className="text-3xl font-black tracking-tight">
-            <span className="text-foreground">Black</span>
-            <span className="text-primary">Love</span>
-            <span className="text-secondary">Link</span>
+          <h1 className="text-3xl tracking-tight">
+            <BrandName />
           </h1>
           <p className="mt-1.5 text-xs font-medium tracking-widest uppercase text-muted-foreground">
             Where love meets purpose
