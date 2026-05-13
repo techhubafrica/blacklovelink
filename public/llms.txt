@@ -1,0 +1,33 @@
+# BlackLoveLink
+
+> The premier dating platform for verified Black professionals building authentic, marriage-minded connections.
+
+BlackLoveLink helps marriage-minded Black professionals (27+) meet verified, like-minded partners through identity verification, intentional matching, and educational content about healthy relationships.
+
+## Pages
+
+- [Home](/): Platform overview, mission, and how to join.
+- [How It Works](/how-it-works): Verification process, matching, and values.
+- [Success Stories](/success-stories): Real couples who met on BlackLoveLink.
+- [Education](/education): Relationship guidance for Black professionals.
+- [Trust & Safety](/trust-safety): Verification, encryption, and privacy controls.
+- [Support](/support): FAQs and contact options.
+- [Contact](/contact): Reach our Accra head office.
+- [Sign In](/auth): Create an account or sign in.
+
+## Articles
+
+- [The One Conversation Most Couples Never Have](/articles/the-one-conversation-couples-never-have)
+- [Why Black Women Are Done Shrinking](/articles/why-black-women-are-done-shrinking)
+- [The Myth of Perfect Timing](/articles/the-myth-of-perfect-timing)
+- [What Staying Actually Looks Like](/articles/what-staying-actually-looks-like)
+- [You Are Not Looking for Love](/articles/you-are-not-looking-for-love)
+- [How to Actually Enjoy the Dating Process](/articles/how-to-actually-enjoy-the-dating-process)
+- [Healthy Relationship Tips](/articles/healthy-relationship-tips)
+
+## Optional
+
+- [Privacy Policy](/privacy-policy)
+- [Terms of Service](/terms-of-service)
+- [Cookie Policy](/cookie-policy)
+- [Accessibility](/accessibility)
