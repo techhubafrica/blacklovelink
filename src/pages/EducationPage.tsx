@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import SEO from "@/components/SEO";
 import { motion } from "framer-motion";
 import {
   Heart,
@@ -91,6 +92,7 @@ const categories = [
 const EducationPage = () => {
   return (
     <div className="min-h-screen bg-background font-display text-foreground">
+      <SEO title={"Relationship Education | BlackLoveLink"} description={"Expert guidance on dating, communication, and relationships for Black professionals seeking marriage-minded connections."} path="/education" ogType="website" />
       <SharedNavbar />
 
       {/* Hero */}

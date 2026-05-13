@@ -1,4 +1,5 @@
 import React from "react";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Quote, Heart, MapPin, Calendar } from "lucide-react";
@@ -85,6 +86,7 @@ const SuccessStoriesPage = () => {
 
     return (
         <div className="min-h-screen font-display bg-background text-foreground">
+      <SEO title={"Success Stories | BlackLoveLink"} description={"Real love stories from Black professionals who met on BlackLoveLink. See how authentic connections turn into lifelong partnerships."} path="/success-stories" ogType="website" />
             <SharedNavbar />
 
             {/* Hero Section */}

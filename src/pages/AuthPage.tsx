@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import SEO from "@/components/SEO";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -276,6 +277,7 @@ const AuthPage = () => {
 
     return (
         <div className="min-h-screen bg-background font-display flex flex-col">
+      <SEO title={"Sign In | BlackLoveLink"} description={"Sign in or create your BlackLoveLink account to start meeting verified Black professionals."} path="/auth" ogType="website" />
             {/* Header */}
             <header className="border-b border-border px-6 py-4">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between">

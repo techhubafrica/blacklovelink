@@ -1,4 +1,5 @@
 import React from "react";
+import SEO from "@/components/SEO";
 import { Flame, ChevronDown, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import SiteFooter from "@/components/SiteFooter";
@@ -47,6 +48,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background font-display">
+      <SEO title={"BlackLoveLink – Where Black Love Begins"} description={"Verified Black professionals building authentic, marriage-minded connections. Join the premier Black dating community today."} path="/" ogType="website" />
       {/* ── ULTRA PREMIUM NAVBAR ── */}
       <motion.header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled

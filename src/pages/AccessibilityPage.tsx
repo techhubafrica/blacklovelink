@@ -1,4 +1,5 @@
 import React from "react";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Accessibility, Eye, Ear, Hand, Monitor, MessageSquare, CheckCircle2 } from "lucide-react";
@@ -54,6 +55,7 @@ const commitments = [
 const AccessibilityPage = () => {
   return (
     <div className="min-h-screen font-display bg-background text-foreground">
+      <SEO title={"Accessibility | BlackLoveLink"} description={"BlackLoveLink's commitment to building an inclusive, accessible dating experience."} path="/accessibility" ogType="website" />
       <SharedNavbar />
 
       {/* Hero */}

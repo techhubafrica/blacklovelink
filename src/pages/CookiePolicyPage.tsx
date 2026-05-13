@@ -1,4 +1,5 @@
 import React from "react";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Cookie, Settings, BarChart, Shield, Users } from "lucide-react";
@@ -59,6 +60,7 @@ const cookieTypes = [
 const CookiePolicyPage = () => {
   return (
     <div className="min-h-screen font-display bg-background text-foreground">
+      <SEO title={"Cookie Policy | BlackLoveLink"} description={"How BlackLoveLink uses cookies and similar tracking technologies."} path="/cookie-policy" ogType="website" />
       <SharedNavbar />
 
       {/* Hero */}
