@@ -4,6 +4,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* Facebook-style three-column shell: pad body for fixed rails on lg+ */
+  @media (min-width: 1024px) {
+    body.app-shell-active {
+      padding-left: 280px;
+      padding-right: 320px;
+    }
+  }
+  /* Reserve space for mobile bottom tab bar */
+  @media (max-width: 767px) {
+    body.app-shell-active {
+      padding-bottom: 56px;
+    }
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 99%;
