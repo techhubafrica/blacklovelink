@@ -1,4 +1,5 @@
 import React from "react";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Shield, UserCheck, Lock, Eye, AlertCircle, MessageSquare } from "lucide-react";
@@ -52,6 +53,7 @@ const TrustSafetyPage = () => {
 
     return (
         <div className="min-h-screen font-display bg-background text-foreground">
+      <SEO title={"Trust & Safety | BlackLoveLink"} description={"How BlackLoveLink keeps Black professionals safe — verification, encryption, privacy controls, and 24/7 moderation."} path="/trust-safety" ogType="website" />
             <SharedNavbar />
 
             {/* Hero Section */}

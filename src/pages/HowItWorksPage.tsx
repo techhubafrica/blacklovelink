@@ -1,4 +1,5 @@
 import React from "react";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -111,6 +112,7 @@ const HowItWorksPage = () => {
 
     return (
         <div className="min-h-screen font-display bg-background text-foreground">
+      <SEO title={"How It Works | BlackLoveLink"} description={"Learn how BlackLoveLink verifies members, matches Black professionals, and helps you build authentic, lasting relationships."} path="/how-it-works" ogType="website" />
             <SharedNavbar />
 
             {/* ── HERO ─────────────────────────────────────────────────── */}

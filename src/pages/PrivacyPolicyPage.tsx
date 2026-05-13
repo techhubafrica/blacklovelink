@@ -1,4 +1,5 @@
 import React from "react";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Shield, Clock, Mail } from "lucide-react";
@@ -20,6 +21,7 @@ const PrivacyPolicyPage = () => {
 
   return (
     <div className="min-h-screen font-display bg-background text-foreground">
+      <SEO title={"Privacy Policy | BlackLoveLink"} description={"How BlackLoveLink collects, uses, and protects your personal information."} path="/privacy-policy" ogType="website" />
       <SharedNavbar />
 
       {/* Hero */}

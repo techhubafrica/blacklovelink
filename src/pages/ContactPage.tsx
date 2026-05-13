@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import SEO from "@/components/SEO";
 import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -46,6 +47,7 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen bg-background font-display flex flex-col pt-[88px]">
+      <SEO title={"Contact Us | BlackLoveLink"} description={"Get in touch with the BlackLoveLink team. Reach our Accra head office by phone, email, or contact form."} path="/contact" ogType="website" />
       {/* ── SIMPLE NAVBAR ── */}
       <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-border/40">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">

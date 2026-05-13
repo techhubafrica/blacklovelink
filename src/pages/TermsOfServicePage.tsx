@@ -1,4 +1,5 @@
 import React from "react";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FileText, ChevronRight } from "lucide-react";
@@ -81,6 +82,7 @@ const sections = [
 const TermsOfServicePage = () => {
   return (
     <div className="min-h-screen font-display bg-background text-foreground">
+      <SEO title={"Terms of Service | BlackLoveLink"} description={"The terms and conditions that govern your use of BlackLoveLink."} path="/terms-of-service" ogType="website" />
       <SharedNavbar />
 
       {/* Hero */}

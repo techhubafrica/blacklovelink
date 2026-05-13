@@ -1,4 +1,5 @@
 import React from "react";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Fingerprint, BookOpen, Image, AlertTriangle, Scale } from "lucide-react";
@@ -46,6 +47,7 @@ const sections = [
 const IntellectualPropertyPage = () => {
   return (
     <div className="min-h-screen font-display bg-background text-foreground">
+      <SEO title={"Intellectual Property | BlackLoveLink"} description={"Information about BlackLoveLink's intellectual property and copyright policies."} path="/intellectual-property" ogType="website" />
       <SharedNavbar />
 
       {/* Hero */}
