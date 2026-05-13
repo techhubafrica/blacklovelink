@@ -82,7 +82,6 @@ export type Database = {
           id: string
           intent: string | null
           interests: string[] | null
-          is_admin: boolean | null
           occupation_company: string
           occupation_title: string
           photos: string[] | null
@@ -102,7 +101,6 @@ export type Database = {
           id?: string
           intent?: string | null
           interests?: string[] | null
-          is_admin?: boolean | null
           occupation_company?: string
           occupation_title?: string
           photos?: string[] | null
@@ -122,7 +120,6 @@ export type Database = {
           id?: string
           intent?: string | null
           interests?: string[] | null
-          is_admin?: boolean | null
           occupation_company?: string
           occupation_title?: string
           photos?: string[] | null
@@ -130,39 +127,6 @@ export type Database = {
           updated_at?: string
           user_id?: string
           verified?: boolean
-        }
-        Relationships: []
-      }
-      support_tickets: {
-        Row: {
-          id: string
-          sender_name: string
-          sender_email: string
-          subject: string
-          message: string
-          status: string
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          sender_name: string
-          sender_email: string
-          subject: string
-          message: string
-          status?: string
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          sender_name?: string
-          sender_email?: string
-          subject?: string
-          message?: string
-          status?: string
-          created_at?: string
-          updated_at?: string
         }
         Relationships: []
       }
