@@ -5,6 +5,7 @@ import { Mail, Phone, MessageCircle, HelpCircle, Send } from "lucide-react";
 import SharedNavbar from "@/components/SharedNavbar";
 import SiteFooter from "@/components/SiteFooter";
 import HeroChatbot from "@/components/HeroChatbot";
+import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -95,6 +96,20 @@ const SupportPage = () => {
 
     return (
         <div className="min-h-screen font-display bg-background text-foreground">
+            <SEO
+                title="Support Center | BlackLoveLink"
+                description="Get help with your BlackLoveLink account — FAQs, contact options, and live support for our Black professional dating community."
+                path="/support"
+                jsonLd={{
+                    "@context": "https://schema.org",
+                    "@type": "FAQPage",
+                    mainEntity: faqs.map(f => ({
+                        "@type": "Question",
+                        name: f.question,
+                        acceptedAnswer: { "@type": "Answer", text: f.answer },
+                    })),
+                }}
+            />
             <SharedNavbar />
 
             {/* Hero Section */}

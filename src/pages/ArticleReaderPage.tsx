@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Clock, Tag } from "lucide-react";
 import { getArticleBySlug } from "@/data/articles";
+import SEO from "@/components/SEO";
 
 // Renders article content: ## heading, **bold**, plain paragraph
 function renderContent(content: string) {
@@ -53,6 +54,28 @@ export default function ArticleReaderPage() {
 
     return (
         <div className="min-h-screen bg-background">
+            <SEO
+                title={`${article.title} | BlackLoveLink`}
+                description={article.excerpt}
+                path={`/articles/${article.slug}`}
+                ogType="article"
+                jsonLd={{
+                    "@context": "https://schema.org",
+                    "@type": "Article",
+                    headline: article.title,
+                    description: article.excerpt,
+                    datePublished: article.publishedAt,
+                    author: { "@type": "Organization", name: "BlackLoveLink" },
+                    publisher: {
+                        "@type": "Organization",
+                        name: "BlackLoveLink",
+                        logo: {
+                            "@type": "ImageObject",
+                            url: "https://blacklovelink.netlify.app/blacklovelink-logo.png",
+                        },
+                    },
+                }}
+            />
             {/* Header */}
             <div className="sticky top-0 z-40 bg-background/90 backdrop-blur border-b border-border">
                 <div className="flex items-center gap-3 px-4 py-3 max-w-2xl mx-auto">
