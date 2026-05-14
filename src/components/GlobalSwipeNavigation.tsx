@@ -35,49 +35,44 @@ export const GlobalSwipeNavigation: React.FC<{ children: React.ReactNode }> = ({
       // Reset ref
       touchStartRef.current = null;
 
-      // Must be a fast deliberate swipe (under 1 second)
-      if (timeDiff > 1000) return;
+      // Must be a fast deliberate swipe (under 600ms for a real tab-switch gesture)
+      if (timeDiff > 600) return;
+
+      // ── VERTICAL BAIL-OUT ──────────────────────────────────────────────────
+      // If the finger moved more than 60px vertically in either direction it's a
+      // scroll gesture. Bail immediately so scrolling never triggers navigation.
+      if (Math.abs(deltaY) > 60) return;
+
+      // ── HORIZONTAL SWIPE GATE ──────────────────────────────────────────────
+      // Require:
+      //   • at least 80 px horizontal travel
+      //   • horizontal movement must be at least 2.5× the vertical drift
+      //     (much stricter than before — eliminates diagonal-scroll false fires)
+      if (Math.abs(deltaX) < 80) return;
+      if (Math.abs(deltaX) < Math.abs(deltaY) * 2.5) return;
 
       const currentIndex = TAB_SEQUENCE.indexOf(location.pathname);
-      const goNext = () => {
-        if (currentIndex < TAB_SEQUENCE.length - 1) {
-          navigate(TAB_SEQUENCE[currentIndex + 1]);
-        }
-      };
-      
-      const goPrev = () => {
-        if (currentIndex > 0) {
-          navigate(TAB_SEQUENCE[currentIndex - 1]);
-        }
-      };
 
-      // Check horizontal swipe first (more deliberate)
-      if (Math.abs(deltaX) > 120 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
-        // Find if target is part of a horizontal scroll container (like a carousel), ignore if so
-        let isHorizontalScrollContainer = false;
-        let current = e.target as HTMLElement | null;
-        while (current && current !== document.body) {
-           const style = window.getComputedStyle(current);
-           if (style.overflowX === 'auto' || style.overflowX === 'scroll') {
-               isHorizontalScrollContainer = true;
-               break;
-           }
-           current = current.parentElement;
+      // Check if inside a horizontal scroll container (e.g. image carousels)
+      let isHorizontalScrollContainer = false;
+      let current = e.target as HTMLElement | null;
+      while (current && current !== document.body) {
+        const style = window.getComputedStyle(current);
+        if (style.overflowX === 'auto' || style.overflowX === 'scroll') {
+          isHorizontalScrollContainer = true;
+          break;
         }
-
-        if (!isHorizontalScrollContainer) {
-            if (deltaX < 0) {
-            // Swiped left = go to next
-            goNext();
-            } else {
-            // Swiped right = go to prev
-            goPrev();
-            }
-            return;
-        }
+        current = current.parentElement;
       }
+      if (isHorizontalScrollContainer) return;
 
-      // Vertical scrolling is left to native behavior — no page navigation on vertical swipe.
+      if (deltaX < 0 && currentIndex < TAB_SEQUENCE.length - 1) {
+        // Swiped left → next tab
+        navigate(TAB_SEQUENCE[currentIndex + 1]);
+      } else if (deltaX > 0 && currentIndex > 0) {
+        // Swiped right → previous tab
+        navigate(TAB_SEQUENCE[currentIndex - 1]);
+      }
     };
 
     document.addEventListener('touchstart', handleTouchStart, { passive: true });
