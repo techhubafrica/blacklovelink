@@ -12,10 +12,10 @@
       padding-right: 320px;
     }
   }
-  /* Reserve space for mobile bottom tab bar */
+  /* Reserve space for mobile bottom tab bar + safe area (home bar) */
   @media (max-width: 767px) {
     body.app-shell-active {
-      padding-bottom: 56px;
+      padding-bottom: max(56px, calc(56px + env(safe-area-inset-bottom)));
     }
   }
 }
@@ -31,10 +31,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 15% 10%;
 
-    --primary: 0 80% 48%;
+    --primary: 0 86% 43%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 145 63% 32%;
+    --secondary: 145 70% 28%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 220 14% 95%;
@@ -52,11 +52,11 @@
 
     --radius: 0.75rem;
 
-    --gradient-brand: linear-gradient(135deg, hsl(0, 80%, 48%), hsl(145, 63%, 32%));
-    --gradient-brand-hover: linear-gradient(135deg, hsl(0, 80%, 42%), hsl(145, 63%, 26%));
+    --gradient-brand: linear-gradient(135deg, hsl(0, 86%, 43%), hsl(145, 70%, 28%));
+    --gradient-brand-hover: linear-gradient(135deg, hsl(0, 86%, 37%), hsl(145, 70%, 22%));
     --gradient-gold: linear-gradient(135deg, hsl(45, 100%, 55%), hsl(35, 100%, 50%));
     --gradient-nope: linear-gradient(135deg, hsl(0, 85%, 55%), hsl(350, 80%, 45%));
-    --gradient-like: linear-gradient(135deg, hsl(145, 63%, 32%), hsl(160, 75%, 40%));
+    --gradient-like: linear-gradient(135deg, hsl(145, 70%, 28%), hsl(160, 75%, 38%));
     --gradient-superlike: linear-gradient(135deg, hsl(200, 90%, 55%), hsl(210, 95%, 50%));
 
     --shadow-card: 0 4px 24px -4px hsla(220, 15%, 10%, 0.10);
@@ -85,10 +85,10 @@
     --popover: 220 15% 11%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 0 80% 52%;
+    --primary: 0 86% 48%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 145 63% 36%;
+    --secondary: 145 70% 33%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 220 14% 16%;
@@ -102,7 +102,7 @@
 
     --border: 220 13% 20%;
     --input: 220 13% 20%;
-    --ring: 0 80% 52%;
+    --ring: 0 86% 48%;
 
     --shadow-card: 0 4px 24px -4px hsla(0, 0%, 0%, 0.30);
     --shadow-glow: 0 0 40px hsla(0, 80%, 52%, 0.25);
@@ -122,6 +122,8 @@
 @layer base {
   * {
     @apply border-border;
+    /* Eliminate 300ms tap delay on Android Chrome, non-iOS */
+    touch-action: manipulation;
   }
 
   html {
@@ -145,6 +147,11 @@
 
   #root {
     height: 100%;
+  }
+
+  /* Prevent iOS Safari from zooming into inputs (requires font-size >= 16px) */
+  input, textarea, select {
+    font-size: max(16px, 1em);
   }
 }
 

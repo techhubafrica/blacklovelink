@@ -276,7 +276,7 @@ const AuthPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-background font-display flex flex-col">
+        <div className="min-h-[100dvh] bg-background font-display flex flex-col">
       <SEO title={"Sign In | BlackLoveLink"} description={"Sign in or create your BlackLoveLink account to start meeting verified Black professionals."} path="/auth" ogType="website" />
             {/* Header */}
             <header className="border-b border-border px-6 py-4">
@@ -299,7 +299,7 @@ const AuthPage = () => {
                 </nav>
             </header>
 
-            <main className="flex-1 flex items-center justify-center px-6 py-16">
+            <main className="flex-1 overflow-y-auto flex items-center justify-center px-6 py-8 sm:py-16">
                 <div className="w-full max-w-md">
                     {/* Brand */}
                     <div className="text-center mb-8">

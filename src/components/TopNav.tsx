@@ -27,6 +27,14 @@ const TopNav = () => {
     return () => document.body.classList.remove("app-shell-active");
   }, []);
 
+  // Inject safe-area padding-bottom CSS variable for the bottom nav
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `.bottom-safe-tab { padding-bottom: env(safe-area-inset-bottom, 0px); height: calc(3.5rem + env(safe-area-inset-bottom, 0px)); }`;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
+
   return (
     <>
       {/* ── FACEBOOK-STYLE TOP HEADER ───────────────────────────────── */}
@@ -111,7 +119,7 @@ const TopNav = () => {
       <RightRail />
 
       {/* ── MOBILE BOTTOM TAB BAR ───────────────────────────────────── */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-50 h-14 bg-card border-t border-border flex items-center justify-around">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-card border-t border-border flex items-center justify-around bottom-safe-tab">
         {tabs.map(({ to, icon: Icon, label }) => {
           const active = location.pathname === to;
           return (
@@ -119,7 +127,7 @@ const TopNav = () => {
               key={to}
               to={to}
               aria-label={label}
-              className="relative flex flex-col items-center justify-center flex-1 h-full"
+              className="relative flex flex-col items-center justify-center flex-1 h-14"
             >
               <Icon
                 className={`w-6 h-6 ${active ? "text-primary" : "text-muted-foreground"}`}

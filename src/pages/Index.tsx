@@ -47,7 +47,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background font-display">
+    <div className="min-h-[100dvh] bg-background font-display">
       <SEO title={"BlackLoveLink – Where Black Love Begins"} description={"Verified Black professionals building authentic, marriage-minded connections. Join the premier Black dating community today."} path="/" ogType="website" />
       {/* ── ULTRA PREMIUM NAVBAR ── */}
       <motion.header
@@ -283,21 +283,21 @@ const Index = () => {
                     closed: { rotate: 0, y: 0 },
                     open: { rotate: 45, y: 8 }
                   }}
-                  className="w-full h-0.5 bg-muted/30 rounded-full"
+                  className="w-full h-0.5 bg-white/80 rounded-full"
                 />
                 <motion.span
                   variants={{
                     closed: { opacity: 1 },
                     open: { opacity: 0 }
                   }}
-                  className="w-full h-0.5 bg-muted/30 rounded-full"
+                  className="w-full h-0.5 bg-white/80 rounded-full"
                 />
                 <motion.span
                   variants={{
                     closed: { rotate: 0, y: 0 },
                     open: { rotate: -45, y: -8 }
                   }}
-                  className="w-full h-0.5 bg-muted/30 rounded-full"
+                  className="w-full h-0.5 bg-white/80 rounded-full"
                 />
               </motion.div>
             </motion.button>
@@ -357,7 +357,7 @@ const Index = () => {
         </AnimatePresence>
       </motion.header>
 
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
+      <section className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden">
         {/* Hero image with reduced opacity for premium feel */}
         <img
           src={heroBg}
@@ -392,7 +392,7 @@ const Index = () => {
               </span>
 
               {/* BlackLoveLink — full hero size, matching logo letter colors */}
-              <span className="block text-5xl sm:text-7xl lg:text-8xl tracking-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.5)]">
+              <span className="block text-[2.75rem] leading-none sm:text-7xl lg:text-8xl tracking-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.5)] break-words">
                 <BrandName dark />
               </span>
             </h1>
