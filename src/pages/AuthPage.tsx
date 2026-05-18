@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import { useToast } from "@/hooks/use-toast";
 import PhoneInput, { COUNTRY_CODES, type CountryCode } from "@/components/PhoneInput";
+import BrandName from "@/components/BrandName";
 
 /* ─── Step types ─────────────────────────────────────────────── */
 /* ─── Step types ─────────────────────────────────────────────── */
@@ -307,7 +308,7 @@ const AuthPage = () => {
                             <Heart className="w-8 h-8 text-primary-foreground" fill="currentColor" />
                         </div>
                         <h1 className="text-3xl font-black text-foreground mb-1">
-                            Welcome to <span className="text-gradient-brand">BlackLoveLink</span>
+                            Welcome to <BrandName />
                         </h1>
                         <AnimatePresence mode="wait">
                             <motion.p
