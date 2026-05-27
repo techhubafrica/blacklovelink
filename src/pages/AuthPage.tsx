@@ -7,7 +7,7 @@ import {
     Eye, EyeOff, Lock, CheckCircle2, Mail,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
+import blackLovelinkLogo from "@/assets/blacklovelink-logo-icon.png";
 import { useToast } from "@/hooks/use-toast";
 import PhoneInput, { COUNTRY_CODES, type CountryCode } from "@/components/PhoneInput";
 import BrandName from "@/components/BrandName";

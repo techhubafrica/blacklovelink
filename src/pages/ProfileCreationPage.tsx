@@ -14,7 +14,7 @@ import {
     Loader2,
     Star,
 } from "lucide-react";
-import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
+import blackLovelinkLogo from "@/assets/blacklovelink-logo-icon.png";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 

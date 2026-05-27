@@ -12,7 +12,7 @@ import profile3 from "@/assets/profile-3.png";
 import ConnectionCards from "@/components/ConnectionCards";
 import HeroChatbot from "@/components/HeroChatbot";
 import PricingSection from "@/components/PricingSection";
-import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
+import blackLovelinkLogo from "@/assets/blacklovelink-logo-icon.png";
 import BrandName from "@/components/BrandName";
 import { useTranslation } from "@/hooks/useTranslation";
 import { usePlatformStats } from "@/hooks/usePlatformStats";

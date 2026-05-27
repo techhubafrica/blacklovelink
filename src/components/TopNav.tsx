@@ -5,7 +5,7 @@ import {
   Search, Home, Heart, Users, MessageCircle, User as UserIcon,
   Bell, Menu, ArrowLeft, Flame, X,
 } from "lucide-react";
-import logo from "@/assets/blacklovelink-logo.png";
+import logo from "@/assets/blacklovelink-logo-icon.png";
 import LeftRail from "@/components/shell/LeftRail";
 import RightRail from "@/components/shell/RightRail";
 import NotificationPanel from "@/components/NotificationPanel";

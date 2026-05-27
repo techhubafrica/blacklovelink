@@ -1,14 +1,11 @@
 /**
- * BrandName — renders "BlackLoveLink" matching the logo exactly.
+ * BrandName — renders "blacklovelink" matching the official logo wordmark.
  *
- * Logo layout (stacked, 3 rows):
- *   Row 1: [badge icon]  B·LACK  — white on dark bg / black on light bg
- *   Row 2:               LOVE    — white text on a vivid red background strip
- *   Row 3:               LIN·K   — LIN white/dark, K green
+ * Typography:  Playfair Display, italic, weight 600
+ * Colours:     black = #0a0a0a  |  love = #C8102E  |  link = #0F7B3C
  *
- * Props:
- *   dark     — use white for BLACK/LIN (hero on dark image)
- *   stacked  — render as 3 rows like the logo (default: false = inline)
+ * dark=true  →  "black" renders white with a soft glow for readability
+ *               on the dark hero background photo.
  */
 
 // Logo-exact colours (pan-African palette from the official wordmark)
@@ -24,13 +21,13 @@ interface BrandNameProps {
   stacked?: boolean;
 }
 
-/**
- * Renders the BlackLoveLink wordmark recreated in pure HTML/CSS — no image,
- * no background. Serif lowercase letters, pan-African colour split, and a
- * flag-striped capital "L" leading the word. Matches the official artwork.
- */
 export default function BrandName({ className = "", dark = false }: BrandNameProps) {
   const blackTone = dark ? "#ffffff" : FLAG_BLACK;
+
+  // Soft white glow so "black" is readable over the dark hero image
+  const blackGlow = dark
+    ? "0 0 20px rgba(255,255,255,0.85), 0 0 50px rgba(255,255,255,0.40), 0 2px 6px rgba(0,0,0,0.9)"
+    : "none";
 
   return (
     <span
@@ -38,22 +35,7 @@ export default function BrandName({ className = "", dark = false }: BrandNamePro
       style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", Georgia, serif', fontWeight: 600 }}
       aria-label="blacklovelink"
     >
-      {/* Flag-striped capital L */}
-      <span
-        aria-hidden
-        className="inline-block align-baseline"
-        style={{
-          width: "0.55em",
-          height: "0.95em",
-          marginRight: "0.04em",
-          background: `linear-gradient(to bottom, ${FLAG_BLACK} 0 33.33%, ${FLAG_RED} 33.33% 66.66%, ${FLAG_GREEN} 66.66% 100%)`,
-          WebkitMask:
-            "linear-gradient(#000,#000) left/0.18em 100% no-repeat, linear-gradient(#000,#000) bottom/100% 0.18em no-repeat",
-          mask:
-            "linear-gradient(#000,#000) left/0.18em 100% no-repeat, linear-gradient(#000,#000) bottom/100% 0.18em no-repeat",
-        }}
-      />
-      <span style={{ color: blackTone }}>black</span>
+      <span style={{ color: blackTone, textShadow: blackGlow }}>black</span>
       <span style={{ color: FLAG_RED }}>love</span>
       <span style={{ color: FLAG_GREEN }}>link</span>
     </span>

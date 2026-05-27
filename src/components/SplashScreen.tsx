@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import logo from "@/assets/blacklovelink-logo.png";
+import logo from "@/assets/blacklovelink-logo-icon.png";
 import BrandName from "@/components/BrandName";
 
 interface SplashScreenProps {
