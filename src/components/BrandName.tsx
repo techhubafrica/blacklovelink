@@ -11,69 +11,51 @@
  *   stacked  — render as 3 rows like the logo (default: false = inline)
  */
 
-// Logo-exact colours
-const LOVE_RED   = "#CC0000";   // vivid red — LOVE text + background
-const LINK_GREEN = "#1A8C2E";   // medium green — K only
+// Logo-exact colours (pan-African palette from the official wordmark)
+const FLAG_BLACK = "#0a0a0a";
+const FLAG_RED   = "#C8102E";
+const FLAG_GREEN = "#0F7B3C";
 
 interface BrandNameProps {
   className?: string;
-  /** White for BLACK/LIN on dark backgrounds */
+  /** Render "black" in white instead of black (for dark backgrounds) */
   dark?: boolean;
-  /** Render as stacked 3-row logo layout */
+  /** Legacy prop — kept for backward compatibility, no longer changes layout */
   stacked?: boolean;
 }
 
-export default function BrandName({ className = "", dark = false, stacked = false }: BrandNameProps) {
-  const baseColor = dark ? "#ffffff" : "#0a0a0a";
+/**
+ * Renders the BlackLoveLink wordmark recreated in pure HTML/CSS — no image,
+ * no background. Serif lowercase letters, pan-African colour split, and a
+ * flag-striped capital "L" leading the word. Matches the official artwork.
+ */
+export default function BrandName({ className = "", dark = false }: BrandNameProps) {
+  const blackTone = dark ? "#ffffff" : FLAG_BLACK;
 
-  if (stacked) {
-    return (
-      <span
-        className={`inline-flex flex-col items-start leading-none font-black tracking-tight ${className}`}
-        aria-label="BlackLoveLink"
-      >
-        {/* Row 1 — BLACK */}
-        <span className="flex items-center gap-[0.12em]">
-          {/* Mini badge icon — mirrors the logo's small brand mark */}
-          <span
-            className="inline-flex items-center justify-center rounded-[0.12em] mr-[0.06em] shrink-0"
-            style={{
-              width: "0.72em",
-              height: "0.72em",
-              background: "#0a0a0a",
-              border: `0.06em solid ${LOVE_RED}`,
-            }}
-            aria-hidden
-          >
-            <span style={{ color: LOVE_RED, fontSize: "0.55em", lineHeight: 1, fontWeight: 900 }}>♥</span>
-          </span>
-          <span style={{ color: baseColor }}>BLACK</span>
-        </span>
-
-        {/* Row 2 — LOVE on red background strip */}
-        <span
-          className="px-[0.18em] py-[0.04em] rounded-[0.06em]"
-          style={{ background: LOVE_RED, color: "#ffffff" }}
-        >
-          LOVE
-        </span>
-
-        {/* Row 3 — LINK (LIN base, K green) */}
-        <span>
-          <span style={{ color: baseColor }}>LIN</span>
-          <span style={{ color: LINK_GREEN }}>K</span>
-        </span>
-      </span>
-    );
-  }
-
-  // ── Inline (single-line) version ─────────────────────────────────────────
   return (
-    <span className={`font-black tracking-tight ${className}`} aria-label="BlackLoveLink">
-      <span style={{ color: baseColor }}>BLACK</span>
-      <span style={{ color: LOVE_RED }}>LOVE</span>
-      <span style={{ color: baseColor }}>LIN</span>
-      <span style={{ color: LINK_GREEN }}>K</span>
+    <span
+      className={`font-serif italic leading-[0.9] tracking-[-0.02em] whitespace-nowrap inline-flex items-baseline ${className}`}
+      style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", Georgia, serif', fontWeight: 600 }}
+      aria-label="blacklovelink"
+    >
+      {/* Flag-striped capital L */}
+      <span
+        aria-hidden
+        className="inline-block align-baseline"
+        style={{
+          width: "0.55em",
+          height: "0.95em",
+          marginRight: "0.04em",
+          background: `linear-gradient(to bottom, ${FLAG_BLACK} 0 33.33%, ${FLAG_RED} 33.33% 66.66%, ${FLAG_GREEN} 66.66% 100%)`,
+          WebkitMask:
+            "linear-gradient(#000,#000) left/0.18em 100% no-repeat, linear-gradient(#000,#000) bottom/100% 0.18em no-repeat",
+          mask:
+            "linear-gradient(#000,#000) left/0.18em 100% no-repeat, linear-gradient(#000,#000) bottom/100% 0.18em no-repeat",
+        }}
+      />
+      <span style={{ color: blackTone }}>black</span>
+      <span style={{ color: FLAG_RED }}>love</span>
+      <span style={{ color: FLAG_GREEN }}>link</span>
     </span>
   );
 }
