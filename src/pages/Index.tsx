@@ -14,7 +14,6 @@ import HeroChatbot from "@/components/HeroChatbot";
 import PricingSection from "@/components/PricingSection";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import BrandName from "@/components/BrandName";
-import brandLogo from "@/assets/blacklovelink-logo.png";
 import { useTranslation } from "@/hooks/useTranslation";
 import { usePlatformStats } from "@/hooks/usePlatformStats";
 import { Language, languageNames } from "@/contexts/LanguageContext";
