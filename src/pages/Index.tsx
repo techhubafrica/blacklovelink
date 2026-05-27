@@ -177,7 +177,7 @@ const Index = () => {
                 to="/education"
                 className="group relative px-4 py-2.5 text-sm font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground"
               >
-                <span className="relative z-10">Education</span>
+                <span className="relative z-10">Relationship Hub</span>
                 <motion.span
                   className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0"
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -336,7 +336,7 @@ const Index = () => {
                     to="/education"
                     className="block px-4 py-3 text-sm font-medium text-primary-foreground/90 rounded-xl hover:bg-white/5 transition-colors"
                   >
-                    Education
+                    Relationship Hub
                   </Link>
                 </motion.div>
                 <motion.div
@@ -381,9 +381,9 @@ const Index = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             {/* Hero heading */}
-            <h1 className="relative leading-none">
+            <h1 className="relative leading-none flex flex-col items-center gap-3">
               {/* "Welcome to" — italic, same family, with decorative flanking lines */}
-              <span className="flex items-center justify-center gap-3 mb-3">
+              <span className="flex items-center justify-center gap-3">
                 <span className="flex-1 h-px bg-gradient-to-r from-transparent via-white/50 to-white/50 max-w-[80px] sm:max-w-[120px]" />
                 <span className="text-3xl sm:text-4xl lg:text-5xl font-black italic text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.9)] tracking-tight">
                   Welcome to
@@ -391,10 +391,12 @@ const Index = () => {
                 <span className="flex-1 h-px bg-gradient-to-l from-transparent via-white/50 to-white/50 max-w-[80px] sm:max-w-[120px]" />
               </span>
 
-              {/* BlackLoveLink — full hero size, matching logo letter colors */}
-              <span className="block text-[2.75rem] leading-none sm:text-7xl lg:text-8xl tracking-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.5)] break-words">
-                <BrandName dark />
-              </span>
+              {/* BlackLoveLink — stacked like the logo, scaled up for hero */}
+              <BrandName
+                dark
+                stacked
+                className="text-[2.6rem] sm:text-7xl lg:text-8xl [text-shadow:0_2px_16px_rgba(0,0,0,0.5)]"
+              />
             </h1>
             <p className="mt-5 text-xl sm:text-2xl lg:text-3xl font-semibold text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.7)] tracking-wide">
               Where Intentional Love Begins

@@ -23,7 +23,7 @@ const SharedNavbar = () => {
         { label: t.nav.successStories, to: "/success-stories" },
         { label: t.nav.trustSafety, to: "/trust-safety" },
         { label: t.nav.support, to: "/support" },
-        { label: "Education", to: "/education" },
+        { label: "Relationship Hub", to: "/education" },
     ];
 
     return (

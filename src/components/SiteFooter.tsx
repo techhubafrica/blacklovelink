@@ -9,7 +9,7 @@ const footerLinks = {
     { label: "How It Works", to: "/how-it-works" },
     { label: "Connections", to: "/connections" },
     { label: "Success Stories", to: "/success-stories" },
-    { label: "Education Hub", to: "/education" },
+    { label: "Relationship Hub", to: "/education" },
   ],
   support: [
     { label: "Help Center", to: "/support" },

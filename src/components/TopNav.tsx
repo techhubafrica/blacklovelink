@@ -1,13 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Search, Home, Heart, Users, MessageCircle, User as UserIcon,
-  Bell, Menu, ArrowLeft, Flame,
+  Bell, Menu, ArrowLeft, Flame, X,
 } from "lucide-react";
 import logo from "@/assets/blacklovelink-logo.png";
 import LeftRail from "@/components/shell/LeftRail";
 import RightRail from "@/components/shell/RightRail";
+import NotificationPanel from "@/components/NotificationPanel";
+import { useNotifications } from "@/hooks/useNotifications";
 
 const tabs = [
   { to: "/swipe", icon: Flame, label: "Discover" },
@@ -20,6 +22,11 @@ const tabs = [
 const TopNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchFocused, setSearchFocused] = useState(false);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const { unreadCount } = useNotifications();
 
   // Toggle body padding so fixed rails don't overlap content on lg+
   useEffect(() => {
@@ -35,6 +42,27 @@ const TopNav = () => {
     return () => document.head.removeChild(style);
   }, []);
 
+  // Close notification panel on route change
+  useEffect(() => {
+    setNotifOpen(false);
+  }, [location.pathname]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/swipe?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+      searchRef.current?.blur();
+    }
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") {
+      setSearchQuery("");
+      searchRef.current?.blur();
+    }
+  };
+
   return (
     <>
       {/* ── FACEBOOK-STYLE TOP HEADER ───────────────────────────────── */}
@@ -45,13 +73,29 @@ const TopNav = () => {
             <Link to="/" aria-label="Home" className="shrink-0">
               <img src={logo} alt="BlackLoveLink" className="h-9 w-9 rounded-full object-cover" />
             </Link>
-            <div className="relative flex-1 min-w-0 hidden sm:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <form onSubmit={handleSearch} className="relative flex-1 min-w-0 hidden sm:block">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
               <input
-                placeholder="Search BlackLoveLink"
-                className="w-full h-10 pl-9 pr-3 rounded-full bg-muted text-sm text-foreground placeholder:text-muted-foreground border border-transparent focus:outline-none focus:border-primary/40 focus:bg-background transition"
+                ref={searchRef}
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                onKeyDown={handleSearchKeyDown}
+                placeholder="Search profiles…"
+                className="w-full h-10 pl-9 pr-8 rounded-full bg-muted text-sm text-foreground placeholder:text-muted-foreground border border-transparent focus:outline-none focus:border-primary/40 focus:bg-background transition"
               />
-            </div>
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-muted-foreground/20 text-muted-foreground"
+                  tabIndex={-1}
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </form>
             <button
               onClick={() => navigate(-1)}
               className="sm:hidden p-2 rounded-full hover:bg-muted text-muted-foreground"
@@ -96,13 +140,32 @@ const TopNav = () => {
             <button className="hidden sm:flex w-10 h-10 rounded-full bg-muted hover:bg-muted/70 items-center justify-center text-foreground">
               <Menu className="w-5 h-5" />
             </button>
-            <Link to="/messages" className="hidden sm:flex w-10 h-10 rounded-full bg-muted hover:bg-muted/70 items-center justify-center text-foreground relative">
+            <Link
+              to="/messages"
+              className="hidden sm:flex w-10 h-10 rounded-full bg-muted hover:bg-muted/70 items-center justify-center text-foreground relative"
+            >
               <MessageCircle className="w-5 h-5" />
             </Link>
-            <button className="w-10 h-10 rounded-full bg-muted hover:bg-muted/70 flex items-center justify-center text-foreground relative" aria-label="Notifications">
+
+            {/* Bell — now functional */}
+            <button
+              onClick={() => setNotifOpen(v => !v)}
+              className={`w-10 h-10 rounded-full flex items-center justify-center text-foreground relative transition-colors ${
+                notifOpen ? "bg-primary/10 text-primary" : "bg-muted hover:bg-muted/70"
+              }`}
+              aria-label="Notifications"
+              aria-expanded={notifOpen}
+            >
               <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-primary ring-2 ring-card" />
+              {unreadCount > 0 && (
+                <span className="absolute top-1 right-1 min-w-[0.65rem] h-[0.65rem] rounded-full bg-primary ring-2 ring-card flex items-center justify-center">
+                  {unreadCount > 9 && (
+                    <span className="text-[8px] font-bold text-white leading-none px-0.5">{unreadCount > 99 ? "99+" : unreadCount}</span>
+                  )}
+                </span>
+              )}
             </button>
+
             <Link
               to="/profile"
               aria-label="Your profile"
@@ -138,6 +201,9 @@ const TopNav = () => {
           );
         })}
       </nav>
+
+      {/* ── NOTIFICATION PANEL ──────────────────────────────────────── */}
+      <NotificationPanel open={notifOpen} onClose={() => setNotifOpen(false)} />
     </>
   );
 };

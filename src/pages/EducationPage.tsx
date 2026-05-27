@@ -92,7 +92,7 @@ const categories = [
 const EducationPage = () => {
   return (
     <div className="min-h-screen bg-background font-display text-foreground">
-      <SEO title={"Relationship Education | BlackLoveLink"} description={"Expert guidance on dating, communication, and relationships for Black professionals seeking marriage-minded connections."} path="/education" ogType="website" />
+      <SEO title={"Relationship Hub | BlackLoveLink"} description={"Expert guidance on dating, communication, and relationships for Black professionals seeking marriage-minded connections."} path="/education" ogType="website" />
       <SharedNavbar />
 
       {/* Hero */}
@@ -104,7 +104,7 @@ const EducationPage = () => {
             className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 mb-6"
           >
             <BookOpen className="h-4 w-4 text-primary" />
-            <span className="text-sm font-semibold text-primary">Education Hub</span>
+            <span className="text-sm font-semibold text-primary">Relationship Hub</span>
           </motion.div>
 
           <motion.h1
@@ -113,7 +113,7 @@ const EducationPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            Love Smarter,{" "}
+            Relationship Hub –{" "}
             <span className="text-gradient-brand">Connect Deeper</span>
           </motion.h1>
 
