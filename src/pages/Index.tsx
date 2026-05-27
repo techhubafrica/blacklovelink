@@ -14,6 +14,7 @@ import HeroChatbot from "@/components/HeroChatbot";
 import PricingSection from "@/components/PricingSection";
 import blackLovelinkLogo from "@/assets/blacklovelink-logo.png";
 import BrandName from "@/components/BrandName";
+import brandLogo from "@/assets/blacklovelink-logo.png";
 import { useTranslation } from "@/hooks/useTranslation";
 import { usePlatformStats } from "@/hooks/usePlatformStats";
 import { Language, languageNames } from "@/contexts/LanguageContext";
@@ -391,11 +392,11 @@ const Index = () => {
                 <span className="flex-1 h-px bg-gradient-to-l from-transparent via-white/50 to-white/50 max-w-[80px] sm:max-w-[120px]" />
               </span>
 
-              {/* BlackLoveLink — stacked like the logo, scaled up for hero */}
-              <BrandName
-                dark
-                stacked
-                className="text-[2.6rem] sm:text-7xl lg:text-8xl [text-shadow:0_2px_16px_rgba(0,0,0,0.5)]"
+              {/* BlackLoveLink — official logo artwork */}
+              <img
+                src={brandLogo}
+                alt="BlackLoveLink"
+                className="mx-auto w-full max-w-[320px] sm:max-w-[560px] lg:max-w-[720px] h-auto drop-shadow-[0_4px_24px_rgba(0,0,0,0.55)]"
               />
             </h1>
             <p className="mt-5 text-xl sm:text-2xl lg:text-3xl font-semibold text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.7)] tracking-wide">
