@@ -22,11 +22,11 @@ interface BrandNameProps {
 }
 
 export default function BrandName({ className = "", dark = false }: BrandNameProps) {
-  const blackTone = dark ? "#ffffff" : FLAG_BLACK;
+  const blackTone = FLAG_BLACK;
 
-  // Soft white glow so "black" is readable over the dark hero image
+  // Soft white glow so "black" is readable over the dark hero image even when the text color is black
   const blackGlow = dark
-    ? "0 0 20px rgba(255,255,255,0.85), 0 0 50px rgba(255,255,255,0.40), 0 2px 6px rgba(0,0,0,0.9)"
+    ? "0 0 8px rgba(255,255,255,0.95), 0 0 16px rgba(255,255,255,0.85), 0 0 24px rgba(255,255,255,0.75)"
     : "none";
 
   return (
