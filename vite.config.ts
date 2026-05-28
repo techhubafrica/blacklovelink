@@ -71,6 +71,9 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       workbox: {
+        // Force new SW to take over immediately — fixes Chrome serving stale cached builds
+        skipWaiting: true,
+        clientsClaim: true,
         // Cache strategies for offline support
         runtimeCaching: [
           {
