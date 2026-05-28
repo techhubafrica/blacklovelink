@@ -7,6 +7,7 @@ import FeedProfileCard from "@/components/feed/FeedProfileCard";
 import { useProfiles, type UserProfile } from "@/hooks/useProfileData";
 import { useSwipe } from "@/hooks/useSwipe";
 import { Loader2, SearchX, ArrowLeft, Home, Sparkles } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 // ── LocalStorage helpers ──────────────────────────────────────────────────────
 const LS_PASSED = "bll_passed_profiles";
@@ -16,6 +17,7 @@ const saveSet = (key: string, set: Set<string>) => localStorage.setItem(key, JSO
 
 const SwipePage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { profiles, likedIds, loading } = useProfiles();
   const { recordSwipe } = useSwipe();
   const [matchedProfile, setMatchedProfile] = useState<UserProfile | null>(null);
@@ -95,10 +97,10 @@ const SwipePage = () => {
           >
             <div>
               <div className="flex items-center gap-2 text-primary-foreground/80 text-xs font-medium uppercase tracking-widest">
-                <Sparkles className="w-3.5 h-3.5" /> Today's Picks
+                <Sparkles className="w-3.5 h-3.5" /> {t.swipe.lookingFor}
               </div>
               <h1 className="text-3xl font-black text-primary-foreground leading-tight mt-1">
-                Discover Love
+                {t.app.discover}
               </h1>
             </div>
             {!loading && visibleProfiles.length > 0 && (
@@ -117,7 +119,7 @@ const SwipePage = () => {
               <div className="absolute inset-0 rounded-full bg-primary/30 blur-2xl animate-pulse" />
               <Loader2 className="relative w-10 h-10 animate-spin text-primary" />
             </div>
-            <p className="text-muted-foreground text-sm font-medium">Finding your matches…</p>
+            <p className="text-muted-foreground text-sm font-medium">{t.app.loading}</p>
           </div>
         ) : visibleProfiles.length === 0 ? (
           <motion.div
@@ -131,22 +133,22 @@ const SwipePage = () => {
                 <SearchX className="w-12 h-12 text-primary-foreground" />
               </div>
             </div>
-            <h2 className="text-2xl font-black text-foreground">You've seen everyone!</h2>
+            <h2 className="text-2xl font-black text-foreground">{t.swipe.noProfilesTitle}</h2>
             <p className="text-muted-foreground text-sm max-w-xs">
-              No more new profiles right now. Check back later or explore the Community tab.
+              {t.swipe.noProfilesDesc}
             </p>
             <button
               onClick={handleStartOver}
               disabled={isResetting}
               className="mt-2 px-8 py-3 flex items-center gap-2 rounded-full gradient-brand text-primary-foreground font-bold shadow-button hover:opacity-90 transition disabled:opacity-50"
             >
-              {isResetting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Start Over"}
+              {isResetting ? <Loader2 className="w-5 h-5 animate-spin" /> : t.swipe.startOver}
             </button>
             <Link
               to="/"
               className="mt-1 text-sm text-muted-foreground hover:text-primary transition font-medium underline-offset-4 hover:underline"
             >
-              Back to homepage
+              {t.nav.home}
             </Link>
           </motion.div>
         ) : (

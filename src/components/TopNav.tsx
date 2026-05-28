@@ -3,21 +3,18 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Search, Home, Heart, Users, MessageCircle, User as UserIcon,
-  Bell, Menu, ArrowLeft, Flame, X,
+  Bell, Menu, ArrowLeft, Flame, X, Globe,
 } from "lucide-react";
 import logo from "@/assets/blacklovelink-logo-icon.png";
 import LeftRail from "@/components/shell/LeftRail";
 import RightRail from "@/components/shell/RightRail";
 import NotificationPanel from "@/components/NotificationPanel";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useTranslation } from "@/hooks/useTranslation";
+import { Language, languageNames } from "@/contexts/LanguageContext";
 
-const tabs = [
-  { to: "/swipe", icon: Flame, label: "Discover" },
-  { to: "/likes", icon: Heart, label: "Likes" },
-  { to: "/community", icon: Users, label: "Community" },
-  { to: "/messages", icon: MessageCircle, label: "Messages" },
-  { to: "/profile", icon: UserIcon, label: "Profile" },
-];
+
+
 
 const TopNav = () => {
   const location = useLocation();
@@ -25,8 +22,19 @@ const TopNav = () => {
   const [notifOpen, setNotifOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
+  const langRef = useRef<HTMLDivElement>(null);
   const { unreadCount } = useNotifications();
+  const { language, setLanguage, t } = useTranslation();
+
+  const tabs = [
+    { to: "/swipe", icon: Flame, label: t.app.discover },
+    { to: "/likes", icon: Heart, label: t.app.likes },
+    { to: "/community", icon: Users, label: t.app.community },
+    { to: "/messages", icon: MessageCircle, label: t.app.messages },
+    { to: "/profile", icon: UserIcon, label: t.app.profile },
+  ];
 
   // Toggle body padding so fixed rails don't overlap content on lg+
   useEffect(() => {
@@ -46,6 +54,17 @@ const TopNav = () => {
   useEffect(() => {
     setNotifOpen(false);
   }, [location.pathname]);
+
+  // Close language dropdown when clicking outside
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,7 +101,7 @@ const TopNav = () => {
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
                 onKeyDown={handleSearchKeyDown}
-                placeholder="Search profiles…"
+                placeholder={t.app.search}
                 className="w-full h-10 pl-9 pr-8 rounded-full bg-muted text-sm text-foreground placeholder:text-muted-foreground border border-transparent focus:outline-none focus:border-primary/40 focus:bg-background transition"
               />
               {searchQuery && (
@@ -137,6 +156,38 @@ const TopNav = () => {
 
           {/* Right: actions */}
           <div className="flex items-center justify-end gap-1.5 flex-1 max-w-[360px]">
+            {/* Language switcher */}
+            <div ref={langRef} className="relative">
+              <button
+                onClick={() => setLangOpen(v => !v)}
+                className={`w-10 h-10 rounded-full flex items-center justify-center text-foreground transition-colors ${
+                  langOpen ? "bg-primary/10 text-primary" : "bg-muted hover:bg-muted/70"
+                }`}
+                aria-label="Change language"
+              >
+                <Globe className="w-5 h-5" />
+              </button>
+              {langOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl bg-card border border-border shadow-2xl z-50 overflow-hidden">
+                  <div className="p-2">
+                    {(Object.keys(languageNames) as Language[]).map((lang) => (
+                      <button
+                        key={lang}
+                        onClick={() => { setLanguage(lang); setLangOpen(false); }}
+                        className={`w-full px-4 py-2.5 text-left text-sm font-medium rounded-xl transition-all duration-150 ${
+                          language === lang
+                            ? "bg-primary text-primary-foreground"
+                            : "text-foreground hover:bg-accent/50"
+                        }`}
+                      >
+                        {languageNames[lang]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <button className="hidden sm:flex w-10 h-10 rounded-full bg-muted hover:bg-muted/70 items-center justify-center text-foreground">
               <Menu className="w-5 h-5" />
             </button>
