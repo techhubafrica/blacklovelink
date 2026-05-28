@@ -36,13 +36,13 @@ const SharedNavbar = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
-            <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 py-4">
+            <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8 h-16">
                 {/* Logo */}
                 <Link to="/" className="flex items-center group relative z-50">
                     <motion.img
                         src={blackLovelinkLogo}
                         alt="BlackLoveLink"
-                        className="h-12 w-auto"
+                        className="h-10 w-auto object-contain"
                         whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 400, damping: 17 }}
                     />
@@ -74,7 +74,7 @@ const SharedNavbar = () => {
                 </div>
 
                 {/* Right Side */}
-                <div className="flex items-center gap-3">
+                <div className="flex shrink-0 items-center gap-3">
                     {/* Language Dropdown */}
                     <div className="relative group hidden md:block">
                         <motion.button
@@ -117,7 +117,7 @@ const SharedNavbar = () => {
                     >
                         <Link
                             to="/auth"
-                            className="group relative overflow-hidden rounded-full gradient-brand px-8 py-3 text-sm font-bold text-primary-foreground shadow-button transition-all duration-300 hover:opacity-90 hover:scale-105"
+                            className="group relative overflow-hidden rounded-full gradient-brand px-6 py-2.5 text-sm font-bold text-primary-foreground shadow-button transition-all duration-300 hover:opacity-90 hover:scale-105 whitespace-nowrap"
                         >
                             <span className="relative z-10">{t.nav.signIn}</span>
                             <motion.span
